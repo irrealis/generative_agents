@@ -16,6 +16,9 @@ openai.api_key = openai_api_key
 def temp_sleep(seconds=0.1):
   time.sleep(seconds)
 
+# NOTE@kaben: Uses:
+# - plan.py
+#   - 4 calls
 def ChatGPT_single_request(prompt): 
   temp_sleep()
 
@@ -30,6 +33,7 @@ def ChatGPT_single_request(prompt):
 # #####################[SECTION 1: CHATGPT-3 STRUCTURE] ######################
 # ============================================================================
 
+# NOTE@kaben: Only referenced in this file.
 def GPT4_request(prompt): 
   """
   Given a prompt and a dictionary of GPT parameters, make a request to OpenAI
@@ -81,6 +85,7 @@ def ChatGPT_request(prompt):
     return "ChatGPT ERROR"
 
 
+# NOTE@kaben: Not used.
 def GPT4_safe_generate_response(prompt, 
                                    example_output,
                                    special_instruction,
@@ -120,6 +125,9 @@ def GPT4_safe_generate_response(prompt,
   return False
 
 
+# NOTE@kaben: Uses:
+# - run_gpt_prompt.py
+#   - 12 calls
 def ChatGPT_safe_generate_response(prompt, 
                                    example_output,
                                    special_instruction,
@@ -164,6 +172,9 @@ def ChatGPT_safe_generate_response(prompt,
   return False
 
 
+# NOTE@kaben: Uses:
+# - run_gpt_prompt.py
+#   - 2 calls
 def ChatGPT_safe_generate_response_OLD(prompt, 
                                    repeat=3,
                                    fail_safe_response="error",
@@ -194,6 +205,9 @@ def ChatGPT_safe_generate_response_OLD(prompt,
 # ###################[SECTION 2: ORIGINAL GPT-3 STRUCTURE] ###################
 # ============================================================================
 
+# NOTE@kaben: Uses:
+# - this file
+#   - 1 calls
 def GPT_request(prompt, gpt_parameter): 
   """
   Given a prompt and a dictionary of GPT parameters, make a request to OpenAI
@@ -224,6 +238,11 @@ def GPT_request(prompt, gpt_parameter):
     return "TOKEN LIMIT EXCEEDED"
 
 
+# NOTE@kaben: Uses:
+# - gpt_structure.py
+#   - 2 calls
+# - run_gpt_prompt.py
+#   - 36 calls
 def generate_prompt(curr_input, prompt_lib_file): 
   """
   Takes in the current input (e.g. comment that you want to classifiy) and 
@@ -263,6 +282,7 @@ def safe_generate_response(prompt,
     print (prompt)
 
   for i in range(repeat): 
+    # TODO@kaben: Refactor.
     curr_gpt_response = GPT_request(prompt, gpt_parameter)
     if func_validate(curr_gpt_response, prompt=prompt): 
       return func_clean_up(curr_gpt_response, prompt=prompt)
