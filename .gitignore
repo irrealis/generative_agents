@@ -1,3 +1,6 @@
+# LangChain LLM-call cache.
+*.langchain.db
+
 frontend_server/settings/local.py
 storage/*
 static_dirs/*
