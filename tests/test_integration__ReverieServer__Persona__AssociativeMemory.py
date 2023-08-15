@@ -1,18 +1,29 @@
-import os
-import sys
-
-this_dir = os.path.abspath(os.path.dirname(__file__))
-reverie_loc = os.path.abspath(f"{this_dir}/../reverie/backend_server")
-sys.path.insert(0, reverie_loc)
-
-
 import logging
 log = logging.getLogger(__name__)
 log.setLevel(logging.DEBUG)
 
+from dotenv import find_dotenv, load_dotenv
+env_path = find_dotenv()
+load_dotenv(env_path)
+
+import os
+import sys
+
+project_dir = os.path.dirname(env_path)
+log.debug(f'{project_dir=}')
+
+backend_server_loc = os.path.abspath(f"{project_dir}/reverie/backend_server")
+sys.path.insert(0, backend_server_loc)
+
+irrealis_datascience_loc = os.path.abspath(f"{project_dir}/../datascience")
+sys.path.insert(0, irrealis_datascience_loc)
+
+
 import reverie
 from reverie import ReverieServer
 from persona.persona import Persona
+
+import langchain
 
 import pytest
 
@@ -20,10 +31,14 @@ import datetime as dt
 import shutil
 
 
+os.environ['LANGCHAIN_TRACING_V2']='true'
+os.environ['LANGCHAIN_PROJECT']='Park Generative Agents'
+tags = ['test', 'brainstorm']
+db_url = "postgresql+psycopg2://kaben:{DB_PASS}@localhost:5432/datascience".format(
+  DB_PASS=os.getenv('DB_PASS')
+)
 
 # To the user: set with your OpenAI API key.
-reverie.openai_api_key=""
-reverie.key_owner=""
 
 
 class ReverieTestServer(ReverieServer):

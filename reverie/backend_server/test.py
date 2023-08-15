@@ -9,8 +9,14 @@ import random
 import openai
 import time 
 
+from persona.prompt_template.language_model import LangChainModel
+from langchain.chat_models import ChatOpenAI
+
 from utils import *
 openai.api_key = openai_api_key
+
+
+llm_oai_gpt_35_turbo = LangChainModel(ChatOpenAI())
 
 def ChatGPT_request(prompt): 
   """
@@ -26,11 +32,12 @@ def ChatGPT_request(prompt):
   """
   # temp_sleep()
   try: 
-    completion = openai.ChatCompletion.create(
-    model="gpt-3.5-turbo", 
-    messages=[{"role": "user", "content": prompt}]
-    )
-    return completion["choices"][0]["message"]["content"]
+    #completion = openai.ChatCompletion.create(
+    #model="gpt-3.5-turbo", 
+    #messages=[{"role": "user", "content": prompt}]
+    #)
+    #return completion["choices"][0]["message"]["content"]
+    return llm_oai_gpt_35_turbo.generate(prompt)
   
   except: 
     print ("ChatGPT ERROR")
