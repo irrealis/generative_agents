@@ -4,6 +4,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 this_dir = os.path.abspath(os.path.dirname(__file__))
+backend_server_loc = this_dir
 environment_loc = os.path.abspath(f"{this_dir}/../../environment/")
 
 # Copy and paste your OpenAI API Key
