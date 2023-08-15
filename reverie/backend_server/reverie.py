@@ -327,6 +327,11 @@ class ReverieServer:
     # The main while loop of Reverie. 
     while (True): 
       # Done with this iteration if <int_counter> reaches 0. 
+      print(f'''
+--- Next simulation step:
+{int_counter=}; simulation time: {self.curr_time.isoformat()}
+---
+''')
       if int_counter == 0: 
         break
 
