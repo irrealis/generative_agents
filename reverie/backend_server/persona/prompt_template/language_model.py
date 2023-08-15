@@ -63,16 +63,13 @@ try:
     def __init__(self, model):
       self.model = model
     def generate(self, prompt, **kw):
-      log.debug(f'{prompt=}')
       if isinstance(self.model, langchain.chat_models.base.BaseChatModel):
-        log.debug('BaseChatModel')
         output = self.model(
           [
             langchain.schema.HumanMessage(content=prompt, additional_kwargs=kw),
           ],
         )
       elif isinstance(self.model, langchain.llms.base.BaseLLM):
-        log.debug('BaseLLM')
         output = self.model(prompt, **kw)
       else:
         raise Exception('model is neither chat nor llm')
