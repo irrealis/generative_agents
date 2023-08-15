@@ -23,6 +23,8 @@ import reverie
 from reverie import ReverieServer
 from persona.persona import Persona
 
+from irrealis.generative_agents.test_tools import *
+
 import langchain
 
 import pytest
@@ -31,6 +33,7 @@ import datetime as dt
 import shutil
 
 
+langchain.llm_cache = SQLiteCache_ForTests(database_path=".langchain.db")
 os.environ['LANGCHAIN_TRACING_V2']='true'
 os.environ['LANGCHAIN_PROJECT']='Park Generative Agents'
 tags = ['test', 'brainstorm']
