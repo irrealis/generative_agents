@@ -124,7 +124,12 @@ def test_brainstorm__prototype_interview_persona(rs):
   curr_convo = []
   interviewer = "Interviewer"
   message = "How are you?"
-  retrieved = retrieve(persona, [message], 30)[message]
+  retrieved = new_retrieve(
+    persona=persona,
+    focal_points=[message],
+    n_count=30,
+    weights=(1.,1.,1.),
+  )[message]
   summarized_idea = generate_summarize_ideas(persona, retrieved, message)
   curr_convo += [[interviewer, message]]
   response = generate_next_line(persona, interviewer, curr_convo, summarized_idea)
