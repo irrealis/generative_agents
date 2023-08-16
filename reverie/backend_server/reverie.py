@@ -19,8 +19,6 @@ to the memory stream, and "reverie" to refer to the overarching simulation
 framework.
 """
 import logging
-
-from sqlalchemy.engine import create
 log = logging.getLogger(__name__)
 log.setLevel(logging.DEBUG)
 
