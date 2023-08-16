@@ -20,6 +20,7 @@ import utils
 
 import reverie
 from reverie import ReverieServer
+from persona.analysis.interview import interview_persona
 from persona.persona import Persona
 from persona.cognitive_modules.retrieve import extract_recency, extract_importance, extract_relevance, new_retrieve, normalize_dict_floats, top_highest_x_values
 from persona.cognitive_modules.converse import generate_summarize_ideas, generate_next_line
@@ -75,28 +76,7 @@ def rs():
   )
 
 
-def interview_persona(persona, message, curr_convo=None, interviewer=None, n_count=None):
-  if curr_convo is None:
-    curr_convo = []
-  if interviewer is None:
-    interviewer = 'Interviewer'
-
-  retrieved = new_retrieve(
-    persona=persona,
-    focal_points=[message],
-    n_count=30,
-    weights=(1.,1.,1.),
-  )[message]
-  summarized_idea = generate_summarize_ideas(persona, retrieved, message)
-  curr_convo += [[interviewer, message]]
-  response = generate_next_line(persona, interviewer, curr_convo, summarized_idea)
-  curr_convo += [[persona.scratch.name, response]]
-
-  return response, curr_convo
-
-
 ### Tests
-
 
 def test_brainstorm__interview_persona(rs):
   persona = rs.personas['Isabella Rodriguez']
