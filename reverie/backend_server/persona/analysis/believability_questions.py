@@ -76,6 +76,21 @@ def get_believability_question_variables(
   event = None,
   random_seed = None
 ):
+  '''
+  Set up a dictionary of substitutions for use in formatting believability question templates.
+
+  Note that this function is closely tied to the specific question templates in
+  believability_templates.json.
+
+  In particular, this function:
+
+  - Chooses two other personas randomly (random_persona_1, random_persona_2)
+    for use in "memory" believability questions.
+  - By default, will setup up "memory" believability questions about
+    Valentine's Day.
+  - Chooses a persona with whom the subject has had the most interactions, for
+    use in "reflections" believability questions.
+  '''
   if random_persona_clause is None:
     random_persona_clause = "organizing a Valentine's Day party"
 
