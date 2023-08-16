@@ -29,9 +29,9 @@
   },
   "reflections": {
     "what_inspires_you": "What inspires you in life the most right now, and why?",
-    "what_book_would_persona_like": "If you had to guess given what you know about {persona_name}, what book do you think {subjective_pronoun} will like and why?",
-    "what_would_persona_like_for_birthday": "If you had to get something {persona_name} likes for {possessive_pronoun} birthday, what would you get {objective_pronoun}?",
-    "how_to_compliment_persona": "What would you say to {persona_name} to compliment {objective_pronoun}?",
+    "what_book_would_persona_like": "If you had to guess given what you know about {persona_name}, what book do you think they will like and why?",
+    "what_would_persona_like_for_birthday": "If you had to get something {persona_name} likes for their birthday, what would you get them?",
+    "how_to_compliment_persona": "What would you say to {persona_name} to compliment?",
     "spend_time_with_someone": "If you could spend time with someone you talked to recently, who would it be and why?"
   }
 }
