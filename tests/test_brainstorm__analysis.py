@@ -79,6 +79,71 @@ def rs():
 ### Tests
 
 
+def test_brainstorm__persona_chat_memory(rs):
+  persona = rs.personas['Isabella Rodriguez']
+  chat_counts = dict()
+  dialog_exchange_counts = dict()
+  for count, event in enumerate(persona.a_mem.seq_chat):
+    participant = event.object
+
+    # Increment count of chats with chat participant.
+    chat_count = chat_counts.get(participant, 0)
+    chat_count += 1
+    chat_counts[participant] = chat_count
+
+    description = event.description
+    created_at = event.created.strftime('%B %d, %Y, %H%M%S')
+    lines = []
+    for row in event.filling:
+      speaker, dialog = row
+
+      if speaker != persona.name:
+        # Increment count of chats with chat participant.
+        dialog_exchange_count = dialog_exchange_counts.get(speaker, 0)
+        dialog_exchange_count += 1
+        dialog_exchange_counts[speaker] = dialog_exchange_count
+
+      line = f'{speaker}: {dialog}'
+      lines.append(line)
+    dialog_history = '\n\n'.join(lines)
+    log.debug(
+      f'''
+Chat:
+  {participant=}
+  {description=}
+  {created_at=}
+
+  Dialog history:
+
+  {dialog_history}
+'''
+  )
+
+  chat_counts_lines = []
+  for participant, count in chat_counts.items():
+    line = f'    {participant}: {count}'
+    chat_counts_lines.append(line)
+  chat_counts_text = '\n'.join(chat_counts_lines)
+
+  dialog_exchange_counts_lines = []
+  for participant, count in dialog_exchange_counts.items():
+    line = f'    {participant}: {count}'
+    dialog_exchange_counts_lines.append(line)
+  dialog_exchange_counts_text = '\n'.join(dialog_exchange_counts_lines)
+
+  log.debug(
+    f'''
+Interaction counts:
+  Chat counts:
+{chat_counts_text}
+  Dialog exchange counts:
+{dialog_exchange_counts_text}
+'''
+  )
+
+
+
+
 def test_brainstorm__interview_question_file(rs):
   interview_questions_path = f'{project_dir}/reverie/backend_server/persona/analysis/V1_interview_questions/believability_templates.json'
   with open(interview_questions_path, 'rb') as f:
