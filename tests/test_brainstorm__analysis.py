@@ -33,7 +33,7 @@ from langchain.cache import SQLiteCache, RETURN_VAL_TYPE
 import pytest
 
 import datetime as dt
-import shutil
+import json, shutil
 
 
 #langchain.llm_cache = SQLiteCache_ForTests(database_path=".langchain.db")
@@ -77,6 +77,31 @@ def rs():
 
 
 ### Tests
+
+
+def test_brainstorm__interview_question_file(rs):
+  interview_questions_path = f'{project_dir}/reverie/backend_server/persona/analysis/V1_interview_questions/believability_templates.json'
+  with open(interview_questions_path, 'rb') as f:
+    believability_questions = json.load(f)
+  log.debug(
+    f'''
+{believability_questions=}
+'''
+  )
+  questions_lines = []
+  for believability_area, questions in believability_questions.items():
+    questions_lines.append(f'{believability_area}:')
+    for topic, question in questions.items():
+      questions_lines.append(f'  {topic}:')
+      questions_lines.append(f'    {question}')
+
+  questions_text = '\n\n'.join(questions_lines)
+  log.debug(
+    f'''
+{questions_text}
+'''
+  )
+
 
 def test_brainstorm__interview_persona(rs):
   persona = rs.personas['Isabella Rodriguez']
