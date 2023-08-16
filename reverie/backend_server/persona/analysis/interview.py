@@ -24,7 +24,7 @@ def interview_persona(persona, message, curr_convo=None, interviewer=None, n_cou
   retrieved = new_retrieve(
     persona=persona,
     focal_points=[message],
-    n_count=30,
+    n_count=n_count,
     weights=(1.,1.,1.),
   )[message]
   summarized_idea = generate_summarize_ideas(persona, retrieved, message)
