@@ -102,12 +102,16 @@ def get_chat_interaction_counts(persona):
   return chat_counts, dialog_exchange_counts
 
 
+
 ### Tests
 
 
 def test_brainstorm__prototype__get_chat_interaction_counts(rs):
   persona = rs.personas['Isabella Rodriguez']
   chat_counts, dialog_exchange_counts = get_chat_interaction_counts(persona)
+
+  max_chats = max(chat_counts.items(), key=lambda x: x[1])
+  max_dialog_exchanges = max(dialog_exchange_counts.items(), key=lambda x: x[1])
 
   chat_counts_lines = []
   for participant, count in chat_counts.items():
@@ -128,6 +132,9 @@ Interaction counts:
 {chat_counts_text}
   Dialog exchange counts:
 {dialog_exchange_counts_text}
+
+Max chats: {max_chats}
+Max dialog exchanges: {max_dialog_exchanges}
 '''
   )
 
