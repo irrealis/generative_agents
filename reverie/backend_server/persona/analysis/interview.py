@@ -15,17 +15,28 @@ from ..cognitive_modules.retrieve import new_retrieve
 from ..cognitive_modules.converse import generate_next_line,  generate_summarize_ideas
 
 
-def interview_persona(persona, message, curr_convo=None, interviewer=None, n_count=None):
+def interview_persona(
+  persona,
+  message,
+  curr_convo=None,
+  interviewer=None,
+  n_count=None,
+  weights=None,
+):
   if curr_convo is None:
     curr_convo = []
   if interviewer is None:
     interviewer = 'Interviewer'
+  if n_count is None:
+    n_count = 30
+  if weights is None:
+    weights = (1.,1.,1.)
 
   retrieved = new_retrieve(
     persona=persona,
     focal_points=[message],
     n_count=n_count,
-    weights=(1.,1.,1.),
+    weights=weights,
   )[message]
   summarized_idea = generate_summarize_ideas(persona, retrieved, message)
   curr_convo += [[interviewer, message]]
