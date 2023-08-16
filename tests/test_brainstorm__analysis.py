@@ -105,6 +105,33 @@ def get_chat_interaction_counts(persona):
 ### Tests
 
 
+def test_brainstorm__prototype__get_chat_interaction_counts(rs):
+  persona = rs.personas['Isabella Rodriguez']
+  chat_counts, dialog_exchange_counts = get_chat_interaction_counts(persona)
+
+  chat_counts_lines = []
+  for participant, count in chat_counts.items():
+    line = f'    {participant}: {count}'
+    chat_counts_lines.append(line)
+  chat_counts_text = '\n'.join(chat_counts_lines)
+
+  dialog_exchange_counts_lines = []
+  for participant, count in dialog_exchange_counts.items():
+    line = f'    {participant}: {count}'
+    dialog_exchange_counts_lines.append(line)
+  dialog_exchange_counts_text = '\n'.join(dialog_exchange_counts_lines)
+
+  log.debug(
+    f'''
+Interaction counts:
+  Chat counts:
+{chat_counts_text}
+  Dialog exchange counts:
+{dialog_exchange_counts_text}
+'''
+  )
+
+
 def test_brainstorm__persona_chat_memory(rs):
   persona = rs.personas['Isabella Rodriguez']
   chat_counts = dict()
