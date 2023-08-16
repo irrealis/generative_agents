@@ -39,3 +39,8 @@ def get_chat_interaction_counts(persona):
   return chat_counts, dialog_exchange_counts
 
 
+def get_max_chat_interactions(persona):
+  chat_counts, dialog_exchange_counts = get_chat_interaction_counts(persona)
+  max_chats = max(chat_counts.items(), key=lambda x: x[1])
+  max_dialog_exchanges = max(dialog_exchange_counts.items(), key=lambda x: x[1])
+  return max_chats, max_dialog_exchanges
