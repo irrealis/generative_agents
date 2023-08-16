@@ -110,6 +110,49 @@ def get_max_chat_interactions(persona):
   return max_chats, max_dialog_exchanges
 
 
+def get_believability_question_variables(
+  persona,
+  personas,
+  random_persona_clause = None,
+  event = None,
+  random_seed = None
+):
+
+  if random_persona_clause is None:
+    random_persona_clause = "organizing a Valentine's Day party"
+
+  if event is None:
+    event = "a Valentine's Day party"
+
+  if random_seed is None:
+    rng = random.Random()
+  else:
+    rng = random.Random(random_seed)
+
+  persona_names = list(personas.keys())
+  persona_names.remove(persona.name)
+
+  random_persona_name = rng.choice(persona_names)
+  random_persona_1 = personas[random_persona_name]
+  persona_names.remove(random_persona_1.name)
+  random_persona_name = rng.choice(persona_names)
+  random_persona_2 = personas[random_persona_name]
+  persona_names.remove(random_persona_2.name)
+
+  max_chats, max_dialog_exchanges = get_max_chat_interactions(persona)
+  well_known_persona_name = max_dialog_exchanges[0]
+
+  question_variables = dict(
+    random_persona_name_1 = random_persona_1.name,
+    random_persona_name_2 = random_persona_2.name,
+    random_persona_clause = random_persona_clause,
+    event = event,
+    well_known_persona_name = well_known_persona_name,
+  )
+
+  return question_variables
+
+
 
 ### Tests
 
