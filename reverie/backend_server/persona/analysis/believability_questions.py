@@ -16,6 +16,14 @@ import random
 
 
 def get_chat_interaction_counts(persona):
+  '''
+  Counts persona's chat interactions with other personas.
+
+  Returns two counts for each persona with whom a subject persona has chatted:
+
+  - Number of chats with the other persona
+  - Total number dialog exchanges with the other persona.
+  '''
   chat_counts = dict()
   dialog_exchange_counts = dict()
   for count, event in enumerate(persona.a_mem.seq_chat):
@@ -33,7 +41,7 @@ def get_chat_interaction_counts(persona):
       speaker, dialog = row
 
       if speaker != persona.name:
-        # Increment count of chats with chat participant.
+        # Increment count of dialog exchanges with chat participant.
         dialog_exchange_count = dialog_exchange_counts.get(speaker, 0)
         dialog_exchange_count += 1
         dialog_exchange_counts[speaker] = dialog_exchange_count
@@ -43,6 +51,7 @@ def get_chat_interaction_counts(persona):
 
 def get_max_chat_interactions(persona):
   chat_counts, dialog_exchange_counts = get_chat_interaction_counts(persona)
+  # Note: there can be ties in these maxima. Python will choose one, but I'm not sure how.
   max_chats = max(chat_counts.items(), key=lambda x: x[1])
   max_dialog_exchanges = max(dialog_exchange_counts.items(), key=lambda x: x[1])
   return max_chats, max_dialog_exchanges
@@ -55,7 +64,6 @@ def get_believability_question_variables(
   event = None,
   random_seed = None
 ):
-
   if random_persona_clause is None:
     random_persona_clause = "organizing a Valentine's Day party"
 
