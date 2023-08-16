@@ -7,11 +7,11 @@
     "typical_weekday_schedule": "Describe your typical weekday schedule in broad strokes."
   },
   "memory": {
-    "who_is_persona_1": "Who is {persona_name}?",
+    "who_is_persona_1": "Who is {random_persona_name_1}?",
     "who_is_nonexistent_person": "Who is Kane Martinez?",
-    "who_is_clause": "Who is {clause}?",
+    "who_is_clause": "Who is {random_persona_clause}?",
     "was_there_event": "Was there {event}?",
-    "who_is_persona_2": "Who is {persona_name}?"
+    "who_is_persona_2": "Who is {random_persona_name_2}?"
   },
   "plans": {
     "at_6am": "What will you be doing at 6am today?",
@@ -29,9 +29,9 @@
   },
   "reflections": {
     "what_inspires_you": "What inspires you in life the most right now, and why?",
-    "what_book_would_persona_like": "If you had to guess given what you know about {persona_name}, what book do you think they will like and why?",
-    "what_would_persona_like_for_birthday": "If you had to get something {persona_name} likes for their birthday, what would you get them?",
-    "how_to_compliment_persona": "What would you say to {persona_name} to compliment?",
+    "what_book_would_persona_like": "If you had to guess given what you know about {well_known_persona_name}, what book do you think they will like and why?",
+    "what_would_persona_like_for_birthday": "If you had to get something {well_known_persona_name} likes for their birthday, what would you get them?",
+    "how_to_compliment_persona": "What would you say to {well_known_persona_name} to compliment them?",
     "spend_time_with_someone": "If you could spend time with someone you talked to recently, who would it be and why?"
   }
 }
