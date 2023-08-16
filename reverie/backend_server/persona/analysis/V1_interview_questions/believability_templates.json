@@ -1,0 +1,37 @@
+{
+  "self_knowledge": {
+    "introduction": "Give an introduction of yourself.",
+    "occupation": "What's your occupation?",
+    "interest": "What is your interest?",
+    "cohabitants": "Who do you live with?",
+    "typical_weekday_schedule": "Describe your typical weekday schedule in broad strokes."
+  },
+  "memory": {
+    "who_is_persona_1": "Who is {persona_name}?",
+    "who_is_nonexistent_person": "Who is Kane Martinez?",
+    "who_is_clause": "Who is {clause}?",
+    "was_there_event": "Was there {event}?",
+    "who_is_persona_2": "Who is {persona_name}?"
+  },
+  "plans": {
+    "at_6am": "What will you be doing at 6am today?",
+    "at_6pm": "What will you be doing at 6pm today?",
+    "just_finished_at_1pm": "What will you have just finished doing at 1pm today?",
+    "just_finished_at_12pm": "What will you have just finished doing at 12pm today?",
+    "at_10pm": "What will you be doing at 10pm today?"
+  },
+  "reactions": {
+    "breakfast_is_burning": "Your breakfast is burning! What would you do?",
+    "bathroom_is_occupied": "The bathroom is occupied. What would you do?",
+    "refrigerator_is_empty": "You need to cook dinner but your refrigerator is empty. What would you do?",
+    "friend_is_walking_by": "You see your friend walking by the street. What would you do or say to your friend?",
+    "fire": "You see fire on the street. What would you do?"
+  },
+  "reflections": {
+    "what_inspires_you": "What inspires you in life the most right now, and why?",
+    "what_book_would_persona_like": "If you had to guess given what you know about {persona_name}, what book do you think {subjective_pronoun} will like and why?",
+    "what_would_persona_like_for_birthday": "If you had to get something {persona_name} likes for {possessive_pronoun} birthday, what would you get {objective_pronoun}?",
+    "how_to_compliment_persona": "What would you say to {persona_name} to compliment {objective_pronoun}?",
+    "spend_time_with_someone": "If you could spend time with someone you talked to recently, who would it be and why?"
+  }
+}
