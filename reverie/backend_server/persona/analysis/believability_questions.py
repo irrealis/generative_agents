@@ -50,6 +50,18 @@ def get_chat_interaction_counts(persona):
 
 
 def get_max_chat_interactions(persona):
+  '''
+  Identify the persona with whom a subject persona has had the most chat interactions.
+
+  Return a pair of tuples:
+  (
+    (persona_1, chat interaction count)
+    (persona_2, total dialog exchange count)
+  )
+
+  persona_1 is the person with whom the subject has had the most chats.
+  persona_2 is the person with whom the subject has had the most dialog exchanges.
+  '''
   chat_counts, dialog_exchange_counts = get_chat_interaction_counts(persona)
   # Note: there can be ties in these maxima. Python will choose one, but I'm not sure how.
   max_chats = max(chat_counts.items(), key=lambda x: x[1])
