@@ -113,6 +113,17 @@ def get_max_chat_interactions(persona):
 ### Tests
 
 
+def test_brainstorm__prototype__get_max_chat_interactions(rs):
+  persona = rs.personas['Isabella Rodriguez']
+  max_chats, max_dialog_exchanges = get_max_chat_interactions(persona)
+  log.debug(
+    f'''
+Max chats: {max_chats}
+Max dialog exchanges: {max_dialog_exchanges}
+'''
+  )
+
+
 def test_brainstorm__prototype__get_chat_interaction_counts(rs):
   persona = rs.personas['Isabella Rodriguez']
   chat_counts, dialog_exchange_counts = get_chat_interaction_counts(persona)
