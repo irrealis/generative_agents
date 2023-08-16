@@ -22,6 +22,7 @@ import utils
 import reverie
 from reverie import ReverieServer
 from persona.analysis.interview import interview_persona
+from persona.analysis.believability_questions import get_chat_interaction_counts
 from persona.persona import Persona
 from persona.cognitive_modules.retrieve import extract_recency, extract_importance, extract_relevance, new_retrieve, normalize_dict_floats, top_highest_x_values
 from persona.cognitive_modules.converse import generate_summarize_ideas, generate_next_line
@@ -75,32 +76,6 @@ def rs():
     sim_code=sim_code,
     predelete=True,
   )
-
-
-def get_chat_interaction_counts(persona):
-  chat_counts = dict()
-  dialog_exchange_counts = dict()
-  for count, event in enumerate(persona.a_mem.seq_chat):
-    participant = event.object
-
-    # Increment count of chats with chat participant.
-    chat_count = chat_counts.get(participant, 0)
-    chat_count += 1
-    chat_counts[participant] = chat_count
-
-    description = event.description
-    created_at = event.created.strftime('%B %d, %Y, %H%M%S')
-    lines = []
-    for row in event.filling:
-      speaker, dialog = row
-
-      if speaker != persona.name:
-        # Increment count of chats with chat participant.
-        dialog_exchange_count = dialog_exchange_counts.get(speaker, 0)
-        dialog_exchange_count += 1
-        dialog_exchange_counts[speaker] = dialog_exchange_count
-
-  return chat_counts, dialog_exchange_counts
 
 
 def get_max_chat_interactions(persona):
