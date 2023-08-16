@@ -157,6 +157,35 @@ def get_believability_question_variables(
 ### Tests
 
 
+def test_brainstorm__get_believability_question_variables(rs):
+  persona_names = list(rs.personas.keys())
+  persona = rs.personas['Isabella Rodriguez']
+  question_variables = get_believability_question_variables(
+    persona=persona,
+    personas=rs.personas,
+    random_persona_clause = "organizing a Valentine's Day party",
+    event = "a Valentine's Day party",
+    # Get a deterministic random number generator by seeding with 0.
+    random_seed = 0,
+  )
+
+  interview_questions_path = f'{project_dir}/reverie/backend_server/persona/analysis/V1_interview_questions/believability_templates.json'
+  with open(interview_questions_path, 'rb') as f:
+    believability_questions = json.load(f)
+  questions_lines = []
+  for believability_area, question_templates in believability_questions.items():
+    questions_lines.append(f'Believability area: {believability_area}:')
+    for topic, question_template in question_templates.items():
+      question = question_template.format_map(question_variables)
+      questions_lines.append(f'  Topic: {topic}: {question}')
+  questions_text = '\n'.join(questions_lines)
+  log.debug(
+    f'''
+{questions_text}
+'''
+  )
+
+
 def test_brainstorm__prototype__interview_question_formatting(rs):
   # Get a deterministic random number generator by seeding with 0.
   rng = random.Random(0)
