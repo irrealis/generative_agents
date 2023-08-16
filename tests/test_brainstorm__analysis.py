@@ -22,7 +22,7 @@ import utils
 import reverie
 from reverie import ReverieServer
 from persona.analysis.interview import interview_persona
-from persona.analysis.believability_questions import get_chat_interaction_counts
+from persona.analysis.believability_questions import get_chat_interaction_counts, get_max_chat_interactions
 from persona.persona import Persona
 from persona.cognitive_modules.retrieve import extract_recency, extract_importance, extract_relevance, new_retrieve, normalize_dict_floats, top_highest_x_values
 from persona.cognitive_modules.converse import generate_summarize_ideas, generate_next_line
@@ -76,13 +76,6 @@ def rs():
     sim_code=sim_code,
     predelete=True,
   )
-
-
-def get_max_chat_interactions(persona):
-  chat_counts, dialog_exchange_counts = get_chat_interaction_counts(persona)
-  max_chats = max(chat_counts.items(), key=lambda x: x[1])
-  max_dialog_exchanges = max(dialog_exchange_counts.items(), key=lambda x: x[1])
-  return max_chats, max_dialog_exchanges
 
 
 def get_believability_question_variables(
