@@ -33,7 +33,8 @@ import datetime as dt
 import shutil
 
 
-langchain.llm_cache = SQLiteCache_ForTests(database_path=".langchain.db")
+#langchain.llm_cache = SQLiteCache_ForTests(database_path=".langchain.db")
+langchain.llm_cache = SQLiteCache(database_path=".langchain.db")
 os.environ['LANGCHAIN_TRACING_V2']='true'
 os.environ['LANGCHAIN_PROJECT']='Park Generative Agents'
 tags = ['test', 'brainstorm']
