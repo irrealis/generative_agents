@@ -18,6 +18,14 @@ term "personas" to refer to generative agents, "associative memory" to refer
 to the memory stream, and "reverie" to refer to the overarching simulation 
 framework.
 """
+import logging
+log = logging.getLogger(__name__)
+log.setLevel(logging.DEBUG)
+
+from dotenv import find_dotenv, load_dotenv
+env_path = find_dotenv()
+load_dotenv(env_path)
+
 import json
 import numpy
 import datetime
@@ -30,6 +38,9 @@ import traceback
 
 from selenium import webdriver
 
+import langchain
+from langchain.cache import SQLiteCache, RETURN_VAL_TYPE
+
 from global_methods import *
 from utils import *
 from maze import *
@@ -38,6 +49,15 @@ from persona.persona import *
 ##############################################################################
 #                                  REVERIE                                   #
 ##############################################################################
+
+project_dir = os.path.dirname(env_path)
+log.debug(f'{project_dir=}')
+os.environ['LANGCHAIN_TRACING_V2']='true'
+os.environ['LANGCHAIN_PROJECT']='Park Generative Agents'
+
+langchain_db_path = os.path.join(project_dir, ".langchain.db")
+langchain.llm_cache = SQLiteCache(database_path=langchain_db_path)
+
 
 class ReverieServer: 
   def __init__(self, 
@@ -305,6 +325,11 @@ class ReverieServer:
     # The main while loop of Reverie. 
     while (True): 
       # Done with this iteration if <int_counter> reaches 0. 
+      print(f'''
+--- Next simulation step:
+{int_counter=}; simulation time: {self.curr_time.isoformat()}
+---
+''')
       if int_counter == 0: 
         break
 
@@ -398,6 +423,7 @@ class ReverieServer:
           #  "persona": {"Klaus Mueller": {"movement": [38, 12]}}, 
           #  "meta": {curr_time: <datetime>}}
           curr_move_file = f"{sim_folder}/movement/{self.step}.json"
+          create_folder_if_not_there(f"{sim_folder}/movement")
           with open(curr_move_file, "w") as outfile: 
             outfile.write(json.dumps(movements, indent=2))
 
