@@ -80,7 +80,24 @@ random.seed(0)
 ### Tests
 
 
-def test_brainstorm__pose_believability_questions(rs):
+interview_questions_path = f'{project_dir}/reverie/backend_server/persona/analysis/V1_interview_questions/believability_templates.json'
+with open(interview_questions_path, 'rb') as f:
+  believability_questions = json.load(f)
+question_templates = [
+  (
+    believability_area,
+    topic,
+    question_template
+  )
+  for believability_area, question_templates in believability_questions.items()
+  for topic, question_template in question_templates.items()
+]
+@pytest.mark.parametrize(
+  'area,topic,question_template',
+  question_templates
+)
+def test_brainstorm__pose_one_believability_question(area, topic, question_template, rs):
+  langchain.llm_cache.hit_miss_tracker = []
   persona_names = list(rs.personas.keys())
   persona = rs.personas['Isabella Rodriguez']
   question_variables = get_believability_question_variables(
@@ -91,28 +108,30 @@ def test_brainstorm__pose_believability_questions(rs):
     # Get a deterministic random number generator by seeding with 0.
     random_seed = 0,
   )
-
-  interview_questions_path = f'{project_dir}/reverie/backend_server/persona/analysis/V1_interview_questions/believability_templates.json'
-  with open(interview_questions_path, 'rb') as f:
-    believability_questions = json.load(f)
-  for believability_area, question_templates in believability_questions.items():
-    for topic, question_template in question_templates.items():
-      question = question_template.format_map(question_variables)
-      response, current_convo = interview_persona(
-        persona=persona,
-        message=question,
-      )
-      log.debug(
-        f'''
+  question = question_template.format_map(question_variables)
+  response, current_convo = interview_persona(
+    persona=persona,
+    message=question,
+  )
+  hit_miss = langchain.llm_cache.hit_miss_tracker
+  langchain.llm_cache.hit_miss_tracker = None
+  misses = [hm for hm in hit_miss if hm['hit_miss'] == 'MISS']
+  #response = '(not requested)'
+  log.debug(
+    f'''
 
 --- Interview question:
-Area: {believability_area}
+Area: {area}
 Topic: {topic}
 Question: {question}
 Response:
 {response}
+
+LangChain cache misses:
+{misses}
 '''
   )
+  assert not misses
 
 
 def test_brainstorm__get_believability_question_variables(rs):
