@@ -60,17 +60,30 @@ try:
   import langchain
 
   class LangChainModel(LanguageModel):
-    def __init__(self, model):
+    def __init__(self, model, exception_handler = None):
       self.model = model
+      self.exception_handler = exception_handler
     def generate(self, prompt, **kw):
       if isinstance(self.model, langchain.chat_models.base.BaseChatModel):
-        output = self.model(
-          [
-            langchain.schema.HumanMessage(content=prompt, additional_kwargs=kw),
-          ],
-        )
+        try:
+          output = self.model(
+            [
+              langchain.schema.HumanMessage(content=prompt, additional_kwargs=kw),
+            ],
+          )
+        except Exception as e:
+          if self.exception_handler:
+            self.exception_handler(e)
+          else:
+            raise e
       elif isinstance(self.model, langchain.llms.base.BaseLLM):
-        output = self.model(prompt, **kw)
+        try:
+          output = self.model(prompt, **kw)
+        except Exception as e:
+          if self.exception_handler:
+            self.exception_handler(e)
+          else:
+            raise e
       else:
         raise Exception('model is neither chat nor llm')
       return output.content

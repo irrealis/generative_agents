@@ -4,9 +4,14 @@ Author: Joon Sung Park (joonspk@stanford.edu)
 File: gpt_structure.py
 Description: Wrapper functions for calling OpenAI APIs.
 """
+import logging
+log = logging.getLogger(__name__)
+log.setLevel(logging.DEBUG)
+
 import json
 import random
 import openai
+import openai.error
 import time 
 
 from utils import *
@@ -17,10 +22,14 @@ from langchain.chat_models import ChatOpenAI
 from langchain.embeddings import OpenAIEmbeddings
 
 
+def openai_exception_handler(exception):
+  log.error(f'Error; exception: {exception}')
+  raise exception
+
 openai.api_key = openai_api_key
-llm_oai_gpt_35_turbo = LangChainModel(ChatOpenAI())
-llm_oai_gpt_4 = LangChainModel(ChatOpenAI(model_name='gpt-4'))
-embeddings_oai_ada = LangChainEmbeddings(OpenAIEmbeddings(model='text-embedding-ada-002'))
+llm_oai_gpt_35_turbo = LangChainModel(ChatOpenAI(), openai_exception_handler)
+llm_oai_gpt_4 = LangChainModel(ChatOpenAI(model_name='gpt-4'), openai_exception_handler)
+embeddings_oai_ada = LangChainEmbeddings(OpenAIEmbeddings(model='text-embedding-ada-002'), openai_exception_handler)
 
 
 
@@ -96,7 +105,8 @@ def ChatGPT_request(prompt):
   #except: 
   #  print ("ChatGPT ERROR")
   #  return "ChatGPT ERROR"
-  return llm_oai_gpt_35_turbo.generate(prompt)
+  result = llm_oai_gpt_35_turbo.generate(prompt)
+  return result
 
 
 # NOTE@kaben: Not used.
@@ -180,7 +190,10 @@ def ChatGPT_safe_generate_response(prompt,
         print (curr_gpt_response)
         print ("~~~~")
 
-    except: 
+    except openai.error.InvalidRequestError as e:
+      log.error(f'OpenAI InvalidRequestError; exception: {e}')
+      raise e
+    except Exception as e: 
       pass
 
   return False

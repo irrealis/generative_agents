@@ -187,7 +187,8 @@ def generate_summarize_ideas(persona, nodes, question):
   statements = ""
   for n in nodes:
     statements += f"{n.embedding_key}\n"
-  summarized_idea = run_gpt_prompt_summarize_ideas(persona, statements, question)[0]
+  result = run_gpt_prompt_summarize_ideas(persona, statements, question)
+  summarized_idea = result[0]
   return summarized_idea
 
 
