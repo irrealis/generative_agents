@@ -32,6 +32,8 @@ from irrealis.generative_agents.test_tools import *
 import langchain
 from langchain.cache import SQLiteCache, RETURN_VAL_TYPE
 
+import openai.error
+
 import pytest
 
 import datetime as dt
@@ -283,6 +285,35 @@ def test_brainstorm__interview_question_file(rs):
 {questions_text}
 '''
   )
+
+
+def test_regression__interview_persona__context_length_exceeded(rs):
+  persona = rs.personas['Isabella Rodriguez']
+  curr_convo = []
+  interviewer = "Interviewer"
+  message = "How are you?"
+  context_length_exceeded = False
+  try:
+    response, curr_convo = interview_persona(
+      persona=persona,
+      message=message,
+      curr_convo=curr_convo,
+      interviewer=interviewer,
+      n_count=30,
+    )
+  except openai.error.InvalidRequestError as e:
+    if e.code == 'context_length_exceeded':
+      context_length_exceeded = True
+    log.warning(f'OpenAI InvalidRequestError: exception: {e}')
+  assert not context_length_exceeded, "OpenAI context length exceeded"
+
+  convo_lines = '\n\n'.join(f'{speaker.upper()}: {line}' for (speaker, line) in curr_convo)
+  log.debug(
+    f'''
+*** Current convo:
+
+{convo_lines}
+''')
 
 
 def test_brainstorm__interview_persona(rs):
