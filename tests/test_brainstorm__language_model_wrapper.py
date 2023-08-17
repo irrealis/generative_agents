@@ -66,10 +66,6 @@ def oai_chat_model():
   return ChatOpenAI()
 
 @pytest.fixture
-def oai_model():
-  return ChatOpenAI()
-
-@pytest.fixture
 def oai_embeddings():
   return OpenAIEmbeddings()
 
@@ -84,10 +80,6 @@ def hf_embeddings():
 @pytest.fixture
 def lm_oai_chat_model(oai_chat_model):
   return LangChainModel(oai_chat_model)
-
-@pytest.fixture
-def lm_oai_model(oai_model):
-  return LangChainModel(oai_model)
 
 @pytest.fixture
 def embs_oai(oai_embeddings):
@@ -105,18 +97,8 @@ def test_brainstorm__language_model_wrapper__lm_oai_chat_model(lm_oai_chat_model
   log.debug(f'{result=}')
 
 
-def test_brainstorm__language_model_wrapper__lm_oai_model(lm_oai_model):
-  result = lm_oai_model.generate('hi.')
-  log.debug(f'{result=}')
-
-
 def test_brainstorm__language_model_wrapper__oai_chat_model(oai_chat_model):
   lcm = LangChainModel(oai_chat_model)
   result = lcm.generate('hi.')
   log.debug(f'{result=}')
 
-
-def test_brainstorm__language_model_wrapper__oai_model(oai_model):
-  lcm = LangChainModel(oai_model)
-  result = lcm.generate('hi.')
-  log.debug(f'{result=}')
