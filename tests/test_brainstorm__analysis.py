@@ -11,13 +11,8 @@ import random
 import sys
 
 project_dir = os.path.dirname(env_path)
-log.debug(f'{project_dir=}')
-
 sys.path.insert(0, os.path.abspath(f"{project_dir}/reverie/backend_server"))
 sys.path.insert(0, os.path.abspath(f"{project_dir}/../datascience"))
-
-
-import utils
 
 import reverie
 from reverie import ReverieServer
@@ -40,8 +35,9 @@ import datetime as dt
 import json, shutil
 
 
-#langchain.llm_cache = SQLiteCache_ForTests(database_path=".langchain.db")
-langchain.llm_cache = SQLiteCache(database_path=".langchain.db")
+#langchain.llm_cache = SQLiteCache_ForTests(database_path=".langchain.db", raise_on_miss=True)
+langchain.llm_cache = SQLiteCache_ForTests(database_path=".langchain.db", raise_on_miss=False)
+#langchain.llm_cache = SQLiteCache(database_path=".langchain.db")
 
 os.environ['LANGCHAIN_TRACING_V2']='true'
 os.environ['LANGCHAIN_PROJECT']='Park Generative Agents'
@@ -80,7 +76,7 @@ def rs():
   )
 
 
-
+random.seed(0)
 ### Tests
 
 

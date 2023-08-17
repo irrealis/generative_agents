@@ -51,8 +51,9 @@ import datetime as dt
 import re
 
 
-#langchain.llm_cache = SQLiteCache_ForTests(database_path=".langchain.db")
-langchain.llm_cache = SQLiteCache(database_path=".langchain.db")
+langchain.llm_cache = SQLiteCache_ForTests(database_path=".langchain.db", raise_on_miss=True)
+#langchain.llm_cache = SQLiteCache_ForTests(database_path=".langchain.db", raise_on_miss=False)
+#langchain.llm_cache = SQLiteCache(database_path=".langchain.db")
 os.environ['LANGCHAIN_TRACING_V2']='true'
 os.environ['LANGCHAIN_PROJECT']='Park Generative Agents'
 tags = ['test', 'brainstorm']
@@ -85,6 +86,8 @@ def lm_oai_chat_model(oai_chat_model):
 def embs_oai(oai_embeddings):
   return LangChainEmbeddings(oai_embeddings)
 
+
+random.seed(0)
 
 
 def test_brainstorm__embeddings_wrapper__embs_oai(embs_oai):

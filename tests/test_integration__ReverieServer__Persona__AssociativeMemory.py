@@ -33,8 +33,9 @@ import datetime as dt
 import shutil
 
 
-#langchain.llm_cache = SQLiteCache_ForTests(database_path=".langchain.db")
-langchain.llm_cache = SQLiteCache(database_path=".langchain.db")
+langchain.llm_cache = SQLiteCache_ForTests(database_path=".langchain.db", raise_on_miss=True)
+#langchain.llm_cache = SQLiteCache_ForTests(database_path=".langchain.db", raise_on_miss=False)
+#langchain.llm_cache = SQLiteCache(database_path=".langchain.db")
 os.environ['LANGCHAIN_TRACING_V2']='true'
 os.environ['LANGCHAIN_PROJECT']='Park Generative Agents'
 tags = ['test', 'brainstorm']
@@ -71,6 +72,8 @@ def rs():
     predelete=True,
   )
 
+
+random.seed(0)
 
 def test__reverie__Persona__scratch__get_str_iss(rs):
   '''Verify Scratch.get_str_iss() doesn't raise exceptions.'''
