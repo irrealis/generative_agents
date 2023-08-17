@@ -24,7 +24,7 @@ from langchain.embeddings import OpenAIEmbeddings
 
 def openai_exception_handler(exception):
   log.error(f'Error; exception: {exception}')
-  raise exception
+  #raise exception
 
 openai.api_key = openai_api_key
 llm_oai_gpt_35_turbo = LangChainModel(ChatOpenAI(), openai_exception_handler)
