@@ -49,6 +49,7 @@ import pytest
 
 import datetime as dt
 import re
+import random
 
 
 langchain.llm_cache = SQLiteCache_ForTests(database_path=".langchain.db", raise_on_miss=True)
