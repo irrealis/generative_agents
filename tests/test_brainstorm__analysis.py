@@ -33,6 +33,7 @@ import openai.error
 import pytest
 
 import datetime as dt
+import functools as ft
 import json, pprint, shutil
 
 
@@ -94,10 +95,86 @@ def is_reflection_error(node):
 
 
 
+# This brainstorm prototypes a procedure to interview a persona under ablation
+# of reflection memories.
+#
+def test_brainstorm__prototype__persona_ablations__reflections(rs):
+  persona = rs.personas['Isabella Rodriguez']
+
+  # Remove non-planning thoughts from keyword-nodes mapping.
+  kw_to_plan_thoughts = {
+    kw:[
+      node for node in nodes if is_planning(node)
+    ]
+    for kw,nodes in persona.a_mem.kw_to_thought.items()
+  }
+  # The above may result in keywords with empty memory lists.
+  # Below such keywords are removed.
+  kw_to_plan_thoughts = {kw:nodes for kw,nodes in kw_to_plan_thoughts.items() if nodes}
+
+  # Verify: the thought depth of all remaining thoughts should be 1.
+  kw_to_thought_depths = {
+    kw:set(
+      n.depth
+      for n in nodes
+    )
+    for kw,nodes in kw_to_plan_thoughts.items()
+  }
+  thought_depths = set(ft.reduce(set.union, kw_to_thought_depths.values()))
+  assert thought_depths == {1}
+
+  # Remove nodes that are either reflections or reflection-errors from id-nodes mapping.
+  id_to_nonreflection_node = {
+    node_id:node
+    for node_id, node in persona.a_mem.id_to_node.items()
+    if not (is_reflection(node) or is_reflection_error(node))
+  }
+
+  # Verify: the depths of all remaining memories should be no more than 1.
+  nonreflection_node_depths = set(node.depth for node in id_to_nonreflection_node.values())
+  assert max(nonreflection_node_depths) <= 1
+
+  # Wipe non-plan thoughts.
+  seq_planning_thought = [node for node in persona.a_mem.seq_thought if is_planning(node)]
+
+  # Verify we've removed thoughts.
+  assert len(seq_planning_thought) < len(persona.a_mem.seq_thought)
+  assert len(id_to_nonreflection_node) < len(persona.a_mem.id_to_node)
+
+  # Update persona's associative memory.
+  persona.a_mem.kw_to_thought = kw_to_plan_thoughts
+  persona.a_mem.id_to_node = id_to_nonreflection_node
+  persona.a_mem.seq_thought = seq_planning_thought
+
+  # Verify consistency between remaining thoughts as seen in `seq_thoughts` and `id_to_node`.
+  associative_memories = persona.a_mem.id_to_node
+  thoughts = {
+    key:node
+    for key,node in associative_memories.items()
+    if node.type == 'thought'
+  }
+  assert len(thoughts) == len(persona.a_mem.seq_thought)
+
+  # Interview agent with partial ablation.
+  question = 'Give an introduction of yourself.'
+  response, current_convo = interview_persona(
+    persona=persona,
+    message=question
+  )
+  log.debug(
+    f'''
+--- Interview question:
+Question: {question}
+Response:
+{response}
+'''
+  )
+
+
 # This brainstorm prototypes a procedure to interview a persona under partial
 # ablation: no planning or reflection memories.
 #
-# This is simpler that the full ablation because:
+# This is simpler than the full ablation because:
 # - Removing all plans and reflections equates to removing all thought memories.
 # - Because non-thought memories are not removed, there are still enough
 #   memories present that no special effort is required to avoid the kinds of
