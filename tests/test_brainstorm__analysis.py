@@ -33,7 +33,7 @@ import openai.error
 import pytest
 
 import datetime as dt
-import json, shutil
+import json, pprint, shutil
 
 
 #langchain.llm_cache = SQLiteCache_ForTests(database_path=".langchain.db", raise_on_miss=True)
@@ -79,6 +79,154 @@ def rs():
 
 random.seed(0)
 ### Tests
+
+
+# Below I'm examining the initial event, thought, and chat memories of Isabella
+# Rodriguez. I'm trying to find a set of memories with the least information
+# possible.
+#
+# Reason: For full ablation I tried interviewing an agent after emptying all
+# memory structures, but this causes exception `ValueError: min() arg is an
+# empty sequence`:
+#  - `interview.py:35:interview_persona()`
+#  - `retrieve.py:242:new_retrieve()`
+#  - `retrieve.py:93:normalize_dict_floats()`
+#
+#  The cause:
+#  - `new_retrieve()` calls `extract_recency()` which returns an empty
+#    dictionary. This empty dictionary is passed to `normalize_dict_floats()`.
+#    `normalize_dict_floats()` tries to find the maximum of the empty
+#    dictionary's values, but the value list is empty, so the `max` function
+#    raises the exception. 
+#  - `extract_recency()` produces the empty dictionary because it is passed an
+#    empty `nodes` list  as its second argument.
+#  - `new_retrieve()` constructs this empty nodes list by iterating over
+#    `persona.a_mem.seq_event + persona.a_mem.seq_thought`, both of which I've
+#    emptied.
+#
+# Result:
+#
+# ```python
+# Initial event memory:
+# { 'created': datetime.datetime(2023, 2, 13, 0, 0),
+#   'depth': 0,
+#   'description': 'Isabella Rodriguez is idle',
+#   'embedding_key': 'Isabella Rodriguez is idle',
+#   'expiration': None,
+#   'filling': [],
+#   'keywords': {'Isabella Rodriguez', 'idle'},
+#   'last_accessed': datetime.datetime(2023, 2, 13, 0, 0),
+#   'node_count': 1,
+#   'node_id': 'node_1',
+#   'object': 'idle',
+#   'poignancy': 1,
+#   'predicate': 'is',
+#   'subject': 'Isabella Rodriguez',
+#   'type': 'event',
+#   'type_count': 1}
+# Initial thought memory:
+# { 'created': datetime.datetime(2023, 2, 13, 0, 0),
+#   'depth': 1,
+#   'description': "This is Isabella Rodriguez's plan for Monday February 13: "
+#                  'wake up and complete the morning routine at 6:00 am, travel '
+#                  'to Hobbs Cafe at 7:00 am, open up shop at 8:00 am, greet '
+#                  'customers and work at the counter until 8 pm, buy party '
+#                  "materials for the Valentine's Day party at the cafe from "
+#                  '9:00 am to 10:00 am, have lunch at 12:00 pm, take a short '
+#                  "nap from 2 to 4 pm, plan the Valentine's Day Party in the "
+#                  'afternoon.',
+#   'embedding_key': "This is Isabella Rodriguez's plan for Monday February 13: "
+#                    'wake up and complete the morning routine at 6:00 am, '
+#                    'travel to Hobbs Cafe at 7:00 am, open up shop at 8:00 am, '
+#                    'greet customers and work at the counter until 8 pm, buy '
+#                    "party materials for the Valentine's Day party at the cafe "
+#                    'from 9:00 am to 10:00 am, have lunch at 12:00 pm, take a '
+#                    "short nap from 2 to 4 pm, plan the Valentine's Day Party "
+#                    'in the afternoon.',
+#   'expiration': datetime.datetime(2023, 3, 15, 0, 0),
+#   'filling': None,
+#   'keywords': {'plan'},
+#   'last_accessed': datetime.datetime(2023, 2, 13, 0, 0),
+#   'node_count': 7,
+#   'node_id': 'node_7',
+#   'object': 'Monday February 13',
+#   'poignancy': 5,
+#   'predicate': 'plan',
+#   'subject': 'Isabella Rodriguez',
+#   'type': 'thought',
+#   'type_count': 1}
+# Initial chat memory:
+# { 'created': datetime.datetime(2023, 2, 13, 11, 22, 40),
+#   'depth': 0,
+#   'description': 'conversing about a conversation about Isabella inviting '
+#                  "Klaus to her Valentine's Day party at Hobbs Cafe on February "
+#                  '14th, 2023 from 5pm to 7pm.',
+#   'embedding_key': 'conversing about a conversation about Isabella inviting '
+#                    "Klaus to her Valentine's Day party at Hobbs Cafe on "
+#                    'February 14th, 2023 from 5pm to 7pm.',
+#   'expiration': None,
+#   'filling': [ [ 'Isabella Rodriguez',
+#                  'Hi Klaus! How are you enjoying your meal? I wanted to let '
+#                  "you know that I'm planning a Valentine's Day party at Hobbs "
+#                  'Cafe on February 14th, 2023 from 5pm to 7pm. I would love '
+#                  'for you to join us!'],
+#                [ 'Klaus Mueller',
+#                  "Oh, hi Isabella! I'm doing well, thank you. The meal is "
+#                  "delicious as always. A Valentine's Day party sounds fun. I'd "
+#                  'love to join! Thank you for inviting me.']],
+#   'keywords': {'Klaus Mueller', 'Isabella Rodriguez'},
+#   'last_accessed': datetime.datetime(2023, 2, 13, 11, 22, 40),
+#   'node_count': 287,
+#   'node_id': 'node_287',
+#   'object': 'Klaus Mueller',
+#   'poignancy': 4,
+#   'predicate': 'chat with',
+#   'subject': 'Isabella Rodriguez',
+#   'type': 'chat',
+#   'type_count': 1}
+# ```
+def test_brainstorm__persona_initial_memories(rs):
+  persona = rs.personas['Isabella Rodriguez']
+  # Examine initial event, thought, and chat memories.
+  initial_event_memory = persona.a_mem.seq_event[-1]
+  second_event_memory = persona.a_mem.seq_event[-2]
+  initial_thought_memory = persona.a_mem.seq_thought[-1]
+  initial_chat_memory = persona.a_mem.seq_chat[-1]
+  log.debug(
+    f'''
+Initial event memory:
+{pprint.pformat(initial_event_memory.__dict__, indent=2)}
+Second event memory:
+{pprint.pformat(second_event_memory.__dict__, indent=2)}
+Initial thought memory:
+{pprint.pformat(initial_thought_memory.__dict__, indent=2)}
+Initial chat memory:
+{pprint.pformat(initial_chat_memory.__dict__, indent=2)}
+'''
+  )
+
+  # Examine whether id_to_node maps node ids to nodes (it does.)
+  initial_event_lookup = persona.a_mem.id_to_node[initial_event_memory.node_id]
+
+  # Construct a minimal kw_to_event dict that refers to just the initial event
+  # memory.
+  narrowed_kw_to_event = {
+    k:[node for node in nodes if node.node_id == initial_event_memory.node_id]
+    for k,nodes in persona.a_mem.kw_to_event.items()
+    if initial_event_memory.node_id in [
+      node.node_id
+      for node in nodes
+    ]
+  }
+  log.debug(
+    f'''
+Initial event lookup:
+{pprint.pformat(initial_event_lookup.__dict__, indent=2)}
+Narrowed_kw_to_event:
+{pprint.pformat(narrowed_kw_to_event, indent=2)}
+'''
+  )
+
 
 
 # Parameterize `...filter_associative_memory` with the names of the personas.
