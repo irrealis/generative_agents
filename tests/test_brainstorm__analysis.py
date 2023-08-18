@@ -18,10 +18,10 @@ import reverie
 from reverie import ReverieServer
 from persona.analysis.interview import interview_persona
 from persona.analysis.believability_questions import get_chat_interaction_counts, get_max_chat_interactions, get_believability_question_variables
-from persona.persona import Persona
-from persona.cognitive_modules.retrieve import extract_recency, extract_importance, extract_relevance, new_retrieve, normalize_dict_floats, top_highest_x_values
-
 from persona.cognitive_modules.converse import generate_summarize_ideas, generate_next_line
+from persona.cognitive_modules.perceive import generate_poig_score
+from persona.cognitive_modules.retrieve import new_retrieve
+from persona.prompt_template.gpt_structure import get_embedding
 
 from irrealis.generative_agents.test_tools import *
 
@@ -77,8 +77,112 @@ def rs():
   )
 
 
-random.seed(0)
 ### Tests
+
+# Try to make system more deterministic.
+random.seed(0)
+
+
+# This brainstorm prototypes a procedure to interview a persona under full
+# ablation: no observation, planning, or reflection memories.
+#
+# To make this work I had to insert a single minimal memory of the form
+# `'{persona.name} is {persona.name}'`. The reason for doing this is that
+# without at least one event or thought memory an exception is raised:
+# `ValueError: min() arg is an empty sequence'.
+#
+# An explanation of the error is written into the comments above
+# `test_brainstorm__persona_initial_memories(...)` where I examine the first
+# event, thought, and chat memories in order to figure out how to setup the
+# minimal memory.
+#
+def test_brainstorm__prototype__persona_ablations__observations_planning_reflections(rs):
+  persona = rs.personas['Isabella Rodriguez']
+
+  # Construct an empty event memory ('Isabella Rodriguez is Isabella Rodriguez')
+  initial_event_memory = persona.a_mem.seq_event[-1]
+  s = persona.name
+  p = 'is'
+  o = persona.name
+  event_description = f'{s} {p} {o}'
+  event_keywords = {s}
+  event_embedding = get_embedding(event_description)
+  event_embedding_pair = (event_description, event_embedding)
+  event_poignancy = generate_poig_score(persona, "event", event_description)
+  persona.a_mem.add_event(
+    created = initial_event_memory.created,
+    expiration = None,
+    s = s,
+    p = p,
+    o = o,
+    description = event_description,
+    keywords = event_keywords,
+    poignancy = event_poignancy,
+    embedding_pair = event_embedding_pair,
+    filling = [],
+  )
+
+  # Extract and verify the empty memory.
+  empty_memory = persona.a_mem.seq_event[0]
+  assert empty_memory.type == 'event'
+  assert empty_memory.created == initial_event_memory.created
+  assert empty_memory.expiration is None
+  assert empty_memory.subject == s
+  assert empty_memory.predicate == p
+  assert empty_memory.object == o
+  assert empty_memory.description == event_description
+  assert empty_memory.embedding_key == event_description
+  assert empty_memory.poignancy == event_poignancy
+  assert empty_memory.keywords == event_keywords
+  assert empty_memory.filling == []
+
+  # Give it bogus ID information.
+  empty_memory.node_id = 'node_0'
+  empty_memory.node_count = 0
+  empty_memory.type_count = 0
+  persona.a_mem.seq_event[0] = empty_memory
+  persona.a_mem.seq_event = [empty_memory]
+
+  # Wipe all other memories.
+  narrowed_kw_to_event = {
+    k:[node for node in nodes if node.node_id == empty_memory.node_id]
+    for k,nodes in persona.a_mem.kw_to_event.items()
+    if empty_memory.node_id in [
+      node.node_id
+      for node in nodes
+    ]
+  }
+  persona.a_mem.kw_to_event = narrowed_kw_to_event
+  persona.a_mem.id_to_node = {
+    empty_memory.node_id: empty_memory
+  }
+  persona.scratch.chatting_with = None
+  persona.scratch.chat = None
+  persona.scratch.chatting_with_buffer = []
+  persona.scratch.daily_req = []
+  persona.scratch.daily_plan_req = []
+  persona.scratch.f_daily_schedule = []
+  persona.scratch.f_daily_schedule_hourly_org = []
+  persona.a_mem.seq_thought = []
+  persona.a_mem.seq_chat = []
+
+  persona.a_mem.kw_to_thought = dict()
+  persona.a_mem.kw_to_chat = dict()
+
+  # Interview agent with full ablation.
+  question = 'Give an introduction of yourself.'
+  response, current_convo = interview_persona(
+    persona=persona,
+    message=question
+  )
+  log.debug(
+    f'''
+--- Interview question:
+Question: {question}
+Response:
+{response}
+'''
+  )
 
 
 # Below I'm examining the initial event, thought, and chat memories of Isabella
@@ -88,6 +192,7 @@ random.seed(0)
 # Reason: For full ablation I tried interviewing an agent after emptying all
 # memory structures, but this causes exception `ValueError: min() arg is an
 # empty sequence`:
+#  - `test_brainstorm__analysis.py:102:test_brainstorm__prototype__persona_ablations__observations_planning_reflections()`
 #  - `interview.py:35:interview_persona()`
 #  - `retrieve.py:242:new_retrieve()`
 #  - `retrieve.py:93:normalize_dict_floats()`
