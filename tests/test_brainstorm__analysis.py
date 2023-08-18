@@ -81,6 +81,55 @@ random.seed(0)
 ### Tests
 
 
+# Parameterize `...filter_associative_memory` with the names of the personas.
+#
+@pytest.mark.parametrize(
+  'persona_name',
+  ['Isabella Rodriguez', 'Maria Lopez', 'Klaus Mueller']
+)
+def test_brainstorm__filter_associative_memory(persona_name, rs):
+  persona = rs.personas[persona_name]
+  associative_memories = persona.a_mem.id_to_node
+
+  events = {
+    key:node
+    for key,node in associative_memories.items()
+    if node.type == 'event'
+  }
+  chats = {
+    key:node
+    for key,node in associative_memories.items()
+    if node.type == 'chat'
+  }
+  thoughts = {
+    key:node
+    for key,node in associative_memories.items()
+    if node.type == 'thought'
+  }
+
+  assert (len(events) + len(chats) + len(thoughts)) == len(associative_memories)
+
+  plans = {
+    key:node
+    for key,node in thoughts.items()
+    if node.filling is None
+  }
+  reflections = {
+    key:node
+    for key,node in thoughts.items()
+    if isinstance(node.filling, list)
+  }
+  errors = {
+    key:node
+    for key,node in thoughts.items()
+    if node.filling == 'node_1' and node.description == 'this is blank'
+  }
+
+  assert (len(plans) + len(reflections) + len(errors)) == len(thoughts)
+  assert (len(plans) + len(reflections) + len(errors)) == len(persona.a_mem.seq_thought)
+
+
+
 # Parameterize `...pose_one_believability_question` with each of the
 # believability questions listed in `believability_templates.json`.
 #
