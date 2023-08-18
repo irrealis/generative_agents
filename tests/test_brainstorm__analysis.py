@@ -402,8 +402,18 @@ def test_brainstorm__filter_associative_memory(persona_name, rs):
   #   only code in Reveries that generates this kind of memory. It can be
   #   thought of as a failed reflection. These errors are characterized by:
   #   - `node.type == 'thought'
-  #   - `node.depth == 1`
   #   - `node.filling == 'node_1' # Notably, this is a string, not a list.
+  #   - `node.description == 'this is blank'
+  #   - `node.depth == 1`
+  #
+  #   Currently the first and second characteristics are sufficient to identify
+  #   these reflection errors. I would hesitate to use `filling == 'node_1'` as
+  #   criterion, but rather `isinstance(filling, str)`.
+  #
+  #   It might be a good idea to ask Park (@joonspk-research) about this. I
+  #   suspect he's in the process of developing some coding idea here, so these
+  #   reflection errors might either go away in future code, or the criteria
+  #   for identifying them might change.
   #
   plans = {
     key:node
@@ -418,7 +428,7 @@ def test_brainstorm__filter_associative_memory(persona_name, rs):
   errors = {
     key:node
     for key,node in thoughts.items()
-    if node.filling == 'node_1' and node.description == 'this is blank'
+    if isinstance(node.filling, str)
   }
 
   assert (len(plans) + len(reflections) + len(errors)) == len(thoughts)
