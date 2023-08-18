@@ -20,6 +20,7 @@ from persona.analysis.interview import interview_persona
 from persona.analysis.believability_questions import get_chat_interaction_counts, get_max_chat_interactions, get_believability_question_variables
 from persona.persona import Persona
 from persona.cognitive_modules.retrieve import extract_recency, extract_importance, extract_relevance, new_retrieve, normalize_dict_floats, top_highest_x_values
+
 from persona.cognitive_modules.converse import generate_summarize_ideas, generate_next_line
 
 from irrealis.generative_agents.test_tools import *
@@ -80,6 +81,9 @@ random.seed(0)
 ### Tests
 
 
+# Parameterize `...pose_one_believability_question` with each of the
+# believability questions listed in `believability_templates.json`.
+#
 interview_questions_path = f'{project_dir}/reverie/backend_server/persona/analysis/V1_interview_questions/believability_templates.json'
 with open(interview_questions_path, 'rb') as f:
   believability_questions = json.load(f)
