@@ -212,7 +212,6 @@ Response:
   )
 
 
-
 # This brainstorm prototypes a procedure to interview a persona under full
 # ablation: no observation, planning, or reflection memories.
 #
@@ -470,39 +469,39 @@ Narrowed_kw_to_event:
 )
 def test_brainstorm__prototype__associative_memory_filters(persona_name, rs):
   persona = rs.personas[persona_name]
-  associative_memories = persona.a_mem.id_to_node
+  id_to_node = persona.a_mem.id_to_node
 
   events = {
     key:node
-    for key,node in associative_memories.items()
+    for key,node in id_to_node.items()
     if node.type == 'event'
   }
   chats = {
     key:node
-    for key,node in associative_memories.items()
+    for key,node in id_to_node.items()
     if node.type == 'chat'
   }
   thoughts = {
     key:node
-    for key,node in associative_memories.items()
+    for key,node in id_to_node.items()
     if node.type == 'thought'
   }
 
-  assert (len(events) + len(chats) + len(thoughts)) == len(associative_memories)
+  assert (len(events) + len(chats) + len(thoughts)) == len(id_to_node)
 
   plans = {
     key:node
-    for key,node in associative_memories.items()
+    for key,node in id_to_node.items()
     if is_planning(node)
   }
   reflections = {
     key:node
-    for key,node in associative_memories.items()
+    for key,node in id_to_node.items()
     if is_reflection(node)
   }
   errors = {
     key:node
-    for key,node in associative_memories.items()
+    for key,node in id_to_node.items()
     if is_reflection_error(node)
   }
 
