@@ -34,8 +34,8 @@ import random
 import shutil
 
 
-langchain.llm_cache = SQLiteCache_ForTests(database_path=".langchain.db", raise_on_miss=True)
-#langchain.llm_cache = SQLiteCache_ForTests(database_path=".langchain.db", raise_on_miss=False)
+#langchain.llm_cache = SQLiteCache_ForTests(database_path=".langchain.db", raise_on_miss=True)
+langchain.llm_cache = SQLiteCache_ForTests(database_path=".langchain.db", raise_on_miss=False)
 #langchain.llm_cache = SQLiteCache(database_path=".langchain.db")
 os.environ['LANGCHAIN_TRACING_V2']='true'
 os.environ['LANGCHAIN_PROJECT']='Park Generative Agents'
