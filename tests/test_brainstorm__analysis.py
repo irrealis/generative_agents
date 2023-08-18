@@ -94,6 +94,21 @@ def is_reflection_error(node):
   return (node.type == 'thought') and isinstance(node.filling, str)
 
 
+def ablate_planning_reflection(persona):
+  # Wipe all thought memories.
+  persona.a_mem.seq_thought = []
+  persona.a_mem.kw_to_thought = dict()
+  persona.a_mem.id_to_node = {
+    node_id:node
+    for node_id, node in persona.a_mem.id_to_node.items()
+    if node.type != 'thought'
+  }
+  persona.scratch.daily_req = []
+  persona.scratch.daily_plan_req = []
+  persona.scratch.f_daily_schedule = []
+  persona.scratch.f_daily_schedule_hourly_org = []
+
+
 def ablate_observations_planning_reflection(persona):
   initial_event_memory = persona.a_mem.seq_event[-1]
   s = persona.name
