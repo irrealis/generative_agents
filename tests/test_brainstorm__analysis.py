@@ -198,6 +198,83 @@ def ablate_observations_planning_reflection(persona):
   persona.a_mem.kw_to_chat = dict()
 
 
+def test_integration__ablate_reflection(rs):
+  persona = rs.personas['Isabella Rodriguez']
+  id_to_node = persona.a_mem.id_to_node
+  thoughts = {
+    key:node
+    for key,node in id_to_node.items()
+    if node.type == 'thought'
+  }
+  plans = {
+    key:node
+    for key,node in thoughts.items()
+    if node.filling is None
+  }
+  reflections = {
+    key:node
+    for key,node in thoughts.items()
+    if isinstance(node.filling, list)
+  }
+  errors = {
+    key:node
+    for key,node in thoughts.items()
+    if isinstance(node.filling, str)
+  }
+
+  # Sanity checks.
+  assert len(persona.a_mem.seq_thought) > 1
+  assert len(plans) > 1
+  assert len(reflections) > 1
+  seq_thought = persona.a_mem.seq_thought[:]
+  assert (len(plans) + len(reflections) + len(errors)) == len(seq_thought)
+
+  ablate_reflection(persona)
+
+  # Verify: the thought depth of all remaining thoughts should be 1.
+  kw_to_plan_thoughts = {
+    kw:[
+      node for node in nodes if is_planning(node)
+    ]
+    for kw,nodes in persona.a_mem.kw_to_thought.items()
+  }
+  kw_to_thought_depths = {
+    kw:set(
+      n.depth
+      for n in nodes
+    )
+    for kw,nodes in kw_to_plan_thoughts.items()
+  }
+  thought_depths = set(ft.reduce(set.union, kw_to_thought_depths.values()))
+  assert thought_depths == {1}
+
+  # Verify: the number of planning memories equals the number of remaining
+  # thought memories.
+  id_to_planning_node = {
+    node_id:node
+    for node_id, node in persona.a_mem.id_to_node.items()
+    if is_planning(node)
+  }
+  assert len(id_to_planning_node) == len(persona.a_mem.seq_thought)
+  # Verify: the depths of all remaining memories should be no more than 1.
+  nonreflection_node_depths = set(node.depth for node in id_to_planning_node.values())
+  assert max(nonreflection_node_depths) <= 1
+
+  # Verify we've removed thoughts.
+  assert len(persona.a_mem.seq_thought) < len(seq_thought)
+  assert len(persona.a_mem.id_to_node) < len(id_to_node)
+
+  # Verify consistency between number of remaining thoughts as seen in
+  # `seq_thoughts` and `id_to_node`.
+  associative_memories = persona.a_mem.id_to_node
+  thoughts = {
+    key:node
+    for key,node in associative_memories.items()
+    if node.type == 'thought'
+  }
+  assert len(thoughts) == len(persona.a_mem.seq_thought)
+
+
 # This brainstorm prototypes a procedure to interview a persona under ablation
 # of reflection memories.
 #
