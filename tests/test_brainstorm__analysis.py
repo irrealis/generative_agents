@@ -94,6 +94,35 @@ def is_reflection_error(node):
   return (node.type == 'thought') and isinstance(node.filling, str)
 
 
+def ablate_reflection(persona):
+  # Remove non-planning thoughts from keyword-nodes mapping.
+  kw_to_plan_thoughts = {
+    kw:[
+      node for node in nodes if is_planning(node)
+    ]
+    for kw,nodes in persona.a_mem.kw_to_thought.items()
+  }
+  # The above may result in keywords with empty memory lists.
+  # Below such keywords are removed.
+  kw_to_plan_thoughts = {kw:nodes for kw,nodes in kw_to_plan_thoughts.items() if nodes}
+
+  # Remove nodes that are either reflections or reflection-errors from id-nodes mapping.
+  id_to_nonreflection_node = {
+    node_id:node
+    for node_id, node in persona.a_mem.id_to_node.items()
+    if not (is_reflection(node) or is_reflection_error(node))
+  }
+
+  # Wipe non-plan thoughts.
+  seq_planning_thought = [node for node in persona.a_mem.seq_thought if is_planning(node)]
+
+  # Update persona's associative memory.
+  persona.a_mem.kw_to_thought = kw_to_plan_thoughts
+  persona.a_mem.id_to_node = id_to_nonreflection_node
+  persona.a_mem.seq_thought = seq_planning_thought
+
+
+
 def ablate_planning_reflection(persona):
   # Wipe all thought memories.
   persona.a_mem.seq_thought = []
