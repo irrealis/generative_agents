@@ -293,14 +293,6 @@ def test_integration__ablate_observations_planning_reflection(rs):
   assert len(persona.scratch.f_daily_schedule) == 0
   assert len(persona.scratch.f_daily_schedule_hourly_org) == 0
 
-  log.debug(
-    f'''
-Scratch:
-
-{pprint.pformat(persona.scratch.__dict__)}
-'''
-  )
-
 
 # This brainstorm prototypes a procedure to interview a persona under full
 # ablation: no observation, planning, or reflection memories.
