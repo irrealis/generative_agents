@@ -636,25 +636,25 @@ def test_brainstorm__prototype__associative_memory_filters(persona_name, rs):
 )
 def test_brainstorm__filter_associative_memory(persona_name, rs):
   persona = rs.personas[persona_name]
-  associative_memories = persona.a_mem.id_to_node
+  id_to_node = persona.a_mem.id_to_node
 
   events = {
     key:node
-    for key,node in associative_memories.items()
+    for key,node in id_to_node.items()
     if node.type == 'event'
   }
   chats = {
     key:node
-    for key,node in associative_memories.items()
+    for key,node in id_to_node.items()
     if node.type == 'chat'
   }
   thoughts = {
     key:node
-    for key,node in associative_memories.items()
+    for key,node in id_to_node.items()
     if node.type == 'thought'
   }
 
-  assert (len(events) + len(chats) + len(thoughts)) == len(associative_memories)
+  assert (len(events) + len(chats) + len(thoughts)) == len(id_to_node)
 
   # There are three types of thought memories:
   # - Plans: per the Park et al generative-agents paper, the persona starts
