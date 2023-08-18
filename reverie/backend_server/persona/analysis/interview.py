@@ -3,8 +3,8 @@ Author: Irrealis (irrealis-chomp@gmail.com)
 
 File: interview.py
 Description: This provides code for evaluation of persona behaviors via
-interviews under the ablation conditions described in Park's paper "Generative
-Agents: Interactive Simulacra of Human Behavior."
+interviews under the ablation conditions described in Park et al. paper
+"Generative Agents: Interactive Simulacra of Human Behavior."
 """
 
 import logging
