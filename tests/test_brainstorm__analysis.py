@@ -387,6 +387,53 @@ Narrowed_kw_to_event:
 
 
 
+@pytest.mark.parametrize(
+  'persona_name',
+  ['Isabella Rodriguez', 'Maria Lopez', 'Klaus Mueller']
+)
+def test_brainstorm__prototype__associative_memory_filters(persona_name, rs):
+  persona = rs.personas[persona_name]
+  associative_memories = persona.a_mem.id_to_node
+
+  events = {
+    key:node
+    for key,node in associative_memories.items()
+    if node.type == 'event'
+  }
+  chats = {
+    key:node
+    for key,node in associative_memories.items()
+    if node.type == 'chat'
+  }
+  thoughts = {
+    key:node
+    for key,node in associative_memories.items()
+    if node.type == 'thought'
+  }
+
+  assert (len(events) + len(chats) + len(thoughts)) == len(associative_memories)
+
+  plans = {
+    key:node
+    for key,node in associative_memories.items()
+    if is_planning(node)
+  }
+  reflections = {
+    key:node
+    for key,node in associative_memories.items()
+    if is_reflection(node)
+  }
+  errors = {
+    key:node
+    for key,node in associative_memories.items()
+    if is_reflection_error(node)
+  }
+
+  assert (len(plans) + len(reflections) + len(errors)) == len(thoughts)
+  assert (len(plans) + len(reflections) + len(errors)) == len(persona.a_mem.seq_thought)
+
+
+
 # Parameterize `...filter_associative_memory` with the names of the personas.
 #
 @pytest.mark.parametrize(
