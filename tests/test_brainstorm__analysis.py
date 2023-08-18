@@ -271,6 +271,37 @@ Response:
   )
 
 
+def test_integration__ablate_observations_planning_reflection(rs):
+  persona = rs.personas['Isabella Rodriguez']
+
+  # Sanity checks.
+  assert len(persona.a_mem.seq_event) > 1
+  assert len(persona.a_mem.seq_chat) > 1
+  assert len(persona.a_mem.seq_thought) > 1
+
+  ablate_observations_planning_reflection(persona)
+
+  assert len(persona.a_mem.id_to_node) == 1
+  assert len(persona.a_mem.seq_event) == 1
+  assert len(persona.a_mem.seq_chat) == 0
+  assert len(persona.a_mem.seq_thought) == 0
+  assert len(persona.a_mem.kw_to_chat) == 0
+  assert len(persona.a_mem.kw_to_thought) == 0
+  assert len(persona.scratch.chatting_with_buffer) == 0
+  assert len(persona.scratch.daily_req) == 0
+  assert len(persona.scratch.daily_plan_req) == 0
+  assert len(persona.scratch.f_daily_schedule) == 0
+  assert len(persona.scratch.f_daily_schedule_hourly_org) == 0
+
+  log.debug(
+    f'''
+Scratch:
+
+{pprint.pformat(persona.scratch.__dict__)}
+'''
+  )
+
+
 # This brainstorm prototypes a procedure to interview a persona under full
 # ablation: no observation, planning, or reflection memories.
 #
