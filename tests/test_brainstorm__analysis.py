@@ -83,6 +83,17 @@ def rs():
 random.seed(0)
 
 
+def is_planning(node):
+  return (node.type == 'thought') and (node.filling is None)
+
+def is_reflection(node):
+  return (node.type == 'thought') and isinstance(node.filling, list)
+
+def is_reflection_error(node):
+  return (node.type == 'thought') and isinstance(node.filling, str)
+
+
+
 # This brainstorm prototypes a procedure to interview a persona under partial
 # ablation: no planning or reflection memories.
 #
