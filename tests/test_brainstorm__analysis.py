@@ -220,7 +220,8 @@ def test_brainstorm__prototype__persona_ablations__reflections(rs):
   persona.a_mem.id_to_node = id_to_nonreflection_node
   persona.a_mem.seq_thought = seq_planning_thought
 
-  # Verify consistency between remaining thoughts as seen in `seq_thoughts` and `id_to_node`.
+  # Verify consistency between number of remaining thoughts as seen in
+  # `seq_thoughts` and `id_to_node`.
   associative_memories = persona.a_mem.id_to_node
   thoughts = {
     key:node
