@@ -42,7 +42,3 @@ def test_integration__ablate_observations_planning_reflection(rs):
   assert len(persona.scratch.daily_plan_req) == 0
   assert len(persona.scratch.f_daily_schedule) == 0
   assert len(persona.scratch.f_daily_schedule_hourly_org) == 0
-
-
-def test_hello():
-  log.debug('Hello, world.')
