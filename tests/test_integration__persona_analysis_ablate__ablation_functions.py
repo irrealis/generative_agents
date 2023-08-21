@@ -121,47 +121,6 @@ def test_integration__ablate_planning_reflection(rs):
   assert len(persona.scratch.f_daily_schedule_hourly_org) == 0
 
 
-# This brainstorm prototypes a procedure to interview a persona under partial
-# ablation: no planning or reflection memories.
-#
-# This is simpler than the full ablation because:
-# - Removing all plans and reflections equates to removing all thought memories.
-# - Because non-thought memories are not removed, there are still enough
-#   memories present that no special effort is required to avoid the kinds of
-#   problems encountered in full ablation.
-#
-def test_brainstorm__prototype__persona_ablations__planning_reflections(rs):
-  persona = rs.personas['Isabella Rodriguez']
-
-  # Wipe all thought memories.
-  persona.a_mem.seq_thought = []
-  persona.a_mem.kw_to_thought = dict()
-  persona.a_mem.id_to_node = {
-    node_id:node
-    for node_id, node in persona.a_mem.id_to_node.items()
-    if node.type != 'thought'
-  }
-  persona.scratch.daily_req = []
-  persona.scratch.daily_plan_req = []
-  persona.scratch.f_daily_schedule = []
-  persona.scratch.f_daily_schedule_hourly_org = []
-
-  # Interview agent with partial ablation.
-  question = 'Give an introduction of yourself.'
-  response, current_convo = interview_persona(
-    persona=persona,
-    message=question
-  )
-  log.debug(
-    f'''
---- Interview question:
-Question: {question}
-Response:
-{response}
-'''
-  )
-
-
 def test_integration__ablate_observations_planning_reflection(rs):
   persona = rs.personas['Isabella Rodriguez']
 
