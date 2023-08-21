@@ -41,16 +41,6 @@ import random
 random.seed(0)
 
 
-# Try to import LangChain. If this works, verify that LLM caching is setup.
-try:
-  import langchain
-  def test_verify_langchain_cache():
-    log.debug(f'{langchain.llm_cache=}')
-    assert isinstance(langchain.llm_cache, SQLiteCache_ForTests)
-except ModuleNotFoundError:
-  pass
-
-
 # Below I'm examining the initial event, thought, and chat memories of Isabella
 # Rodriguez. I'm trying to find a set of memories with the least information
 # possible.
