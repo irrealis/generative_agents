@@ -9,28 +9,15 @@ load_dotenv(env_path)
 import os
 import sys
 
-project_dir = os.path.dirname(env_path)
-log.debug(f'{project_dir=}')
+project_dir = os.path.dirname(os.path.abspath(env_path))
+sys.path.insert(0, os.path.abspath(f"{project_dir}/reverie/backend_server"))
 
-backend_server_loc = os.path.abspath(f"{project_dir}/reverie/backend_server")
-sys.path.insert(0, backend_server_loc)
-
-irrealis_datascience_loc = os.path.abspath(f"{project_dir}/../datascience")
-sys.path.insert(0, irrealis_datascience_loc)
-
+from langchain_setup import *
 
 from reverie import ReverieServer
 from persona.persona import Persona
 from persona.prompt_template.language_model import LangChainModel
 from persona.prompt_template.embeddings import LangChainEmbeddings
-
-#from irrealis.retrievers import TimeWeightedVectorStoreRetriever
-#from irrealis.vectorstores import PGVector
-#from irrealis.generative_agents.agent import *
-#from irrealis.generative_agents.chains import *
-#from irrealis.generative_agents.gender import *
-#from irrealis.generative_agents.prompts import *
-from irrealis.generative_agents.test_tools import *
 
 import langchain
 from langchain.cache import SQLiteCache, RETURN_VAL_TYPE
@@ -47,20 +34,7 @@ from langchain.schema import Document
 from pydantic import BaseModel, Field
 import pytest
 
-import datetime as dt
-import re
 import random
-
-
-#langchain.llm_cache = SQLiteCache_ForTests(database_path=".langchain.db", raise_on_miss=True)
-langchain.llm_cache = SQLiteCache_ForTests(database_path=".langchain.db", raise_on_miss=False)
-#langchain.llm_cache = SQLiteCache(database_path=".langchain.db")
-os.environ['LANGCHAIN_TRACING_V2']='true'
-os.environ['LANGCHAIN_PROJECT']='Park Generative Agents'
-tags = ['test', 'brainstorm']
-db_url = "postgresql+psycopg2://kaben:{DB_PASS}@localhost:5432/datascience".format(
-  DB_PASS=os.getenv('DB_PASS')
-)
 
 
 @pytest.fixture

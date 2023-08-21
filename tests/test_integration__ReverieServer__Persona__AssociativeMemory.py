@@ -9,42 +9,20 @@ load_dotenv(env_path)
 import os
 import sys
 
-project_dir = os.path.dirname(env_path)
-log.debug(f'{project_dir=}')
+project_dir = os.path.dirname(os.path.abspath(env_path))
+sys.path.insert(0, os.path.abspath(f"{project_dir}/reverie/backend_server"))
 
-backend_server_loc = os.path.abspath(f"{project_dir}/reverie/backend_server")
-sys.path.insert(0, backend_server_loc)
-
-irrealis_datascience_loc = os.path.abspath(f"{project_dir}/../datascience")
-sys.path.insert(0, irrealis_datascience_loc)
-
+from langchain_setup import *
 
 import reverie
 from reverie import ReverieServer
-from persona.persona import Persona
-
-from irrealis.generative_agents.test_tools import *
-
-import langchain
 
 import pytest
 
-import datetime as dt
 import random
 import shutil
 
 
-#langchain.llm_cache = SQLiteCache_ForTests(database_path=".langchain.db", raise_on_miss=True)
-langchain.llm_cache = SQLiteCache_ForTests(database_path=".langchain.db", raise_on_miss=False)
-#langchain.llm_cache = SQLiteCache(database_path=".langchain.db")
-os.environ['LANGCHAIN_TRACING_V2']='true'
-os.environ['LANGCHAIN_PROJECT']='Park Generative Agents'
-tags = ['test', 'brainstorm']
-db_url = "postgresql+psycopg2://kaben:{DB_PASS}@localhost:5432/datascience".format(
-  DB_PASS=os.getenv('DB_PASS')
-)
-
-# To the user: set with your OpenAI API key.
 
 
 class ReverieTestServer(ReverieServer):
@@ -95,7 +73,6 @@ def test__reverie__Persona__scratch__get_str_daily_schedule_summary(rs):
   daily_schedule = isabella.scratch.get_str_daily_schedule_summary()
   log.debug(
     f'''
-
 *** Persona daily schedule:
 {daily_schedule}
 ''')

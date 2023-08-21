@@ -7,12 +7,12 @@ env_path = find_dotenv()
 load_dotenv(env_path)
 
 import os
-import random
 import sys
 
-project_dir = os.path.dirname(env_path)
+project_dir = os.path.dirname(os.path.abspath(env_path))
 sys.path.insert(0, os.path.abspath(f"{project_dir}/reverie/backend_server"))
-sys.path.insert(0, os.path.abspath(f"{project_dir}/../datascience"))
+
+from langchain_setup import *
 
 import reverie
 from reverie import ReverieServer
@@ -24,11 +24,6 @@ from persona.cognitive_modules.perceive import generate_poig_score
 from persona.cognitive_modules.retrieve import new_retrieve
 from persona.prompt_template.gpt_structure import get_embedding
 
-from irrealis.generative_agents.test_tools import *
-
-import langchain
-from langchain.cache import SQLiteCache, RETURN_VAL_TYPE
-
 import openai.error
 
 import pytest
@@ -36,12 +31,7 @@ import pytest
 import datetime as dt
 import functools as ft
 import json, pprint, shutil
-
-
-langchain.llm_cache = SQLiteCache_ForTests(database_path=".langchain.db", raise_on_miss=False)
-
-os.environ['LANGCHAIN_TRACING_V2']='true'
-os.environ['LANGCHAIN_PROJECT']='Park Generative Agents'
+import random
 
 
 class ReverieTestServer(ReverieServer):
@@ -75,6 +65,16 @@ def rs():
 
 # Try to make system more deterministic.
 random.seed(0)
+
+
+# Try to import LangChain. If this works, verify that LLM caching is setup.
+try:
+  import langchain
+  def test_verify_langchain_cache():
+    log.debug(f'{langchain.llm_cache=}')
+    assert isinstance(langchain.llm_cache, SQLiteCache_ForTests)
+except ModuleNotFoundError:
+  pass
 
 
 def test_integration__ablate_reflection(rs):
