@@ -41,6 +41,25 @@ import random
 random.seed(0)
 
 
+def test_brainstorm__prototype__interview_with_ablations__observation_planning_reflection(rs):
+  persona = rs.personas['Isabella Rodriguez']
+  ablate_observations_planning_reflection(persona)
+  question = 'Give an introduction of yourself.'
+
+  response, current_convo = interview_persona(
+    persona=persona,
+    message=question
+  )
+  log.debug(
+    f'''
+--- Interview question:
+Question: {question}
+Response:
+{response}
+'''
+  )
+
+
 # Below I'm examining the initial event, thought, and chat memories of Isabella
 # Rodriguez. I'm trying to find a set of memories with the least information
 # possible.
