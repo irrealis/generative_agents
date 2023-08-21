@@ -26,6 +26,10 @@ from dotenv import find_dotenv, load_dotenv
 env_path = find_dotenv()
 load_dotenv(env_path)
 
+import os
+
+project_dir = os.path.dirname(os.path.abspath(env_path))
+
 import json
 import numpy
 import datetime
@@ -50,14 +54,28 @@ from persona.persona import *
 #                                  REVERIE                                   #
 ##############################################################################
 
-project_dir = os.path.dirname(env_path)
-log.debug(f'{project_dir=}')
-os.environ['LANGCHAIN_TRACING_V2']='true'
-os.environ['LANGCHAIN_PROJECT']='Park Generative Agents'
 
-langchain_db_path = os.path.join(project_dir, ".langchain.db")
-langchain.llm_cache = SQLiteCache(database_path=langchain_db_path)
+# Try to import LangChain. If this works, setup cache for LLM calls.
+try:
+  import langchain
+  from langchain.cache import SQLiteCache, RETURN_VAL_TYPE
+  log.debug('Successfully imported LangChain.')
 
+  if not os.environ.get('LANGCHAIN_PROJECT'):
+    os.environ['LANGCHAIN_TRACING_V2']='true'
+    os.environ['LANGCHAIN_PROJECT']='Park Generative Agents'
+
+  if not langchain.llm_cache:
+    langchain_db_path = os.path.join(project_dir, ".langchain.db")
+    langchain.llm_cache = SQLiteCache(database_path=langchain_db_path)
+
+except ModuleNotFoundError:
+  log.info(
+    '''
+Unable to import setup LangChain tools; LangChain not installed.
+Not setting up LangChain caching for LLM calls.
+'''
+  )
 
 class ReverieServer: 
   def __init__(self, 
