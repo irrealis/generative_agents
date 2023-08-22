@@ -40,6 +40,8 @@ import openai.error
 
 import pytest
 
+import jsonpickle
+
 import datetime as dt
 import functools as ft
 import json, pprint, shutil
@@ -50,6 +52,99 @@ import random
 
 # Try to make system more deterministic.
 random.seed(0)
+
+
+# Helper function to count different types of thought memories.
+def count_thoughts(
+  id_to_node
+):
+  thoughts = {
+    key:node
+    for key,node in id_to_node.items()
+    if node.type == 'thought'
+  }
+  plans = {
+    key:node
+    for key,node in thoughts.items()
+    if node.filling is None
+  }
+  reflections = {
+    key:node
+    for key,node in thoughts.items()
+    if isinstance(node.filling, list)
+  }
+  errors = {
+    key:node
+    for key,node in thoughts.items()
+    if isinstance(node.filling, str)
+  }
+
+  thought_ct = len(thoughts)
+  plan_ct = len(plans)
+  reflection_ct = len(reflections)
+  error_ct = len(errors)
+
+  return thought_ct, plan_ct, reflection_ct, error_ct
+
+
+def test_brainstorm__freeze_thaw_ablate_count(rs):
+  persona = rs.personas['Isabella Rodriguez']
+
+  # Count persona's thoughts before ablation.
+  (
+    orig_thought_ct,
+    orig_plan_ct,
+    orig_reflection_ct,
+    orig_error_ct,
+  ) = count_thoughts(persona.a_mem.id_to_node)
+
+  persona_frozen = jsonpickle.encode(persona, indent=2)
+  persona_thawed = jsonpickle.decode(persona_frozen)
+  ablate_planning_reflection(persona_thawed)
+
+  # Count original persona's thoughts after ablation of thawed persona. Counts shouldn't change.
+  (
+    new_thought_ct,
+    new_plan_ct,
+    new_reflection_ct,
+    new_error_ct,
+  ) = count_thoughts(persona.a_mem.id_to_node)
+
+  # Count thawed persona's thoughts after ablation. Counts should differ.
+  (
+    thawed_thought_ct,
+    thawed_plan_ct,
+    thawed_reflection_ct,
+    thawed_error_ct,
+  ) = count_thoughts(persona_thawed.a_mem.id_to_node)
+
+  # Counts of original persona's thoughts shouldn't change.
+  assert new_thought_ct == orig_thought_ct
+  assert new_plan_ct == orig_plan_ct
+  assert new_reflection_ct == orig_reflection_ct
+  assert new_error_ct == orig_error_ct
+
+  # After ablation, counts of thawed persona's thoughts should differ.
+  assert thawed_thought_ct != orig_thought_ct
+  assert thawed_plan_ct != orig_plan_ct
+  assert thawed_reflection_ct != orig_reflection_ct
+  assert thawed_error_ct != orig_error_ct
+
+
+def test_brainstorm__jsonpickle_persona(rs):
+  persona = rs.personas['Isabella Rodriguez']
+  # Ensure can encode without raising exceptions.
+  persona_frozen_1 = jsonpickle.encode(persona, indent=2)
+  persona_frozen_2 = jsonpickle.encode(persona, indent=2)
+  persona_thawed = jsonpickle.decode(persona_frozen_1)
+  persona_frozen_3 = jsonpickle.encode(persona_thawed, indent=2)
+
+  #with open(f'{project_dir}/tests/persona_frozen_1.json', 'w') as f:
+  #  f.write(persona_frozen_1)
+  #with open(f'{project_dir}/tests/persona_frozen_2.json', 'w') as f:
+  #  f.write(persona_frozen_2)
+  #with open(f'{project_dir}/tests/persona_frozen_3.json', 'w') as f:
+  #  f.write(persona_frozen_3)
 
 
 def test_brainstorm__prototype__interview_with_ablations__reflection(rs):
