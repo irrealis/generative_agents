@@ -54,6 +54,28 @@ import random
 random.seed(0)
 
 
+def test_brainstorm__freeze_thaw_ablate_interview(rs):
+  persona = rs.personas['Isabella Rodriguez']
+  persona_frozen = jsonpickle.encode(persona, indent=2)
+  persona_thawed = jsonpickle.decode(persona_frozen)
+
+  ablate_reflection(persona_thawed)
+  question = 'Give an introduction of yourself.'
+
+  response, current_convo = interview_persona(
+    persona=persona_thawed,
+    message=question
+  )
+  log.debug(
+    f'''
+--- Interview question:
+Question: {question}
+Response:
+{response}
+'''
+  )
+
+
 # Helper function to count different types of thought memories.
 def count_thoughts(
   id_to_node
