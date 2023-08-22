@@ -44,4 +44,3 @@ def interview_persona(
   curr_convo += [[persona.scratch.name, response]]
 
   return response, curr_convo
-

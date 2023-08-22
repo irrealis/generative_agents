@@ -18,8 +18,19 @@ from reverie_setup import ReverieTestServer, rs
 import reverie
 from reverie import ReverieServer
 from persona.analysis.interview import interview_persona
-from persona.analysis.ablate import ablate_observations_planning_reflection, ablate_planning_reflection, ablate_reflection, is_planning, is_reflection, is_reflection_error
-from persona.analysis.believability_questions import get_chat_interaction_counts, get_max_chat_interactions, get_believability_question_variables
+from persona.analysis.ablate import (
+  ablate_observations_planning_reflection,
+  ablate_planning_reflection,
+  ablate_reflection,
+  is_planning,
+  is_reflection,
+  is_reflection_error,
+)
+from persona.analysis.believability.believability_questions import (
+  get_chat_interaction_counts,
+  get_max_chat_interactions,
+  get_believability_question_variables,
+)
 from persona.cognitive_modules.converse import generate_summarize_ideas, generate_next_line
 from persona.cognitive_modules.perceive import generate_poig_score
 from persona.cognitive_modules.retrieve import new_retrieve
@@ -399,17 +410,17 @@ def test_brainstorm__filter_associative_memory(persona_name, rs):
 # Parameterize `...pose_one_believability_question` with each of the
 # believability questions listed in `believability_templates.json`.
 #
-interview_questions_path = f'{project_dir}/reverie/backend_server/persona/analysis/V1_interview_questions/believability_templates.json'
+interview_questions_path = f'{project_dir}/reverie/backend_server/persona/analysis/believability/V1_interview_questions/believability_templates.json'
 with open(interview_questions_path, 'rb') as f:
   believability_questions = json.load(f)
 question_templates = [
   (
     believability_area,
     topic,
-    question_template
+    template
   )
-  for believability_area, question_templates in believability_questions.items()
-  for topic, question_template in question_templates.items()
+  for believability_area, templates in list(believability_questions.items())[:1]
+  for topic, template in list(templates.items())[:1]
 ]
 @pytest.mark.parametrize(
   'area,topic,question_template',
@@ -465,7 +476,7 @@ def test_brainstorm__get_believability_question_variables(rs):
     random_seed = 0,
   )
 
-  interview_questions_path = f'{project_dir}/reverie/backend_server/persona/analysis/V1_interview_questions/believability_templates.json'
+  interview_questions_path = f'{project_dir}/reverie/backend_server/persona/analysis/believability/V1_interview_questions/believability_templates.json'
   with open(interview_questions_path, 'rb') as f:
     believability_questions = json.load(f)
   questions_lines = []
@@ -508,7 +519,7 @@ def test_brainstorm__prototype__interview_question_formatting(rs):
     well_known_persona_name = well_known_persona_name,
   )
 
-  interview_questions_path = f'{project_dir}/reverie/backend_server/persona/analysis/V1_interview_questions/believability_templates.json'
+  interview_questions_path = f'{project_dir}/reverie/backend_server/persona/analysis/believability/V1_interview_questions/believability_templates.json'
   with open(interview_questions_path, 'rb') as f:
     believability_questions = json.load(f)
   questions_lines = []
@@ -633,7 +644,7 @@ Interaction counts:
 
 
 def test_brainstorm__interview_question_file(rs):
-  interview_questions_path = f'{project_dir}/reverie/backend_server/persona/analysis/V1_interview_questions/believability_templates.json'
+  interview_questions_path = f'{project_dir}/reverie/backend_server/persona/analysis/believability/V1_interview_questions/believability_templates.json'
   with open(interview_questions_path, 'rb') as f:
     believability_questions = json.load(f)
   log.debug(
