@@ -314,38 +314,14 @@ def believability_interviews(reverie_server, sim_folder, random_seed=None):
   with open(interview_questions_path, 'rb') as f:
     question_templates = json.load(f)
 
-  # Layout of the interviews dict:
-  #
-  # interviews = {
-  #   'personas': [
-  #     {
-  #       'persona': <persona.name>
-  #       'categories': [
-  #         {
-  #           'category': <category>,
-  #           'questions': [
-  #             {
-  #               'question': <question>
-  #               'conditions': [
-  #                 'condition': <condition>
-  #                 'response': <response>
-  #               ]
-  #             }
-  #           ]
-  #         }
-  #       ]
-  #     }
-  #   ]
-  # }
-  #
-
-  interviews_dict = generate_interviews_dict(
+  interviewer = BelievabilityInterviewer(
     question_templates=question_templates,
     reverie_server=reverie_server,
     random_persona_clause="organizing a Valentine's Day party",
     event="a Valentine's Day party",
     random_seed=random_seed,
   )
+  interviews_dict = interviewer.generate_interviews_dict()
 
   with open(interviews_path, 'w') as f:
     yaml.dump(interviews_dict, f)
