@@ -86,13 +86,13 @@ class BelievabilityInterviewer(object):
   def __init__(
     self,
     question_templates,
-    reverie_server,
+    personas,
     random_persona_clause,
     event,
     random_seed
   ):
     self.question_templates = question_templates
-    self.reverie_server = reverie_server
+    self.personas = personas
     self.random_persona_clause = random_persona_clause
     self.event = event
     self.random_seed = random_seed
@@ -103,10 +103,12 @@ class BelievabilityInterviewer(object):
     condition,
     method,
   ):
-    _,_, response, curr_conv = method(question)
+    retrieved, summarized_idea, response, curr_conv = method(question)
     condition_dict = dict(
       condition = condition,
       response = response,
+      retrieved = retrieved,
+      summarized_idea = summarized_idea,
     )
     return condition_dict
 
@@ -119,7 +121,7 @@ class BelievabilityInterviewer(object):
   ):
     question_variables = get_believability_question_variables(
       persona=persona,
-      personas=self.reverie_server.personas,
+      personas=self.personas,
       random_persona_clause=self.random_persona_clause,
       event=self.event,
       random_seed=self.random_seed,
@@ -170,7 +172,7 @@ class BelievabilityInterviewer(object):
         personas = list()
       )
     )
-    for persona in self.reverie_server.personas.values():
+    for persona in self.personas.values():
       persona_dict = self.generate_persona_dict(persona)
       interviews_dict['interviews']['personas'].append(persona_dict)
     return interviews_dict
@@ -189,7 +191,7 @@ def believability_interviews(reverie_server, sim_folder, random_seed=None):
 
   interviewer = BelievabilityInterviewer(
     question_templates=question_templates,
-    reverie_server=reverie_server,
+    personas=reverie_server.personas,
     random_persona_clause="organizing a Valentine's Day party",
     event="a Valentine's Day party",
     random_seed=random_seed,

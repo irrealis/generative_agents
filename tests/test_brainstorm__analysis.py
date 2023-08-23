@@ -72,7 +72,7 @@ def test_brainstorm__believability_interviewer__interviews_dict(rs):
 
   interviewer = BelievabilityInterviewer(
     question_templates=question_templates,
-    reverie_server=rs,
+    personas=rs.personas,
     random_persona_clause="organizing a Valentine's Day party",
     event="a Valentine's Day party",
     random_seed=0,
