@@ -77,14 +77,17 @@ def generate_question_dict(
   persona,
   reverie_server,
   condition_methods,
+  random_persona_clause,
+  event,
+  random_seed,
 ):
   question_variables = get_believability_question_variables(
     persona=persona,
     personas=reverie_server.personas,
-    random_persona_clause = "organizing a Valentine's Day party",
-    event = "a Valentine's Day party",
+    random_persona_clause=random_persona_clause,
+    event=event,
     # Get a deterministic random number generator by seeding with 0.
-    random_seed = 0,
+    random_seed=random_seed,
   )
   question = template.format_map(question_variables)
   question_dict = dict(
@@ -105,6 +108,9 @@ def generate_category_dict(
   persona,
   reverie_server,
   condition_methods,
+  random_persona_clause,
+  event,
+  random_seed,
 ):
   category_dict = dict(
     category = category,
@@ -117,6 +123,9 @@ def generate_category_dict(
       persona=persona,
       reverie_server=reverie_server,
       condition_methods=condition_methods,
+      random_persona_clause=random_persona_clause,
+      event=event,
+      random_seed=random_seed,
     )
     category_dict['questions'].append(question_dict)
   return category_dict
@@ -126,6 +135,9 @@ def generate_persona_dict(
   question_templates,
   persona,
   reverie_server,
+  random_persona_clause,
+  event,
+  random_seed,
 ):
   conditions = Conditions(persona)
   condition_methods = conditions.get_condition_methods_dict()
@@ -140,6 +152,9 @@ def generate_persona_dict(
       persona=persona,
       reverie_server=reverie_server,
       condition_methods=condition_methods,
+      random_persona_clause=random_persona_clause,
+      event=event,
+      random_seed=random_seed,
     )
     persona_dict['categories'].append(category_dict)
   return persona_dict
@@ -198,6 +213,10 @@ def believability_interviews(reverie_server, sim_folder):
       question_templates=question_templates,
       persona=persona,
       reverie_server=reverie_server,
+      random_persona_clause = "organizing a Valentine's Day party",
+      event = "a Valentine's Day party",
+      # Get a deterministic random number generator by seeding with 0.
+      random_seed = 0,
     )
     #conditions = Conditions(persona)
     #condition_methods = conditions.get_condition_methods_dict()
