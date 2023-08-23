@@ -80,18 +80,10 @@ def questions(rs):
 random.seed(0)
 
 
-def test_integration__believability_interviews(rs):
+def test_integration__believability_interviews(rs, questions):
   environment_loc = f"{project_dir}/environment"
   fs_storage = f"{environment_loc}/frontend_server/storage"
   sim_folder = f"{fs_storage}/{rs.sim_code}"
-  interview_questions_path = f'{project_dir}/reverie/backend_server/persona/analysis/believability/V1_interview_questions/believability_templates.json'
-  believability_dir = f'{sim_folder}/analysis/believability'
-
-  os.makedirs(believability_dir, exist_ok=True)
-  with open(interview_questions_path, 'rb') as f:
-    question_templates = json.load(f)
-  question_templates = {'plans':question_templates['plans']}
-  question_templates['plans'] = {'just_finished_at_1pm': question_templates['plans']['just_finished_at_1pm']}
   persona = rs.personas['Isabella Rodriguez']
   personas_to_interview = {persona.name:persona}
 
@@ -100,7 +92,7 @@ def test_integration__believability_interviews(rs):
     sim_folder,
     random_seed=0,
     personas_to_interview=personas_to_interview,
-    question_templates=question_templates,
+    question_templates=questions,
   )
 
   assert 'interviews' in interviews_dict
