@@ -214,3 +214,5 @@ def believability_interviews(
 
   with open(interviews_path, 'w') as f:
     yaml.dump(interviews_dict, f)
+
+  return interviews_dict
