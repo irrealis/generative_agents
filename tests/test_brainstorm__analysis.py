@@ -138,8 +138,6 @@ def test_brainstorm__believability_interviewer__interviews_dict(rs):
   persona = rs.personas['Isabella Rodriguez']
   personas_to_interview = {persona.name:persona}
   interviews_dict = interviewer.generate_interviews_dict(personas=personas_to_interview)
-  with open(interviews_path, 'w') as f:
-    yaml.dump(interviews_dict, f)
 
 
 def test_brainstorm__freeze_thaw_ablate_interview(rs):
