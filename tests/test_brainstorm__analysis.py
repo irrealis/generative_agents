@@ -58,6 +58,22 @@ import random
 yaml = YAML()
 
 
+@pytest.fixture
+def questions(rs):
+  environment_loc = f"{project_dir}/environment"
+  fs_storage = f"{environment_loc}/frontend_server/storage"
+  sim_folder = f"{fs_storage}/{rs.sim_code}"
+  interview_questions_path = f'{project_dir}/reverie/backend_server/persona/analysis/believability/V1_interview_questions/believability_templates.json'
+  believability_dir = f'{sim_folder}/analysis/believability'
+  os.makedirs(believability_dir, exist_ok=True)
+  with open(interview_questions_path, 'rb') as f:
+    templates = json.load(f)
+  templates = {'plans':templates['plans']}
+  templates['plans'] = {'just_finished_at_1pm': templates['plans']['just_finished_at_1pm']}
+  return templates
+
+
+
 ### Tests
 
 # Try to make system more deterministic.
