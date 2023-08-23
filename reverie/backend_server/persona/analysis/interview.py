@@ -15,7 +15,7 @@ from ..cognitive_modules.retrieve import new_retrieve
 from ..cognitive_modules.converse import generate_next_line,  generate_summarize_ideas
 
 
-def interview_persona(
+def interview_persona__detail(
   persona,
   message,
   curr_convo=None,
@@ -43,4 +43,17 @@ def interview_persona(
   response = generate_next_line(persona, interviewer, curr_convo, summarized_idea)
   curr_convo += [[persona.scratch.name, response]]
 
+  return retrieved, summarized_idea, response, curr_convo
+
+
+def interview_persona(
+  persona,
+  message,
+  **kw
+):
+  retrieved, summarized_idea, response, curr_convo = interview_persona__detail(
+    persona,
+    message,
+    **kw
+  )
   return response, curr_convo
