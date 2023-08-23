@@ -92,7 +92,7 @@ def test_brainstorm__believability_interviewer__interviews_dict(rs):
     yaml.dump(interviews_dict, f)
 
 
-def test_brainstorm__believability_interviews(rs):
+def test_integration__believability_interviews(rs):
   environment_loc = f"{project_dir}/environment"
   fs_storage = f"{environment_loc}/frontend_server/storage"
   sim_folder = f"{fs_storage}/{rs.sim_code}"
