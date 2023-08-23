@@ -73,6 +73,17 @@ def questions(rs):
   return templates
 
 
+@pytest.fixture
+def interviewer(rs, questions):
+  interviewer = BelievabilityInterviewer(
+    question_templates=questions,
+    personas=rs.personas,
+    random_persona_clause="organizing a Valentine's Day party",
+    event="a Valentine's Day party",
+    random_seed=0,
+  )
+  return interviewer
+
 
 ### Tests
 
