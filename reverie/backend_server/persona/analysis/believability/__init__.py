@@ -186,7 +186,6 @@ def believability_interviews(personas, sim_folder, random_seed=None):
   interview_questions_path = os.path.join(this_dir, 'V1_interview_questions', 'believability_templates.json')
   believability_dir = os.path.join(sim_folder, 'analysis', 'believability')
   interviews_path = os.path.join(believability_dir, 'interviews.yaml')
-  persona_names = list(personas.keys())
 
   os.makedirs(believability_dir, exist_ok=True)
   with open(interview_questions_path, 'rb') as f:
