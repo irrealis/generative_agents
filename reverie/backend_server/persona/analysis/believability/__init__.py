@@ -99,6 +99,28 @@ def generate_question_dict(
   return question_dict
 
 
+def generate_category_dict(
+  category,
+  questions,
+  persona,
+  reverie_server,
+  condition_methods,
+):
+  category_dict = dict(
+    category = category,
+    questions = list()
+  )
+  for question_id, template in questions.items():
+    question_dict = generate_question_dict(
+      question_id=question_id,
+      template=template,
+      persona=persona,
+      reverie_server=reverie_server,
+      condition_methods=condition_methods,
+    )
+    category_dict['questions'].append(question_dict)
+  return category_dict
+
 
 def believability_interviews(reverie_server, sim_folder):
   interview_questions_path = os.path.join(this_dir, 'V1_interview_questions', 'believability_templates.json')
@@ -157,42 +179,49 @@ def believability_interviews(reverie_server, sim_folder):
       categories = list()
     )
     for category, questions in believability_questions.items():
-      category_dict = dict(
-        category = category,
-        questions = list()
+      category_dict = generate_category_dict(
+        category=category,
+        questions=questions,
+        persona=persona,
+        reverie_server=reverie_server,
+        condition_methods=condition_methods,
       )
-      for question_id, template in questions.items():
-        question_dict = generate_question_dict(
-          question_id=question_id,
-          template=template,
-          persona=persona,
-          reverie_server=reverie_server,
-          condition_methods=condition_methods,
-        )
-        #question_variables = get_believability_question_variables(
-        #  persona=persona,
-        #  personas=reverie_server.personas,
-        #  random_persona_clause = "organizing a Valentine's Day party",
-        #  event = "a Valentine's Day party",
-        #  # Get a deterministic random number generator by seeding with 0.
-        #  random_seed = 0,
-        #)
-        #question = template.format_map(question_variables)
-        #question_dict = dict(
-        #  question_id = question_id,
-        #  question = question,
-        #  conditions = list()
-        #)
-        #for condition, method in condition_methods.items():
-        #  # This calls one of the Condition methods, which in turn calls the language model.
-        #  condition_dict = generate_condition_dict(question, condition, method)
-        #  #response, curr_conv = method(question)
-        #  #condition_dict = dict(
-        #  #  condition = condition,
-        #  #  response = response,
-        #  #)
-        #  question_dict['conditions'].append(condition_dict)
-        category_dict['questions'].append(question_dict)
+      #category_dict = dict(
+      #  category = category,
+      #  questions = list()
+      #)
+      #for question_id, template in questions.items():
+      #  question_dict = generate_question_dict(
+      #    question_id=question_id,
+      #    template=template,
+      #    persona=persona,
+      #    reverie_server=reverie_server,
+      #    condition_methods=condition_methods,
+      #  )
+      #  #question_variables = get_believability_question_variables(
+      #  #  persona=persona,
+      #  #  personas=reverie_server.personas,
+      #  #  random_persona_clause = "organizing a Valentine's Day party",
+      #  #  event = "a Valentine's Day party",
+      #  #  # Get a deterministic random number generator by seeding with 0.
+      #  #  random_seed = 0,
+      #  #)
+      #  #question = template.format_map(question_variables)
+      #  #question_dict = dict(
+      #  #  question_id = question_id,
+      #  #  question = question,
+      #  #  conditions = list()
+      #  #)
+      #  #for condition, method in condition_methods.items():
+      #  #  # This calls one of the Condition methods, which in turn calls the language model.
+      #  #  condition_dict = generate_condition_dict(question, condition, method)
+      #  #  #response, curr_conv = method(question)
+      #  #  #condition_dict = dict(
+      #  #  #  condition = condition,
+      #  #  #  response = response,
+      #  #  #)
+      #  #  question_dict['conditions'].append(condition_dict)
+      #  category_dict['questions'].append(question_dict)
       persona_dict['categories'].append(category_dict)
     interviews_dict['interviews']['personas'].append(persona_dict)
 
