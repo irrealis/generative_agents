@@ -58,6 +58,18 @@ class Conditions(object):
     return condition_methods_dict
 
 
+def generate_condition_dict(
+  question,
+  condition,
+  method,
+):
+  response, curr_conv = method(question)
+  condition_dict = dict(
+    condition = condition,
+    response = response,
+  )
+  return condition_dict
+
 
 
 def believability_interviews(reverie_server, sim_folder):
@@ -138,11 +150,12 @@ def believability_interviews(reverie_server, sim_folder):
         )
         for condition, method in condition_methods.items():
           # This calls one of the Condition methods, which in turn calls the language model.
-          response, curr_conv = method(question)
-          condition_dict = dict(
-            condition = condition,
-            response = response,
-          )
+          condition_dict = generate_condition_dict(question, condition, method)
+          #response, curr_conv = method(question)
+          #condition_dict = dict(
+          #  condition = condition,
+          #  response = response,
+          #)
           question_dict['conditions'].append(condition_dict)
         category_dict['questions'].append(question_dict)
       persona_dict['categories'].append(category_dict)
