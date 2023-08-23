@@ -139,6 +139,32 @@ def test_brainstorm__believability_interviewer__interviews_dict(rs):
   personas_to_interview = {persona.name:persona}
   interviews_dict = interviewer.generate_interviews_dict(personas=personas_to_interview)
 
+  assert 'interviews' in interviews_dict
+  assert 'personas' in interviews_dict['interviews']
+  assert isinstance(interviews_dict['interviews']['personas'], list)
+  first_persona_dict = interviews_dict['interviews']['personas'][0]
+  assert 'persona' in first_persona_dict
+  assert persona.name == first_persona_dict['persona']
+  assert 'categories' in first_persona_dict
+  assert isinstance(first_persona_dict['categories'], list)
+  first_category_dict = first_persona_dict['categories'][0]
+  assert 'category' in first_category_dict
+  assert 'plans' == first_category_dict['category']
+  assert 'questions' in first_category_dict
+  assert isinstance(first_category_dict['questions'], list)
+  first_question_dict = first_category_dict['questions'][0]
+  assert 'question_id' in first_question_dict
+  assert first_question_dict['question_id'] == 'just_finished_at_1pm'
+  assert 'question' in first_question_dict
+  assert 'conditions' in first_question_dict
+  assert isinstance(first_question_dict['conditions'], list)
+  assert len(first_question_dict['conditions']) == 4
+  first_condition_dict = first_question_dict['conditions'][0]
+  assert 'condition' in first_condition_dict
+  assert 'response' in first_condition_dict
+  assert 'summarized_idea' in first_condition_dict
+  assert first_condition_dict['condition'] == 'no_observation_no_reflection_no_planning'
+
 
 def test_brainstorm__freeze_thaw_ablate_interview(rs):
   persona = rs.personas['Isabella Rodriguez']
