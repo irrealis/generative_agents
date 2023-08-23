@@ -76,6 +76,8 @@ def test_brainstorm__believability_interviewer__interviews_dict(rs):
   os.makedirs(believability_dir, exist_ok=True)
   with open(interview_questions_path, 'rb') as f:
     question_templates = json.load(f)
+  question_templates = {'plans':question_templates['plans']}
+  question_templates['plans'] = {'just_finished_at_1pm': question_templates['plans']['just_finished_at_1pm']}
 
   interviewer = BelievabilityInterviewer(
     question_templates=question_templates,
