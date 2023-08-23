@@ -165,13 +165,15 @@ class BelievabilityInterviewer(object):
       persona_dict['categories'].append(category_dict)
     return persona_dict
 
-  def generate_interviews_dict(self):
+  def generate_interviews_dict(self, personas = None):
+    if personas is None:
+      personas = self.personas
     interviews_dict = dict(
       interviews = dict(
         personas = list()
       )
     )
-    for persona in self.personas.values():
+    for persona in personas.values():
       persona_dict = self.generate_persona_dict(persona)
       interviews_dict['interviews']['personas'].append(persona_dict)
     return interviews_dict
