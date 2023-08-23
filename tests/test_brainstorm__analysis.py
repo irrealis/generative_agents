@@ -114,7 +114,7 @@ def test_integration__believability_interviews(rs):
   assert first_condition_dict['condition'] == 'no_observation_no_reflection_no_planning'
 
 
-def test_brainstorm__believability_interviewer__interviews_dict(rs):
+def test_integration__BelievabilityInterviewer__generate_interviews_dict(rs):
   environment_loc = f"{project_dir}/environment"
   fs_storage = f"{environment_loc}/frontend_server/storage"
   sim_folder = f"{fs_storage}/{rs.sim_code}"
