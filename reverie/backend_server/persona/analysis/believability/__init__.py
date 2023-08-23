@@ -153,19 +153,21 @@ class BelievabilityInterviewer(object):
       category_dict['questions'].append(question_dict)
     return category_dict
 
-  def generate_persona_dict(self, persona):
+  def generate_persona_dict(self, persona, question_templates = None):
+    if question_templates is None:
+      question_templates = self.question_templates
     conditions = Conditions(persona)
     condition_methods = conditions.get_condition_methods_dict()
     persona_dict = dict(
       persona = persona.name,
       categories = list()
     )
-    for category, questions in self.question_templates.items():
+    for category, questions in question_templates.items():
       category_dict = self.generate_category_dict(category, questions, persona, condition_methods)
       persona_dict['categories'].append(category_dict)
     return persona_dict
 
-  def generate_interviews_dict(self, personas = None):
+  def generate_interviews_dict(self, personas = None, question_templates = None):
     if personas is None:
       personas = self.personas
     interviews_dict = dict(
@@ -174,7 +176,7 @@ class BelievabilityInterviewer(object):
       )
     )
     for persona in personas.values():
-      persona_dict = self.generate_persona_dict(persona)
+      persona_dict = self.generate_persona_dict(persona, question_templates)
       interviews_dict['interviews']['personas'].append(persona_dict)
     return interviews_dict
 
