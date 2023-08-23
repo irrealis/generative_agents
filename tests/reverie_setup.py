@@ -30,5 +30,3 @@ def rs():
     sim_code=sim_code,
     predelete=True,
   )
-
-
