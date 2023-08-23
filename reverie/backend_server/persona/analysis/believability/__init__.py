@@ -160,6 +160,31 @@ def generate_persona_dict(
   return persona_dict
 
 
+def generate_interviews_dict(
+  question_templates,
+  reverie_server,
+  random_persona_clause,
+  event,
+  random_seed,
+):
+  interviews_dict = dict(
+    interviews = dict(
+      personas = list()
+    )
+  )
+  for persona in reverie_server.personas.values():
+    persona_dict = generate_persona_dict(
+      question_templates=question_templates,
+      persona=persona,
+      reverie_server=reverie_server,
+      random_persona_clause=random_persona_clause,
+      event=event,
+      random_seed=random_seed,
+    )
+    interviews_dict['interviews']['personas'].append(persona_dict)
+  return interviews_dict
+
+
 def believability_interviews(reverie_server, sim_folder, random_seed=None):
   interview_questions_path = os.path.join(this_dir, 'V1_interview_questions', 'believability_templates.json')
   believability_dir = os.path.join(sim_folder, 'analysis', 'believability')
@@ -203,73 +228,80 @@ def believability_interviews(reverie_server, sim_folder, random_seed=None):
     human = '',
   )
 
-  interviews_dict = dict(
-    interviews = dict(
-      personas = list()
-    )
+  interviews_dict = generate_interviews_dict(
+    question_templates=question_templates,
+    reverie_server=reverie_server,
+    random_persona_clause="organizing a Valentine's Day party",
+    event="a Valentine's Day party",
+    random_seed=random_seed,
   )
-  for persona in reverie_server.personas.values():
-    persona_dict = generate_persona_dict(
-      question_templates=question_templates,
-      persona=persona,
-      reverie_server=reverie_server,
-      random_persona_clause = "organizing a Valentine's Day party",
-      event = "a Valentine's Day party",
-      # Get a deterministic random number generator by seeding with 0.
-      random_seed = 0,
-    )
-    #conditions = Conditions(persona)
-    #condition_methods = conditions.get_condition_methods_dict()
-    #persona_dict = dict(
-    #  persona = persona.name,
-    #  categories = list()
-    #)
-    #for category, questions in question_templates.items():
-    #  category_dict = generate_category_dict(
-    #    category=category,
-    #    questions=questions,
-    #    persona=persona,
-    #    reverie_server=reverie_server,
-    #    condition_methods=condition_methods,
-    #  )
-    #  #category_dict = dict(
-    #  #  category = category,
-    #  #  questions = list()
-    #  #)
-    #  #for question_id, template in questions.items():
-    #  #  question_dict = generate_question_dict(
-    #  #    question_id=question_id,
-    #  #    template=template,
-    #  #    persona=persona,
-    #  #    reverie_server=reverie_server,
-    #  #    condition_methods=condition_methods,
-    #  #  )
-    #  #  #question_variables = get_believability_question_variables(
-    #  #  #  persona=persona,
-    #  #  #  personas=reverie_server.personas,
-    #  #  #  random_persona_clause = "organizing a Valentine's Day party",
-    #  #  #  event = "a Valentine's Day party",
-    #  #  #  # Get a deterministic random number generator by seeding with 0.
-    #  #  #  random_seed = 0,
-    #  #  #)
-    #  #  #question = template.format_map(question_variables)
-    #  #  #question_dict = dict(
-    #  #  #  question_id = question_id,
-    #  #  #  question = question,
-    #  #  #  conditions = list()
-    #  #  #)
-    #  #  #for condition, method in condition_methods.items():
-    #  #  #  # This calls one of the Condition methods, which in turn calls the language model.
-    #  #  #  condition_dict = generate_condition_dict(question, condition, method)
-    #  #  #  #response, curr_conv = method(question)
-    #  #  #  #condition_dict = dict(
-    #  #  #  #  condition = condition,
-    #  #  #  #  response = response,
-    #  #  #  #)
-    #  #  #  question_dict['conditions'].append(condition_dict)
-    #  #  category_dict['questions'].append(question_dict)
-    #  persona_dict['categories'].append(category_dict)
-    interviews_dict['interviews']['personas'].append(persona_dict)
+  #interviews_dict = dict(
+  #  interviews = dict(
+  #    personas = list()
+  #  )
+  #)
+  #for persona in reverie_server.personas.values():
+  #  persona_dict = generate_persona_dict(
+  #    question_templates=question_templates,
+  #    persona=persona,
+  #    reverie_server=reverie_server,
+  #    random_persona_clause = "organizing a Valentine's Day party",
+  #    event = "a Valentine's Day party",
+  #    # Get a deterministic random number generator by seeding with 0.
+  #    random_seed = 0,
+  #  )
+  #  #conditions = Conditions(persona)
+  #  #condition_methods = conditions.get_condition_methods_dict()
+  #  #persona_dict = dict(
+  #  #  persona = persona.name,
+  #  #  categories = list()
+  #  #)
+  #  #for category, questions in question_templates.items():
+  #  #  category_dict = generate_category_dict(
+  #  #    category=category,
+  #  #    questions=questions,
+  #  #    persona=persona,
+  #  #    reverie_server=reverie_server,
+  #  #    condition_methods=condition_methods,
+  #  #  )
+  #  #  #category_dict = dict(
+  #  #  #  category = category,
+  #  #  #  questions = list()
+  #  #  #)
+  #  #  #for question_id, template in questions.items():
+  #  #  #  question_dict = generate_question_dict(
+  #  #  #    question_id=question_id,
+  #  #  #    template=template,
+  #  #  #    persona=persona,
+  #  #  #    reverie_server=reverie_server,
+  #  #  #    condition_methods=condition_methods,
+  #  #  #  )
+  #  #  #  #question_variables = get_believability_question_variables(
+  #  #  #  #  persona=persona,
+  #  #  #  #  personas=reverie_server.personas,
+  #  #  #  #  random_persona_clause = "organizing a Valentine's Day party",
+  #  #  #  #  event = "a Valentine's Day party",
+  #  #  #  #  # Get a deterministic random number generator by seeding with 0.
+  #  #  #  #  random_seed = 0,
+  #  #  #  #)
+  #  #  #  #question = template.format_map(question_variables)
+  #  #  #  #question_dict = dict(
+  #  #  #  #  question_id = question_id,
+  #  #  #  #  question = question,
+  #  #  #  #  conditions = list()
+  #  #  #  #)
+  #  #  #  #for condition, method in condition_methods.items():
+  #  #  #  #  # This calls one of the Condition methods, which in turn calls the language model.
+  #  #  #  #  condition_dict = generate_condition_dict(question, condition, method)
+  #  #  #  #  #response, curr_conv = method(question)
+  #  #  #  #  #condition_dict = dict(
+  #  #  #  #  #  condition = condition,
+  #  #  #  #  #  response = response,
+  #  #  #  #  #)
+  #  #  #  #  question_dict['conditions'].append(condition_dict)
+  #  #  #  category_dict['questions'].append(question_dict)
+  #  #  persona_dict['categories'].append(category_dict)
+  #  interviews_dict['interviews']['personas'].append(persona_dict)
 
   with open(interviews_path, 'w') as f:
     yaml.dump(interviews_dict, f)
