@@ -133,14 +133,7 @@ def test_integration__believability_interviews(rs, questions):
   assert first_condition_dict['condition'] == 'no_observation_no_reflection_no_planning'
 
 
-def test_integration__BelievabilityInterviewer__generate_interviews_dict(rs, questions):
-  interviewer = BelievabilityInterviewer(
-    question_templates=questions,
-    personas=rs.personas,
-    random_persona_clause="organizing a Valentine's Day party",
-    event="a Valentine's Day party",
-    random_seed=0,
-  )
+def test_integration__BelievabilityInterviewer__generate_interviews_dict(rs, interviewer):
   persona = rs.personas['Isabella Rodriguez']
   personas_to_interview = {persona.name:persona}
   interviews_dict = interviewer.generate_interviews_dict(personas=personas_to_interview)
