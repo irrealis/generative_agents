@@ -182,14 +182,23 @@ class BelievabilityInterviewer(object):
 
 
 
-def believability_interviews(personas, sim_folder, random_seed=None):
-  interview_questions_path = os.path.join(this_dir, 'V1_interview_questions', 'believability_templates.json')
+def believability_interviews(
+  personas,
+  sim_folder,
+  random_seed=None,
+  personas_to_interview=None,
+  question_templates=None,
+):
   believability_dir = os.path.join(sim_folder, 'analysis', 'believability')
   interviews_path = os.path.join(believability_dir, 'interviews.yaml')
 
-  os.makedirs(believability_dir, exist_ok=True)
-  with open(interview_questions_path, 'rb') as f:
-    question_templates = json.load(f)
+  if personas_to_interview is None:
+    personas_to_interview = personas
+  if question_templates is None:
+    interview_questions_path = os.path.join(this_dir, 'V1_interview_questions', 'believability_templates.json')
+    os.makedirs(believability_dir, exist_ok=True)
+    with open(interview_questions_path, 'rb') as f:
+      question_templates = json.load(f)
 
   interviewer = BelievabilityInterviewer(
     question_templates=question_templates,
@@ -198,7 +207,10 @@ def believability_interviews(personas, sim_folder, random_seed=None):
     event="a Valentine's Day party",
     random_seed=random_seed,
   )
-  interviews_dict = interviewer.generate_interviews_dict()
+  interviews_dict = interviewer.generate_interviews_dict(
+    personas=personas_to_interview,
+    question_templates=question_templates,
+  )
 
   with open(interviews_path, 'w') as f:
     yaml.dump(interviews_dict, f)
