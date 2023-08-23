@@ -107,7 +107,6 @@ class BelievabilityInterviewer(object):
     condition_dict = dict(
       condition = condition,
       response = response,
-      retrieved = retrieved,
       summarized_idea = summarized_idea,
     )
     return condition_dict
