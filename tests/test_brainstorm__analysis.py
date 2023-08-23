@@ -71,7 +71,6 @@ def test_brainstorm__believability_interviewer__interviews_dict(rs):
   interview_questions_path = f'{project_dir}/reverie/backend_server/persona/analysis/believability/V1_interview_questions/believability_templates.json'
   believability_dir = f'{sim_folder}/analysis/believability'
   interviews_path = f'{believability_dir}/interviews.yaml'
-  persona_names = list(rs.personas.keys())
 
   os.makedirs(believability_dir, exist_ok=True)
   with open(interview_questions_path, 'rb') as f:
