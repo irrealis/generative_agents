@@ -48,6 +48,17 @@ class Conditions(object):
   def interview__full_architecture(self, question, **kw):
     return interview_persona(self.full_architecture, question, **kw)
 
+  def get_condition_methods_dict(self):
+    condition_methods_dict = dict(
+      no_observation_no_reflection_no_planning = self.interview__no_observation_no_reflection_no_planning,
+      no_reflection_no_planning = self.interview__no_reflection_no_planning,
+      no_reflection = self.interview__no_reflection,
+      full_architecture = self.interview__full_architecture,
+    )
+    return condition_methods_dict
+
+
+
 
 def believability_interviews(reverie_server, sim_folder):
   interview_questions_path = os.path.join(this_dir, 'V1_interview_questions', 'believability_templates.json')
@@ -99,12 +110,7 @@ def believability_interviews(reverie_server, sim_folder):
   )
   for persona in reverie_server.personas.values():
     conditions = Conditions(persona)
-    condition_methods = dict(
-      no_observation_no_reflection_no_planning = conditions.interview__no_observation_no_reflection_no_planning,
-      no_reflection_no_planning = conditions.interview__no_reflection_no_planning,
-      no_reflection = conditions.interview__no_reflection,
-      full_architecture = conditions.interview__full_architecture,
-    )
+    condition_methods = conditions.get_condition_methods_dict()
 
     persona_dict = dict(
       persona = persona.name,
