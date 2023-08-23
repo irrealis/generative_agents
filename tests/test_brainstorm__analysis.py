@@ -46,16 +46,23 @@ import pytest
 
 import jsonpickle
 
+from ruamel.yaml import YAML
+from ruamel.yaml.scalarstring import LiteralScalarString
+
 import datetime as dt
 import functools as ft
 import json, pprint, shutil
 import random
 
 
+yaml = YAML()
+
+
 ### Tests
 
 # Try to make system more deterministic.
 random.seed(0)
+
 
 def test_brainstorm__believability_interviewer__interviews_dict(rs):
   environment_loc = f"{project_dir}/environment"
@@ -64,8 +71,8 @@ def test_brainstorm__believability_interviewer__interviews_dict(rs):
   interview_questions_path = f'{project_dir}/reverie/backend_server/persona/analysis/believability/V1_interview_questions/believability_templates.json'
   believability_dir = f'{sim_folder}/analysis/believability'
   interviews_path = f'{believability_dir}/interviews.yaml'
-
   persona_names = list(rs.personas.keys())
+
   os.makedirs(believability_dir, exist_ok=True)
   with open(interview_questions_path, 'rb') as f:
     question_templates = json.load(f)
@@ -78,6 +85,8 @@ def test_brainstorm__believability_interviewer__interviews_dict(rs):
     random_seed=0,
   )
   interviews_dict = interviewer.generate_interviews_dict()
+  with open(interviews_path, 'w') as f:
+    yaml.dump(interviews_dict, f)
 
 
 def test_brainstorm__believability_interviews(rs):
