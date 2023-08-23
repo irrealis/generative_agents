@@ -64,34 +64,6 @@ yaml = YAML()
 random.seed(0)
 
 
-def test_brainstorm__believability_interviewer__interviews_dict(rs):
-  environment_loc = f"{project_dir}/environment"
-  fs_storage = f"{environment_loc}/frontend_server/storage"
-  sim_folder = f"{fs_storage}/{rs.sim_code}"
-  interview_questions_path = f'{project_dir}/reverie/backend_server/persona/analysis/believability/V1_interview_questions/believability_templates.json'
-  believability_dir = f'{sim_folder}/analysis/believability'
-  interviews_path = f'{believability_dir}/interviews.yaml'
-
-  os.makedirs(believability_dir, exist_ok=True)
-  with open(interview_questions_path, 'rb') as f:
-    question_templates = json.load(f)
-  question_templates = {'plans':question_templates['plans']}
-  question_templates['plans'] = {'just_finished_at_1pm': question_templates['plans']['just_finished_at_1pm']}
-
-  interviewer = BelievabilityInterviewer(
-    question_templates=question_templates,
-    personas=rs.personas,
-    random_persona_clause="organizing a Valentine's Day party",
-    event="a Valentine's Day party",
-    random_seed=0,
-  )
-  persona = rs.personas['Isabella Rodriguez']
-  personas_to_interview = {persona.name:persona}
-  interviews_dict = interviewer.generate_interviews_dict(personas=personas_to_interview)
-  with open(interviews_path, 'w') as f:
-    yaml.dump(interviews_dict, f)
-
-
 def test_integration__believability_interviews(rs):
   environment_loc = f"{project_dir}/environment"
   fs_storage = f"{environment_loc}/frontend_server/storage"
@@ -140,6 +112,34 @@ def test_integration__believability_interviews(rs):
   assert 'response' in first_condition_dict
   assert 'summarized_idea' in first_condition_dict
   assert first_condition_dict['condition'] == 'no_observation_no_reflection_no_planning'
+
+
+def test_brainstorm__believability_interviewer__interviews_dict(rs):
+  environment_loc = f"{project_dir}/environment"
+  fs_storage = f"{environment_loc}/frontend_server/storage"
+  sim_folder = f"{fs_storage}/{rs.sim_code}"
+  interview_questions_path = f'{project_dir}/reverie/backend_server/persona/analysis/believability/V1_interview_questions/believability_templates.json'
+  believability_dir = f'{sim_folder}/analysis/believability'
+  interviews_path = f'{believability_dir}/interviews.yaml'
+
+  os.makedirs(believability_dir, exist_ok=True)
+  with open(interview_questions_path, 'rb') as f:
+    question_templates = json.load(f)
+  question_templates = {'plans':question_templates['plans']}
+  question_templates['plans'] = {'just_finished_at_1pm': question_templates['plans']['just_finished_at_1pm']}
+
+  interviewer = BelievabilityInterviewer(
+    question_templates=question_templates,
+    personas=rs.personas,
+    random_persona_clause="organizing a Valentine's Day party",
+    event="a Valentine's Day party",
+    random_seed=0,
+  )
+  persona = rs.personas['Isabella Rodriguez']
+  personas_to_interview = {persona.name:persona}
+  interviews_dict = interviewer.generate_interviews_dict(personas=personas_to_interview)
+  with open(interviews_path, 'w') as f:
+    yaml.dump(interviews_dict, f)
 
 
 def test_brainstorm__freeze_thaw_ablate_interview(rs):
