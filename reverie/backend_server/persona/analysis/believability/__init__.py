@@ -160,7 +160,7 @@ def generate_persona_dict(
   return persona_dict
 
 
-def believability_interviews(reverie_server, sim_folder):
+def believability_interviews(reverie_server, sim_folder, random_seed=None):
   interview_questions_path = os.path.join(this_dir, 'V1_interview_questions', 'believability_templates.json')
   believability_dir = os.path.join(sim_folder, 'analysis', 'believability')
   interviews_path = os.path.join(believability_dir, 'interviews.yaml')
