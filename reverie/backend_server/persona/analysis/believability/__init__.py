@@ -123,7 +123,7 @@ def generate_category_dict(
 
 
 def generate_persona_dict(
-  believability_questions,
+  question_templates,
   persona,
   reverie_server,
 ):
@@ -133,7 +133,7 @@ def generate_persona_dict(
     persona = persona.name,
     categories = list()
   )
-  for category, questions in believability_questions.items():
+  for category, questions in question_templates.items():
     category_dict = generate_category_dict(
       category=category,
       questions=questions,
@@ -153,7 +153,7 @@ def believability_interviews(reverie_server, sim_folder):
 
   os.makedirs(believability_dir, exist_ok=True)
   with open(interview_questions_path, 'rb') as f:
-    believability_questions = json.load(f)
+    question_templates = json.load(f)
 
   # Layout of the interviews dict:
   #
@@ -195,7 +195,7 @@ def believability_interviews(reverie_server, sim_folder):
   )
   for persona in reverie_server.personas.values():
     persona_dict = generate_persona_dict(
-      believability_questions=believability_questions,
+      question_templates=question_templates,
       persona=persona,
       reverie_server=reverie_server,
     )
@@ -205,7 +205,7 @@ def believability_interviews(reverie_server, sim_folder):
     #  persona = persona.name,
     #  categories = list()
     #)
-    #for category, questions in believability_questions.items():
+    #for category, questions in question_templates.items():
     #  category_dict = generate_category_dict(
     #    category=category,
     #    questions=questions,
