@@ -130,22 +130,9 @@ def test_integration__believability_interviews(rs):
   assert first_condition_dict['condition'] == 'no_observation_no_reflection_no_planning'
 
 
-def test_integration__BelievabilityInterviewer__generate_interviews_dict(rs):
-  environment_loc = f"{project_dir}/environment"
-  fs_storage = f"{environment_loc}/frontend_server/storage"
-  sim_folder = f"{fs_storage}/{rs.sim_code}"
-  interview_questions_path = f'{project_dir}/reverie/backend_server/persona/analysis/believability/V1_interview_questions/believability_templates.json'
-  believability_dir = f'{sim_folder}/analysis/believability'
-  interviews_path = f'{believability_dir}/interviews.yaml'
-
-  os.makedirs(believability_dir, exist_ok=True)
-  with open(interview_questions_path, 'rb') as f:
-    question_templates = json.load(f)
-  question_templates = {'plans':question_templates['plans']}
-  question_templates['plans'] = {'just_finished_at_1pm': question_templates['plans']['just_finished_at_1pm']}
-
+def test_integration__BelievabilityInterviewer__generate_interviews_dict(rs, questions):
   interviewer = BelievabilityInterviewer(
-    question_templates=question_templates,
+    question_templates=questions,
     personas=rs.personas,
     random_persona_clause="organizing a Valentine's Day party",
     event="a Valentine's Day party",
