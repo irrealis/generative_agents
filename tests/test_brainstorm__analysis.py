@@ -95,7 +95,7 @@ def test_brainstorm__freeze_thaw_ablate_interview(rs):
   ablate_reflection(persona_thawed)
   question = 'Give an introduction of yourself.'
 
-  response, current_convo = interview_persona(
+  _,_, response, current_convo = interview_persona(
     persona=persona_thawed,
     message=question
   )
@@ -207,7 +207,7 @@ def test_brainstorm__prototype__interview_with_ablations__reflection(rs):
   ablate_reflection(persona)
   question = 'Give an introduction of yourself.'
 
-  response, current_convo = interview_persona(
+  _,_, response, current_convo = interview_persona(
     persona=persona,
     message=question
   )
@@ -226,7 +226,7 @@ def test_brainstorm__prototype__interview_with_ablations__planning_reflection(rs
   ablate_planning_reflection(persona)
   question = 'Give an introduction of yourself.'
 
-  response, current_convo = interview_persona(
+  _,_, response, current_convo = interview_persona(
     persona=persona,
     message=question
   )
@@ -245,7 +245,7 @@ def test_brainstorm__prototype__interview_with_ablations__observation_planning_r
   ablate_observations_planning_reflection(persona)
   question = 'Give an introduction of yourself.'
 
-  response, current_convo = interview_persona(
+  _,_, response, current_convo = interview_persona(
     persona=persona,
     message=question
   )
@@ -589,7 +589,7 @@ def test_brainstorm__pose_one_believability_question(area, topic, question_templ
     random_seed = 0,
   )
   question = question_template.format_map(question_variables)
-  response, current_convo = interview_persona(
+  _,_, response, current_convo = interview_persona(
     persona=persona,
     message=question,
   )
@@ -824,7 +824,7 @@ def test_regression__interview_persona__context_length_exceeded(rs):
   message = "How are you?"
   context_length_exceeded = False
   try:
-    response, curr_convo = interview_persona(
+    _,_, response, curr_convo = interview_persona(
       persona=persona,
       message=message,
       curr_convo=curr_convo,
@@ -851,7 +851,7 @@ def test_brainstorm__interview_persona(rs):
   curr_convo = []
   interviewer = "Interviewer"
   message = "How are you?"
-  response, curr_convo = interview_persona(
+  _,_, response, curr_convo = interview_persona(
     persona=persona,
     message=message,
     curr_convo=curr_convo,

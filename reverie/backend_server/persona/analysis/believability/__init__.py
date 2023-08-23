@@ -103,7 +103,7 @@ class BelievabilityInterviewer(object):
     condition,
     method,
   ):
-    response, curr_conv = method(question)
+    _,_, response, curr_conv = method(question)
     condition_dict = dict(
       condition = condition,
       response = response,
