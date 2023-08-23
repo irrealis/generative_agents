@@ -58,6 +58,125 @@ class Conditions(object):
     return condition_methods_dict
 
 
+class BelievabilityInterviewer(object):
+  # Layout of the interviews dict:
+  #
+  # interviews = {
+  #   'personas': [
+  #     {
+  #       'persona': <persona.name>
+  #       'categories': [
+  #         {
+  #           'category': <category>,
+  #           'questions': [
+  #             {
+  #               'question': <question>
+  #               'conditions': [
+  #                 'condition': <condition>
+  #                 'response': <response>
+  #               ]
+  #             }
+  #           ]
+  #         }
+  #       ]
+  #     }
+  #   ]
+  # }
+  #
+  def __init__(
+    self,
+    question_templates,
+    reverie_server,
+    random_persona_clause,
+    event,
+    random_seed
+  ):
+    self.question_templates = question_templates
+    self.reverie_server = reverie_server
+    self.random_persona_clause = random_persona_clause
+    self.event = event
+    self.random_seed = random_seed
+
+  def generate_condition_dict(
+    self,
+    question,
+    condition,
+    method,
+  ):
+    response, curr_conv = method(question)
+    condition_dict = dict(
+      condition = condition,
+      response = response,
+    )
+    return condition_dict
+
+  def generate_question_dict(
+    self,
+    question_id,
+    template,
+    persona,
+    condition_methods,
+  ):
+    question_variables = get_believability_question_variables(
+      persona=persona,
+      personas=self.reverie_server.personas,
+      random_persona_clause=self.random_persona_clause,
+      event=self.event,
+      random_seed=self.random_seed,
+    )
+    question = template.format_map(question_variables)
+    question_dict = dict(
+      question_id = question_id,
+      question = question,
+      conditions = list()
+    )
+    for condition, method in condition_methods.items():
+      # This calls one of the Condition methods, which in turn calls the language model.
+      condition_dict = self.generate_condition_dict(question, condition, method)
+      question_dict['conditions'].append(condition_dict)
+    return question_dict
+
+  def generate_category_dict(
+    self,
+    category,
+    questions,
+    persona,
+    condition_methods,
+  ):
+    category_dict = dict(
+      category = category,
+      questions = list()
+    )
+    for question_id, template in questions.items():
+      question_dict = self.generate_question_dict(question_id, template, persona, condition_methods)
+      category_dict['questions'].append(question_dict)
+    return category_dict
+
+  def generate_persona_dict(self, persona):
+    conditions = Conditions(persona)
+    condition_methods = conditions.get_condition_methods_dict()
+    persona_dict = dict(
+      persona = persona.name,
+      categories = list()
+    )
+    for category, questions in self.question_templates.items():
+      category_dict = self.generate_category_dict(category, questions, persona, condition_methods)
+      persona_dict['categories'].append(category_dict)
+    return persona_dict
+
+  def generate_interviews_dict(self):
+    interviews_dict = dict(
+      interviews = dict(
+        personas = list()
+      )
+    )
+    for persona in self.reverie_server.personas.values():
+      persona_dict = self.generate_persona_dict(persona)
+      interviews_dict['interviews']['personas'].append(persona_dict)
+    return interviews_dict
+
+
+
 def generate_condition_dict(
   question,
   condition,
