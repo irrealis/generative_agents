@@ -65,6 +65,8 @@ def ablate_planning_reflection(persona):
   persona.scratch.daily_plan_req = []
   persona.scratch.f_daily_schedule = []
   persona.scratch.f_daily_schedule_hourly_org = []
+  persona.scratch.currently = ''
+  persona.scratch.lifestyle = ''
 
 
 def ablate_observations_planning_reflection(persona):
@@ -120,6 +122,8 @@ def ablate_observations_planning_reflection(persona):
   persona.scratch.daily_plan_req = []
   persona.scratch.f_daily_schedule = []
   persona.scratch.f_daily_schedule_hourly_org = []
+  persona.scratch.currently = ''
+  persona.scratch.lifestyle = ''
   persona.a_mem.seq_thought = []
   persona.a_mem.seq_chat = []
 
