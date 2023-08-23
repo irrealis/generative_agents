@@ -84,7 +84,7 @@ def test_brainstorm__believability_interviews(rs):
   environment_loc = f"{project_dir}/environment"
   fs_storage = f"{environment_loc}/frontend_server/storage"
   sim_folder = f"{fs_storage}/{rs.sim_code}"
-  believability_interviews(rs, sim_folder, random_seed=0)
+  believability_interviews(rs.personas, sim_folder, random_seed=0)
 
 
 def test_brainstorm__freeze_thaw_ablate_interview(rs):

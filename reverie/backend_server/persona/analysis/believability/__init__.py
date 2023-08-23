@@ -179,11 +179,11 @@ class BelievabilityInterviewer(object):
 
 
 
-def believability_interviews(reverie_server, sim_folder, random_seed=None):
+def believability_interviews(personas, sim_folder, random_seed=None):
   interview_questions_path = os.path.join(this_dir, 'V1_interview_questions', 'believability_templates.json')
   believability_dir = os.path.join(sim_folder, 'analysis', 'believability')
   interviews_path = os.path.join(believability_dir, 'interviews.yaml')
-  persona_names = list(reverie_server.personas.keys())
+  persona_names = list(personas.keys())
 
   os.makedirs(believability_dir, exist_ok=True)
   with open(interview_questions_path, 'rb') as f:
@@ -191,7 +191,7 @@ def believability_interviews(reverie_server, sim_folder, random_seed=None):
 
   interviewer = BelievabilityInterviewer(
     question_templates=question_templates,
-    personas=reverie_server.personas,
+    personas=personas,
     random_persona_clause="organizing a Valentine's Day party",
     event="a Valentine's Day party",
     random_seed=random_seed,
