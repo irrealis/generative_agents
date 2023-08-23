@@ -26,7 +26,10 @@ from persona.analysis.ablate import (
   is_reflection,
   is_reflection_error,
 )
-from persona.analysis.believability import believability_interviews
+from persona.analysis.believability import (
+  believability_interviews,
+  BelievabilityInterviewer,
+)
 from persona.analysis.believability.believability_questions import (
   get_chat_interaction_counts,
   get_max_chat_interactions,
@@ -53,6 +56,28 @@ import random
 
 # Try to make system more deterministic.
 random.seed(0)
+
+def test_brainstorm__believability_interviewer__interviews_dict(rs):
+  environment_loc = f"{project_dir}/environment"
+  fs_storage = f"{environment_loc}/frontend_server/storage"
+  sim_folder = f"{fs_storage}/{rs.sim_code}"
+  interview_questions_path = f'{project_dir}/reverie/backend_server/persona/analysis/believability/V1_interview_questions/believability_templates.json'
+  believability_dir = f'{sim_folder}/analysis/believability'
+  interviews_path = f'{believability_dir}/interviews.yaml'
+
+  persona_names = list(rs.personas.keys())
+  os.makedirs(believability_dir, exist_ok=True)
+  with open(interview_questions_path, 'rb') as f:
+    question_templates = json.load(f)
+
+  interviewer = BelievabilityInterviewer(
+    question_templates=question_templates,
+    reverie_server=rs,
+    random_persona_clause="organizing a Valentine's Day party",
+    event="a Valentine's Day party",
+    random_seed=0,
+  )
+  interviews_dict = interviewer.generate_interviews_dict()
 
 
 def test_brainstorm__believability_interviews(rs):
