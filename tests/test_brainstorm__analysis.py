@@ -107,7 +107,7 @@ def test_brainstorm__believability_interviews(rs):
   persona = rs.personas['Isabella Rodriguez']
   personas_to_interview = {persona.name:persona}
 
-  believability_interviews(
+  interviews_dict = believability_interviews(
     rs.personas,
     sim_folder,
     random_seed=0,
