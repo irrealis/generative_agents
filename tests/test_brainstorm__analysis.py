@@ -60,7 +60,14 @@ yaml = YAML()
 
 
 class PrototypeConceptNode(ConceptNode):
-  ...
+  def is_plan_thought(self):
+    return (
+      (self.type == 'thought')
+      and
+      (self.keywords == {'plan'})
+      and
+      (self.filling is None)
+    )
 
 
 @pytest.fixture
