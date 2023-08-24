@@ -58,10 +58,6 @@ import json, pprint, random, re
 yaml = YAML()
 
 
-class PrototypeConceptNode(ConceptNode):
-  ...
-
-
 @pytest.fixture
 def questions(rs):
   environment_loc = f"{project_dir}/environment"
