@@ -124,6 +124,13 @@ class PrototypeConceptNode(ConceptNode):
   def is_chat(self):
     return (self.type == 'chat')
 
+  def is_idle(self):
+    return (
+      (self.predicate == 'is')
+      and
+      (self.object == 'idle')
+    )
+
 
 @pytest.fixture
 def questions(rs):
