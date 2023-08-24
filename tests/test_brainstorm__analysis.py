@@ -110,6 +110,17 @@ class PrototypeConceptNode(ConceptNode):
     object_re = re.compile(r'(?P<world>.+):(?P<arena>.+):(?P<sector>.+):(?P<game_object>.+)')
     return object_re.fullmatch(self.subject)
 
+  def is_activity_event(self):
+    return (
+      (self.type == 'event')
+      and
+      not (
+        self.is_chat_event()
+        or
+        self.is_object_observation_event()
+      )
+    )
+
 
 @pytest.fixture
 def questions(rs):
