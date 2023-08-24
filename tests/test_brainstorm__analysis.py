@@ -98,6 +98,13 @@ class PrototypeConceptNode(ConceptNode):
       )
     )
 
+  def is_chat_event(self):
+    return (
+      (self.type == 'event')
+      and
+      self.filling
+    )
+
 
 @pytest.fixture
 def questions(rs):
