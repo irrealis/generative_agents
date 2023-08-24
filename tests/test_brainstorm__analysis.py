@@ -105,6 +105,11 @@ class PrototypeConceptNode(ConceptNode):
       self.filling
     )
 
+  def is_object_observation_event(self):
+    import re
+    object_re = re.compile(r'(?P<world>.+):(?P<arena>.+):(?P<sector>.+):(?P<game_object>.+)')
+    return object_re.fullmatch(self.subject)
+
 
 @pytest.fixture
 def questions(rs):
