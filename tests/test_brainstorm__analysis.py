@@ -124,6 +124,24 @@ class PrototypeConceptNode(ConceptNode):
   def is_chat(self):
     return (self.type == 'chat')
 
+  classifiers = dict(
+    chat_event=is_chat_event,
+    object_observation_event=is_object_observation_event,
+    activity_event=is_activity_event,
+    plan_thought=is_plan_thought,
+    reflection_thought=is_reflection_thought,
+    reflection_error_thought=is_reflection_error_thought,
+    bootstrap_thought=is_bootstrap_thought,
+    chat=is_chat,
+  )
+
+  def classify(self):
+    matches = []
+    for category, classifier in self.classifiers.items():
+      if classifier(self):
+        matches.append(category)
+    return matches
+
   def is_idle(self):
     return (
       (self.predicate == 'is')
