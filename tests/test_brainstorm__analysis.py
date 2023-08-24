@@ -311,7 +311,7 @@ def test_unit__ConceptNode__is_bootstrap_thought(concept_nodes):
   assert not concept_nodes['chat'].is_bootstrap_thought()
 
 
-def test_prototype__ConceptNode__is_chat_event(concept_nodes):
+def test_unit__ConceptNode__is_chat_event(concept_nodes):
   assert concept_nodes['chat_event'].is_chat_event()
   assert not concept_nodes['object_observation_event'].is_chat_event()
   assert not concept_nodes['activity_event'].is_chat_event()
