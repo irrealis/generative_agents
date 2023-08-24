@@ -58,8 +58,6 @@ import json, pprint, random, re
 yaml = YAML()
 
 
-object_re = re.compile(r'(?P<world>.+):(?P<arena>.+):(?P<sector>.+):(?P<game_object>.+)')
-
 class PrototypeConceptNode(ConceptNode):
   ...
 
