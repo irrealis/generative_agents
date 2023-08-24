@@ -52,8 +52,7 @@ from ruamel.yaml.scalarstring import LiteralScalarString
 
 import datetime as dt
 import functools as ft
-import json, pprint, shutil
-import random
+import json, pprint, random, re
 
 
 yaml = YAML()
