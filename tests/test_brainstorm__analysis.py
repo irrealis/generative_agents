@@ -368,7 +368,7 @@ def test_unit__ConceptNode__is_idle(concept_nodes):
   assert concept_nodes['idle_object_observation_event'].is_idle()
 
 
-def test_prototype__ConceptNode__classify(concept_nodes):
+def test_unit__ConceptNode__classify(concept_nodes):
   assert ['chat_event'] == concept_nodes['chat_event'].classify()
   assert ['object_observation_event'] == concept_nodes['object_observation_event'].classify()
   assert ['activity_event'] == concept_nodes['activity_event'].classify()
