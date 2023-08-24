@@ -121,6 +121,9 @@ class PrototypeConceptNode(ConceptNode):
       )
     )
 
+  def is_chat(self):
+    return (self.type == 'chat')
+
 
 @pytest.fixture
 def questions(rs):
