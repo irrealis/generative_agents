@@ -69,6 +69,16 @@ class PrototypeConceptNode(ConceptNode):
       (self.filling is None)
     )
 
+  def is_reflection_thought(self):
+    return (
+      (self.type == 'thought')
+      and
+      (self.depth > 0)
+      and
+      isinstance(self.filling, list)
+    )
+
+
 
 @pytest.fixture
 def questions(rs):
