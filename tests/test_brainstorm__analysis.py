@@ -85,6 +85,18 @@ class PrototypeConceptNode(ConceptNode):
       (self.description == 'this is blank')
     )
 
+  def is_bootstrap_thought(self):
+    return (
+      (self.type == 'thought')
+      and
+      not (
+        self.is_plan_thought()
+        or
+        self.is_reflection_thought()
+        or
+        self.is_reflection_error_thought()
+      )
+    )
 
 
 @pytest.fixture
