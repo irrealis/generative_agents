@@ -78,6 +78,13 @@ class PrototypeConceptNode(ConceptNode):
       isinstance(self.filling, list)
     )
 
+  def is_reflection_error_thought(self):
+    return (
+      (self.type == 'thought')
+      and
+      (self.description == 'this is blank')
+    )
+
 
 
 @pytest.fixture
