@@ -322,7 +322,7 @@ def test_unit__ConceptNode__is_chat_event(concept_nodes):
   assert not concept_nodes['chat'].is_chat_event()
 
 
-def test_prototype__ConceptNode__is_object_observation_event(concept_nodes):
+def test_unit__ConceptNode__is_object_observation_event(concept_nodes):
   assert not concept_nodes['chat_event'].is_object_observation_event()
   assert concept_nodes['object_observation_event'].is_object_observation_event()
   assert not concept_nodes['activity_event'].is_object_observation_event()
