@@ -300,7 +300,7 @@ def test_unit__ConceptNode__is_reflection_error_thought(concept_nodes):
   assert not concept_nodes['chat'].is_reflection_error_thought()
 
 
-def test_prototype__ConceptNode__is_bootstrap_thought(concept_nodes):
+def test_unit__ConceptNode__is_bootstrap_thought(concept_nodes):
   assert not concept_nodes['chat_event'].is_bootstrap_thought()
   assert not concept_nodes['object_observation_event'].is_bootstrap_thought()
   assert not concept_nodes['activity_event'].is_bootstrap_thought()
