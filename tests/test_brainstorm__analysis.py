@@ -267,7 +267,7 @@ def concept_nodes():
 random.seed(0)
 
 
-def test_prototype__ConceptNode__is_plan_thought(concept_nodes):
+def test_unit__ConceptNode__is_plan_thought(concept_nodes):
   assert not concept_nodes['chat_event'].is_plan_thought()
   assert not concept_nodes['object_observation_event'].is_plan_thought()
   assert not concept_nodes['activity_event'].is_plan_thought()
