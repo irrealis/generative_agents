@@ -38,6 +38,7 @@ from persona.analysis.believability.believability_questions import (
 from persona.cognitive_modules.converse import generate_summarize_ideas, generate_next_line
 from persona.cognitive_modules.perceive import generate_poig_score
 from persona.cognitive_modules.retrieve import new_retrieve
+from persona.memory_structures.associative_memory import ConceptNode
 from persona.prompt_template.gpt_structure import get_embedding
 
 import openai.error
