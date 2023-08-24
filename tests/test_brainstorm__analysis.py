@@ -429,6 +429,19 @@ def test_prototype__ConceptNode__is_chat(prototype_concept_nodes):
   assert prototype_concept_nodes['chat'].is_chat()
 
 
+def test_prototype__ConceptNode__is_idle(prototype_concept_nodes):
+  assert not prototype_concept_nodes['chat_event'].is_idle()
+  assert not prototype_concept_nodes['object_observation_event'].is_idle()
+  assert not prototype_concept_nodes['activity_event'].is_idle()
+  assert not prototype_concept_nodes['plan_thought'].is_idle()
+  assert not prototype_concept_nodes['reflection_thought'].is_idle()
+  assert not prototype_concept_nodes['reflection_error_thought'].is_idle()
+  assert not prototype_concept_nodes['bootstrap_thought'].is_idle()
+  assert not prototype_concept_nodes['chat'].is_idle()
+  assert prototype_concept_nodes['idle_activity_event'].is_idle()
+  assert prototype_concept_nodes['idle_object_observation_event'].is_idle()
+
+
 def test_integration__believability_interviews(rs, questions):
   environment_loc = f"{project_dir}/environment"
   fs_storage = f"{environment_loc}/frontend_server/storage"
