@@ -107,8 +107,6 @@ class PrototypeConceptNode(ConceptNode):
     )
 
   def is_object_observation_event(self):
-    import re
-    object_re = re.compile(r'(?P<world>.+):(?P<arena>.+):(?P<sector>.+):(?P<game_object>.+)')
     return object_re.fullmatch(self.subject)
 
   def is_activity_event(self):
