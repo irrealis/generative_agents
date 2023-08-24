@@ -92,7 +92,7 @@ def interviewer(rs, questions):
 @pytest.fixture
 def concept_nodes():
   return dict(
-    plan_thought = PrototypeConceptNode(
+    plan_thought = ConceptNode(
       node_id = "node_7",
       node_count = 7,
       type_count = 1,
@@ -109,7 +109,7 @@ def concept_nodes():
       keywords = {'plan'},
       filling = None,
     ),
-    activity_event = PrototypeConceptNode(
+    activity_event = ConceptNode(
       node_id = "node_8",
       node_count = 8,
       type_count = 7,
@@ -126,7 +126,7 @@ def concept_nodes():
       keywords = {'sleep', 'Isabella Rodriguez'},
       filling = [],
     ),
-    object_observation_event = PrototypeConceptNode(
+    object_observation_event = ConceptNode(
       node_id = "node_9",
       node_count = 9,
       type_count = 8,
@@ -143,7 +143,7 @@ def concept_nodes():
       keywords = {'bed', 'used'},
       filling = [],
     ),
-    bootstrap_thought = PrototypeConceptNode(
+    bootstrap_thought = ConceptNode(
       node_id = "node_10",
       node_count = 10,
       type_count = 2,
@@ -160,7 +160,7 @@ def concept_nodes():
       keywords = {'excited', 'Isabella Rodriguez', 'be'},
       filling = None,
     ),
-    reflection_thought = PrototypeConceptNode(
+    reflection_thought = ConceptNode(
       node_id = "node_101",
       node_count = 101,
       type_count = 7,
@@ -177,7 +177,7 @@ def concept_nodes():
       keywords = {'invested', 'Isabella Rodriguez', 'be'},
       filling = ['node_10', 'node_7', 'node_99'],
     ),
-    chat = PrototypeConceptNode(
+    chat = ConceptNode(
       node_id = "node_287",
       node_count = 287,
       type_count = 1,
@@ -194,7 +194,7 @@ def concept_nodes():
       keywords = {'Isabella Rodriguez', 'Klaus Mueller'},
       filling = [['Isabella Rodriguez', "Hi Klaus! How are you enjoying your meal? I wanted to let you know that I'm planning a Valentine's Day party at Hobbs Cafe on February 14th, 2023 from 5pm to 7pm. I would love for you to join us!"], ['Klaus Mueller', "Oh, hi Isabella! I'm doing well, thank you. The meal is delicious as always. A Valentine's Day party sounds fun. I'd love to join! Thank you for inviting me."]],
     ),
-    chat_event = PrototypeConceptNode(
+    chat_event = ConceptNode(
       node_id = "node_288",
       node_count = 288,
       type_count = 251,
@@ -211,7 +211,7 @@ def concept_nodes():
       keywords = {'Isabella Rodriguez', 'Klaus Mueller'},
       filling = ['node_287'],
     ),
-    reflection_error_thought = PrototypeConceptNode(
+    reflection_error_thought = ConceptNode(
       node_id = "node_881",
       node_count = 881,
       type_count = 135,
@@ -228,7 +228,7 @@ def concept_nodes():
       keywords = {'is', 'blank', 'Isabella Rodriguez'},
       filling = 'node_1',
     ),
-    idle_activity_event = PrototypeConceptNode(
+    idle_activity_event = ConceptNode(
       node_id = "node_1",
       node_count = 1,
       type_count = 1,
@@ -245,7 +245,7 @@ def concept_nodes():
       keywords = {'Isabella Rodriguez', 'idle'},
       filling = [],
     ),
-    idle_object_observation_event = PrototypeConceptNode(
+    idle_object_observation_event = ConceptNode(
       node_id = "node_2",
       node_count = 2,
       type_count = 2,
