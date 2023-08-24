@@ -27,6 +27,9 @@ import re
 from global_methods import *
 
 
+object_re = re.compile(r'(?P<world>.+):(?P<arena>.+):(?P<sector>.+):(?P<game_object>.+)')
+
+
 class ConceptNode: 
   def __init__(self,
                node_id, node_count, type_count, node_type, depth,
