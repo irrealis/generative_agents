@@ -90,7 +90,7 @@ def interviewer(rs, questions):
 
 
 @pytest.fixture
-def prototype_concept_nodes():
+def concept_nodes():
   return dict(
     plan_thought = PrototypeConceptNode(
       node_id = "node_7",
@@ -271,116 +271,116 @@ def prototype_concept_nodes():
 random.seed(0)
 
 
-def test_prototype__ConceptNode__is_plan_thought(prototype_concept_nodes):
-  assert not prototype_concept_nodes['chat_event'].is_plan_thought()
-  assert not prototype_concept_nodes['object_observation_event'].is_plan_thought()
-  assert not prototype_concept_nodes['activity_event'].is_plan_thought()
-  assert prototype_concept_nodes['plan_thought'].is_plan_thought()
-  assert not prototype_concept_nodes['reflection_thought'].is_plan_thought()
-  assert not prototype_concept_nodes['reflection_error_thought'].is_plan_thought()
-  assert not prototype_concept_nodes['bootstrap_thought'].is_plan_thought()
-  assert not prototype_concept_nodes['chat'].is_plan_thought()
+def test_prototype__ConceptNode__is_plan_thought(concept_nodes):
+  assert not concept_nodes['chat_event'].is_plan_thought()
+  assert not concept_nodes['object_observation_event'].is_plan_thought()
+  assert not concept_nodes['activity_event'].is_plan_thought()
+  assert concept_nodes['plan_thought'].is_plan_thought()
+  assert not concept_nodes['reflection_thought'].is_plan_thought()
+  assert not concept_nodes['reflection_error_thought'].is_plan_thought()
+  assert not concept_nodes['bootstrap_thought'].is_plan_thought()
+  assert not concept_nodes['chat'].is_plan_thought()
 
 
-def test_prototype__ConceptNode__is_reflection_thought(prototype_concept_nodes):
-  assert not prototype_concept_nodes['chat_event'].is_reflection_thought()
-  assert not prototype_concept_nodes['object_observation_event'].is_reflection_thought()
-  assert not prototype_concept_nodes['activity_event'].is_reflection_thought()
-  assert not prototype_concept_nodes['plan_thought'].is_reflection_thought()
-  assert prototype_concept_nodes['reflection_thought'].is_reflection_thought()
-  assert not prototype_concept_nodes['reflection_error_thought'].is_reflection_thought()
-  assert not prototype_concept_nodes['bootstrap_thought'].is_reflection_thought()
-  assert not prototype_concept_nodes['chat'].is_reflection_thought()
+def test_prototype__ConceptNode__is_reflection_thought(concept_nodes):
+  assert not concept_nodes['chat_event'].is_reflection_thought()
+  assert not concept_nodes['object_observation_event'].is_reflection_thought()
+  assert not concept_nodes['activity_event'].is_reflection_thought()
+  assert not concept_nodes['plan_thought'].is_reflection_thought()
+  assert concept_nodes['reflection_thought'].is_reflection_thought()
+  assert not concept_nodes['reflection_error_thought'].is_reflection_thought()
+  assert not concept_nodes['bootstrap_thought'].is_reflection_thought()
+  assert not concept_nodes['chat'].is_reflection_thought()
 
 
-def test_prototype__ConceptNode__is_reflection_error_thought(prototype_concept_nodes):
-  assert not prototype_concept_nodes['chat_event'].is_reflection_error_thought()
-  assert not prototype_concept_nodes['object_observation_event'].is_reflection_error_thought()
-  assert not prototype_concept_nodes['activity_event'].is_reflection_error_thought()
-  assert not prototype_concept_nodes['plan_thought'].is_reflection_error_thought()
-  assert not prototype_concept_nodes['reflection_thought'].is_reflection_error_thought()
-  assert prototype_concept_nodes['reflection_error_thought'].is_reflection_error_thought()
-  assert not prototype_concept_nodes['bootstrap_thought'].is_reflection_error_thought()
-  assert not prototype_concept_nodes['chat'].is_reflection_error_thought()
+def test_prototype__ConceptNode__is_reflection_error_thought(concept_nodes):
+  assert not concept_nodes['chat_event'].is_reflection_error_thought()
+  assert not concept_nodes['object_observation_event'].is_reflection_error_thought()
+  assert not concept_nodes['activity_event'].is_reflection_error_thought()
+  assert not concept_nodes['plan_thought'].is_reflection_error_thought()
+  assert not concept_nodes['reflection_thought'].is_reflection_error_thought()
+  assert concept_nodes['reflection_error_thought'].is_reflection_error_thought()
+  assert not concept_nodes['bootstrap_thought'].is_reflection_error_thought()
+  assert not concept_nodes['chat'].is_reflection_error_thought()
 
 
-def test_prototype__ConceptNode__is_bootstrap_thought(prototype_concept_nodes):
-  assert not prototype_concept_nodes['chat_event'].is_bootstrap_thought()
-  assert not prototype_concept_nodes['object_observation_event'].is_bootstrap_thought()
-  assert not prototype_concept_nodes['activity_event'].is_bootstrap_thought()
-  assert not prototype_concept_nodes['plan_thought'].is_bootstrap_thought()
-  assert not prototype_concept_nodes['reflection_thought'].is_bootstrap_thought()
-  assert not prototype_concept_nodes['reflection_error_thought'].is_bootstrap_thought()
-  assert prototype_concept_nodes['bootstrap_thought'].is_bootstrap_thought()
-  assert not prototype_concept_nodes['chat'].is_bootstrap_thought()
+def test_prototype__ConceptNode__is_bootstrap_thought(concept_nodes):
+  assert not concept_nodes['chat_event'].is_bootstrap_thought()
+  assert not concept_nodes['object_observation_event'].is_bootstrap_thought()
+  assert not concept_nodes['activity_event'].is_bootstrap_thought()
+  assert not concept_nodes['plan_thought'].is_bootstrap_thought()
+  assert not concept_nodes['reflection_thought'].is_bootstrap_thought()
+  assert not concept_nodes['reflection_error_thought'].is_bootstrap_thought()
+  assert concept_nodes['bootstrap_thought'].is_bootstrap_thought()
+  assert not concept_nodes['chat'].is_bootstrap_thought()
 
 
-def test_prototype__ConceptNode__is_chat_event(prototype_concept_nodes):
-  assert prototype_concept_nodes['chat_event'].is_chat_event()
-  assert not prototype_concept_nodes['object_observation_event'].is_chat_event()
-  assert not prototype_concept_nodes['activity_event'].is_chat_event()
-  assert not prototype_concept_nodes['plan_thought'].is_chat_event()
-  assert not prototype_concept_nodes['reflection_thought'].is_chat_event()
-  assert not prototype_concept_nodes['reflection_error_thought'].is_chat_event()
-  assert not prototype_concept_nodes['bootstrap_thought'].is_chat_event()
-  assert not prototype_concept_nodes['chat'].is_chat_event()
+def test_prototype__ConceptNode__is_chat_event(concept_nodes):
+  assert concept_nodes['chat_event'].is_chat_event()
+  assert not concept_nodes['object_observation_event'].is_chat_event()
+  assert not concept_nodes['activity_event'].is_chat_event()
+  assert not concept_nodes['plan_thought'].is_chat_event()
+  assert not concept_nodes['reflection_thought'].is_chat_event()
+  assert not concept_nodes['reflection_error_thought'].is_chat_event()
+  assert not concept_nodes['bootstrap_thought'].is_chat_event()
+  assert not concept_nodes['chat'].is_chat_event()
 
 
-def test_prototype__ConceptNode__is_object_observation_event(prototype_concept_nodes):
-  assert not prototype_concept_nodes['chat_event'].is_object_observation_event()
-  assert prototype_concept_nodes['object_observation_event'].is_object_observation_event()
-  assert not prototype_concept_nodes['activity_event'].is_object_observation_event()
-  assert not prototype_concept_nodes['plan_thought'].is_object_observation_event()
-  assert not prototype_concept_nodes['reflection_thought'].is_object_observation_event()
-  assert not prototype_concept_nodes['reflection_error_thought'].is_object_observation_event()
-  assert not prototype_concept_nodes['bootstrap_thought'].is_object_observation_event()
-  assert not prototype_concept_nodes['chat'].is_object_observation_event()
+def test_prototype__ConceptNode__is_object_observation_event(concept_nodes):
+  assert not concept_nodes['chat_event'].is_object_observation_event()
+  assert concept_nodes['object_observation_event'].is_object_observation_event()
+  assert not concept_nodes['activity_event'].is_object_observation_event()
+  assert not concept_nodes['plan_thought'].is_object_observation_event()
+  assert not concept_nodes['reflection_thought'].is_object_observation_event()
+  assert not concept_nodes['reflection_error_thought'].is_object_observation_event()
+  assert not concept_nodes['bootstrap_thought'].is_object_observation_event()
+  assert not concept_nodes['chat'].is_object_observation_event()
 
 
-def test_prototype__ConceptNode__is_activity_event(prototype_concept_nodes):
-  assert not prototype_concept_nodes['chat_event'].is_activity_event()
-  assert not prototype_concept_nodes['object_observation_event'].is_activity_event()
-  assert prototype_concept_nodes['activity_event'].is_activity_event()
-  assert not prototype_concept_nodes['plan_thought'].is_activity_event()
-  assert not prototype_concept_nodes['reflection_thought'].is_activity_event()
-  assert not prototype_concept_nodes['reflection_error_thought'].is_activity_event()
-  assert not prototype_concept_nodes['bootstrap_thought'].is_activity_event()
-  assert not prototype_concept_nodes['chat'].is_activity_event()
+def test_prototype__ConceptNode__is_activity_event(concept_nodes):
+  assert not concept_nodes['chat_event'].is_activity_event()
+  assert not concept_nodes['object_observation_event'].is_activity_event()
+  assert concept_nodes['activity_event'].is_activity_event()
+  assert not concept_nodes['plan_thought'].is_activity_event()
+  assert not concept_nodes['reflection_thought'].is_activity_event()
+  assert not concept_nodes['reflection_error_thought'].is_activity_event()
+  assert not concept_nodes['bootstrap_thought'].is_activity_event()
+  assert not concept_nodes['chat'].is_activity_event()
 
 
-def test_prototype__ConceptNode__is_chat(prototype_concept_nodes):
-  assert not prototype_concept_nodes['chat_event'].is_chat()
-  assert not prototype_concept_nodes['object_observation_event'].is_chat()
-  assert not prototype_concept_nodes['activity_event'].is_chat()
-  assert not prototype_concept_nodes['plan_thought'].is_chat()
-  assert not prototype_concept_nodes['reflection_thought'].is_chat()
-  assert not prototype_concept_nodes['reflection_error_thought'].is_chat()
-  assert not prototype_concept_nodes['bootstrap_thought'].is_chat()
-  assert prototype_concept_nodes['chat'].is_chat()
+def test_prototype__ConceptNode__is_chat(concept_nodes):
+  assert not concept_nodes['chat_event'].is_chat()
+  assert not concept_nodes['object_observation_event'].is_chat()
+  assert not concept_nodes['activity_event'].is_chat()
+  assert not concept_nodes['plan_thought'].is_chat()
+  assert not concept_nodes['reflection_thought'].is_chat()
+  assert not concept_nodes['reflection_error_thought'].is_chat()
+  assert not concept_nodes['bootstrap_thought'].is_chat()
+  assert concept_nodes['chat'].is_chat()
 
 
-def test_prototype__ConceptNode__is_idle(prototype_concept_nodes):
-  assert not prototype_concept_nodes['chat_event'].is_idle()
-  assert not prototype_concept_nodes['object_observation_event'].is_idle()
-  assert not prototype_concept_nodes['activity_event'].is_idle()
-  assert not prototype_concept_nodes['plan_thought'].is_idle()
-  assert not prototype_concept_nodes['reflection_thought'].is_idle()
-  assert not prototype_concept_nodes['reflection_error_thought'].is_idle()
-  assert not prototype_concept_nodes['bootstrap_thought'].is_idle()
-  assert not prototype_concept_nodes['chat'].is_idle()
-  assert prototype_concept_nodes['idle_activity_event'].is_idle()
-  assert prototype_concept_nodes['idle_object_observation_event'].is_idle()
+def test_prototype__ConceptNode__is_idle(concept_nodes):
+  assert not concept_nodes['chat_event'].is_idle()
+  assert not concept_nodes['object_observation_event'].is_idle()
+  assert not concept_nodes['activity_event'].is_idle()
+  assert not concept_nodes['plan_thought'].is_idle()
+  assert not concept_nodes['reflection_thought'].is_idle()
+  assert not concept_nodes['reflection_error_thought'].is_idle()
+  assert not concept_nodes['bootstrap_thought'].is_idle()
+  assert not concept_nodes['chat'].is_idle()
+  assert concept_nodes['idle_activity_event'].is_idle()
+  assert concept_nodes['idle_object_observation_event'].is_idle()
 
 
-def test_prototype__ConceptNode__classify(prototype_concept_nodes):
-  assert ['chat_event'] == prototype_concept_nodes['chat_event'].classify()
-  assert ['object_observation_event'] == prototype_concept_nodes['object_observation_event'].classify()
-  assert ['activity_event'] == prototype_concept_nodes['activity_event'].classify()
-  assert ['plan_thought'] == prototype_concept_nodes['plan_thought'].classify()
-  assert ['reflection_thought'] == prototype_concept_nodes['reflection_thought'].classify()
-  assert ['reflection_error_thought'] == prototype_concept_nodes['reflection_error_thought'].classify()
-  assert ['bootstrap_thought'] == prototype_concept_nodes['bootstrap_thought'].classify()
-  assert ['chat'] == prototype_concept_nodes['chat'].classify()
+def test_prototype__ConceptNode__classify(concept_nodes):
+  assert ['chat_event'] == concept_nodes['chat_event'].classify()
+  assert ['object_observation_event'] == concept_nodes['object_observation_event'].classify()
+  assert ['activity_event'] == concept_nodes['activity_event'].classify()
+  assert ['plan_thought'] == concept_nodes['plan_thought'].classify()
+  assert ['reflection_thought'] == concept_nodes['reflection_thought'].classify()
+  assert ['reflection_error_thought'] == concept_nodes['reflection_error_thought'].classify()
+  assert ['bootstrap_thought'] == concept_nodes['bootstrap_thought'].classify()
+  assert ['chat'] == concept_nodes['chat'].classify()
 
 
 def test_integration__believability_interviews(rs, questions):
