@@ -1,0 +1,310 @@
+import logging
+log = logging.getLogger(__name__)
+log.setLevel(logging.DEBUG)
+
+from dotenv import find_dotenv, load_dotenv
+env_path = find_dotenv()
+load_dotenv(env_path)
+
+import os
+import sys
+
+project_dir = os.path.dirname(os.path.abspath(env_path))
+sys.path.insert(0, os.path.abspath(f"{project_dir}/reverie/backend_server"))
+
+from persona.memory_structures.associative_memory import ConceptNode
+
+import pytest
+
+import datetime as dt
+
+
+@pytest.fixture
+def concept_nodes():
+  return dict(
+    plan_thought = ConceptNode(
+      node_id = "node_7",
+      node_count = 7,
+      type_count = 1,
+      node_type = "thought",
+      depth = 1,
+      created = dt.datetime.fromisoformat('2023-02-13 00:00:00'),
+      expiration = dt.datetime.fromisoformat('2023-03-15 00:00:00'),
+      s = "Isabella Rodriguez",
+      p = "plan",
+      o = "Monday February 13",
+      description = "This is Isabella Rodriguez's plan for Monday February 13: wake up and complete the morning routine at 6:00 am, travel to Hobbs Cafe at 7:00 am, open up shop at 8:00 am, greet customers and work at the counter until 8 pm, buy party materials for the Valentine's Day party at the cafe from 9:00 am to 10:00 am, have lunch at 12:00 pm, take a short nap from 2 to 4 pm, plan the Valentine's Day Party in the afternoon.",
+      embedding_key = "This is Isabella Rodriguez's plan for Monday February 13: wake up and complete the morning routine at 6:00 am, travel to Hobbs Cafe at 7:00 am, open up shop at 8:00 am, greet customers and work at the counter until 8 pm, buy party materials for the Valentine's Day party at the cafe from 9:00 am to 10:00 am, have lunch at 12:00 pm, take a short nap from 2 to 4 pm, plan the Valentine's Day Party in the afternoon.",
+      poignancy = 5,
+      keywords = {'plan'},
+      filling = None,
+    ),
+    activity_event = ConceptNode(
+      node_id = "node_8",
+      node_count = 8,
+      type_count = 7,
+      node_type = "event",
+      depth = 0,
+      created = dt.datetime.fromisoformat('2023-02-13 00:00:10'),
+      expiration = None,
+      s = "Isabella Rodriguez",
+      p = "is",
+      o = "sleep",
+      description = "Isabella Rodriguez is sleeping",
+      embedding_key = "Isabella Rodriguez is sleeping",
+      poignancy = 1,
+      keywords = {'sleep', 'Isabella Rodriguez'},
+      filling = [],
+    ),
+    object_observation_event = ConceptNode(
+      node_id = "node_9",
+      node_count = 9,
+      type_count = 8,
+      node_type = "event",
+      depth = 0,
+      created = dt.datetime.fromisoformat('2023-02-13 00:00:10'),
+      expiration = None,
+      s = "the Ville:Isabella Rodriguez's apartment:main room:bed",
+      p = "be",
+      o = "used",
+      description = "bed is being used",
+      embedding_key = "bed is being used",
+      poignancy = 1,
+      keywords = {'bed', 'used'},
+      filling = [],
+    ),
+    bootstrap_thought = ConceptNode(
+      node_id = "node_10",
+      node_count = 10,
+      type_count = 2,
+      node_type = "thought",
+      depth = 1,
+      created = dt.datetime.fromisoformat('2023-02-13 00:00:20'),
+      expiration = dt.datetime.fromisoformat('2023-03-15 00:00:20'),
+      s = "Isabella Rodriguez",
+      p = "be",
+      o = "excited",
+      description = "Isabella Rodriguez is excited to be planning a Valentine's Day party at Hobbs Cafe on February 14th from 5pm and is eager to invite everyone to attend the party.",
+      embedding_key = "Isabella Rodriguez is excited to be planning a Valentine's Day party at Hobbs Cafe on February 14th from 5pm and is eager to invite everyone to attend the party.",
+      poignancy = 6,
+      keywords = {'excited', 'Isabella Rodriguez', 'be'},
+      filling = None,
+    ),
+    reflection_thought = ConceptNode(
+      node_id = "node_101",
+      node_count = 101,
+      type_count = 7,
+      node_type = "thought",
+      depth = 2,
+      created = dt.datetime.fromisoformat('2023-02-13 07:50:10'),
+      expiration = dt.datetime.fromisoformat('2023-03-15 07:50:10'),
+      s = "Isabella Rodriguez",
+      p = "be",
+      o = "invested",
+      description = "Isabella Rodriguez is very invested in the Valentine's Day party at Hobbs Cafe",
+      embedding_key = "Isabella Rodriguez is very invested in the Valentine's Day party at Hobbs Cafe",
+      poignancy = 7,
+      keywords = {'invested', 'Isabella Rodriguez', 'be'},
+      filling = ['node_10', 'node_7', 'node_99'],
+    ),
+    chat = ConceptNode(
+      node_id = "node_287",
+      node_count = 287,
+      type_count = 1,
+      node_type = "chat",
+      depth = 0,
+      created = dt.datetime.fromisoformat('2023-02-13 11:22:40'),
+      expiration = None,
+      s = "Isabella Rodriguez",
+      p = "chat with",
+      o = "Klaus Mueller",
+      description = "conversing about a conversation about Isabella inviting Klaus to her Valentine's Day party at Hobbs Cafe on February 14th, 2023 from 5pm to 7pm.",
+      embedding_key = "conversing about a conversation about Isabella inviting Klaus to her Valentine's Day party at Hobbs Cafe on February 14th, 2023 from 5pm to 7pm.",
+      poignancy = 4,
+      keywords = {'Isabella Rodriguez', 'Klaus Mueller'},
+      filling = [['Isabella Rodriguez', "Hi Klaus! How are you enjoying your meal? I wanted to let you know that I'm planning a Valentine's Day party at Hobbs Cafe on February 14th, 2023 from 5pm to 7pm. I would love for you to join us!"], ['Klaus Mueller', "Oh, hi Isabella! I'm doing well, thank you. The meal is delicious as always. A Valentine's Day party sounds fun. I'd love to join! Thank you for inviting me."]],
+    ),
+    chat_event = ConceptNode(
+      node_id = "node_288",
+      node_count = 288,
+      type_count = 251,
+      node_type = "event",
+      depth = 0,
+      created = dt.datetime.fromisoformat('2023-02-13 11:22:40'),
+      expiration = None,
+      s = "Isabella Rodriguez",
+      p = "chat with",
+      o = "Klaus Mueller",
+      description = "Isabella Rodriguez is conversing about a conversation about Isabella inviting Klaus to her Valentine's Day party at Hobbs Cafe on February 14th, 2023 from 5pm to 7pm.",
+      embedding_key = "Isabella Rodriguez is conversing about a conversation about Isabella inviting Klaus to her Valentine's Day party at Hobbs Cafe on February 14th, 2023 from 5pm to 7pm.",
+      poignancy = 7,
+      keywords = {'Isabella Rodriguez', 'Klaus Mueller'},
+      filling = ['node_287'],
+    ),
+    reflection_error_thought = ConceptNode(
+      node_id = "node_881",
+      node_count = 881,
+      type_count = 135,
+      node_type = "thought",
+      depth = 1,
+      created = dt.datetime.fromisoformat('2023-02-13 20:17:10'),
+      expiration = dt.datetime.fromisoformat('2023-03-15 20:17:10'),
+      s = "Isabella Rodriguez",
+      p = "is",
+      o = "blank",
+      description = "this is blank",
+      embedding_key = "this is blank",
+      poignancy = 5,
+      keywords = {'is', 'blank', 'Isabella Rodriguez'},
+      filling = 'node_1',
+    ),
+    idle_activity_event = ConceptNode(
+      node_id = "node_1",
+      node_count = 1,
+      type_count = 1,
+      node_type = "event",
+      depth = 0,
+      created = dt.datetime.fromisoformat('2023-02-13 00:00:00'),
+      expiration = None,
+      s = "Isabella Rodriguez",
+      p = "is",
+      o = "idle",
+      description = "Isabella Rodriguez is idle",
+      embedding_key = "Isabella Rodriguez is idle",
+      poignancy = 1,
+      keywords = {'Isabella Rodriguez', 'idle'},
+      filling = [],
+    ),
+    idle_object_observation_event = ConceptNode(
+      node_id = "node_2",
+      node_count = 2,
+      type_count = 2,
+      node_type = "event",
+      depth = 0,
+      created = dt.datetime.fromisoformat('2023-02-13 00:00:00'),
+      expiration = None,
+      s = "the Ville:Isabella Rodriguez's apartment:main room:bed",
+      p = "is",
+      o = "idle",
+      description = "bed is idle",
+      embedding_key = "bed is idle",
+      poignancy = 1,
+      keywords = {'idle', 'bed'},
+      filling = [],
+    ),
+  )
+
+
+### Tests
+
+
+def test_unit__ConceptNode__is_plan_thought(concept_nodes):
+  assert not concept_nodes['chat_event'].is_plan_thought()
+  assert not concept_nodes['object_observation_event'].is_plan_thought()
+  assert not concept_nodes['activity_event'].is_plan_thought()
+  assert concept_nodes['plan_thought'].is_plan_thought()
+  assert not concept_nodes['reflection_thought'].is_plan_thought()
+  assert not concept_nodes['reflection_error_thought'].is_plan_thought()
+  assert not concept_nodes['bootstrap_thought'].is_plan_thought()
+  assert not concept_nodes['chat'].is_plan_thought()
+
+
+def test_unit__ConceptNode__is_reflection_thought(concept_nodes):
+  assert not concept_nodes['chat_event'].is_reflection_thought()
+  assert not concept_nodes['object_observation_event'].is_reflection_thought()
+  assert not concept_nodes['activity_event'].is_reflection_thought()
+  assert not concept_nodes['plan_thought'].is_reflection_thought()
+  assert concept_nodes['reflection_thought'].is_reflection_thought()
+  assert not concept_nodes['reflection_error_thought'].is_reflection_thought()
+  assert not concept_nodes['bootstrap_thought'].is_reflection_thought()
+  assert not concept_nodes['chat'].is_reflection_thought()
+
+
+def test_unit__ConceptNode__is_reflection_error_thought(concept_nodes):
+  assert not concept_nodes['chat_event'].is_reflection_error_thought()
+  assert not concept_nodes['object_observation_event'].is_reflection_error_thought()
+  assert not concept_nodes['activity_event'].is_reflection_error_thought()
+  assert not concept_nodes['plan_thought'].is_reflection_error_thought()
+  assert not concept_nodes['reflection_thought'].is_reflection_error_thought()
+  assert concept_nodes['reflection_error_thought'].is_reflection_error_thought()
+  assert not concept_nodes['bootstrap_thought'].is_reflection_error_thought()
+  assert not concept_nodes['chat'].is_reflection_error_thought()
+
+
+def test_unit__ConceptNode__is_bootstrap_thought(concept_nodes):
+  assert not concept_nodes['chat_event'].is_bootstrap_thought()
+  assert not concept_nodes['object_observation_event'].is_bootstrap_thought()
+  assert not concept_nodes['activity_event'].is_bootstrap_thought()
+  assert not concept_nodes['plan_thought'].is_bootstrap_thought()
+  assert not concept_nodes['reflection_thought'].is_bootstrap_thought()
+  assert not concept_nodes['reflection_error_thought'].is_bootstrap_thought()
+  assert concept_nodes['bootstrap_thought'].is_bootstrap_thought()
+  assert not concept_nodes['chat'].is_bootstrap_thought()
+
+
+def test_unit__ConceptNode__is_chat_event(concept_nodes):
+  assert concept_nodes['chat_event'].is_chat_event()
+  assert not concept_nodes['object_observation_event'].is_chat_event()
+  assert not concept_nodes['activity_event'].is_chat_event()
+  assert not concept_nodes['plan_thought'].is_chat_event()
+  assert not concept_nodes['reflection_thought'].is_chat_event()
+  assert not concept_nodes['reflection_error_thought'].is_chat_event()
+  assert not concept_nodes['bootstrap_thought'].is_chat_event()
+  assert not concept_nodes['chat'].is_chat_event()
+
+
+def test_unit__ConceptNode__is_object_observation_event(concept_nodes):
+  assert not concept_nodes['chat_event'].is_object_observation_event()
+  assert concept_nodes['object_observation_event'].is_object_observation_event()
+  assert not concept_nodes['activity_event'].is_object_observation_event()
+  assert not concept_nodes['plan_thought'].is_object_observation_event()
+  assert not concept_nodes['reflection_thought'].is_object_observation_event()
+  assert not concept_nodes['reflection_error_thought'].is_object_observation_event()
+  assert not concept_nodes['bootstrap_thought'].is_object_observation_event()
+  assert not concept_nodes['chat'].is_object_observation_event()
+
+
+def test_unit__ConceptNode__is_activity_event(concept_nodes):
+  assert not concept_nodes['chat_event'].is_activity_event()
+  assert not concept_nodes['object_observation_event'].is_activity_event()
+  assert concept_nodes['activity_event'].is_activity_event()
+  assert not concept_nodes['plan_thought'].is_activity_event()
+  assert not concept_nodes['reflection_thought'].is_activity_event()
+  assert not concept_nodes['reflection_error_thought'].is_activity_event()
+  assert not concept_nodes['bootstrap_thought'].is_activity_event()
+  assert not concept_nodes['chat'].is_activity_event()
+
+
+def test_unit__ConceptNode__is_chat(concept_nodes):
+  assert not concept_nodes['chat_event'].is_chat()
+  assert not concept_nodes['object_observation_event'].is_chat()
+  assert not concept_nodes['activity_event'].is_chat()
+  assert not concept_nodes['plan_thought'].is_chat()
+  assert not concept_nodes['reflection_thought'].is_chat()
+  assert not concept_nodes['reflection_error_thought'].is_chat()
+  assert not concept_nodes['bootstrap_thought'].is_chat()
+  assert concept_nodes['chat'].is_chat()
+
+
+def test_unit__ConceptNode__is_idle(concept_nodes):
+  assert not concept_nodes['chat_event'].is_idle()
+  assert not concept_nodes['object_observation_event'].is_idle()
+  assert not concept_nodes['activity_event'].is_idle()
+  assert not concept_nodes['plan_thought'].is_idle()
+  assert not concept_nodes['reflection_thought'].is_idle()
+  assert not concept_nodes['reflection_error_thought'].is_idle()
+  assert not concept_nodes['bootstrap_thought'].is_idle()
+  assert not concept_nodes['chat'].is_idle()
+  assert concept_nodes['idle_activity_event'].is_idle()
+  assert concept_nodes['idle_object_observation_event'].is_idle()
+
+
+def test_prototype__ConceptNode__classify(concept_nodes):
+  assert ['chat_event'] == concept_nodes['chat_event'].classify()
+  assert ['object_observation_event'] == concept_nodes['object_observation_event'].classify()
+  assert ['activity_event'] == concept_nodes['activity_event'].classify()
+  assert ['plan_thought'] == concept_nodes['plan_thought'].classify()
+  assert ['reflection_thought'] == concept_nodes['reflection_thought'].classify()
+  assert ['reflection_error_thought'] == concept_nodes['reflection_error_thought'].classify()
+  assert ['bootstrap_thought'] == concept_nodes['bootstrap_thought'].classify()
+  assert ['chat'] == concept_nodes['chat'].classify()
