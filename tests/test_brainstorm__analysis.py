@@ -41,6 +41,8 @@ from persona.cognitive_modules.retrieve import new_retrieve
 from persona.memory_structures.associative_memory import ConceptNode
 from persona.prompt_template.gpt_structure import get_embedding
 
+from global_methods import add_period_if_missing
+
 import openai.error
 
 import pytest
@@ -163,6 +165,14 @@ def test_integration__BelievabilityInterviewer__generate_interviews_dict(rs, int
   assert 'response' in first_condition_dict
   assert 'summarized_idea' in first_condition_dict
   assert first_condition_dict['condition'] == 'no_observation_no_reflection_no_planning'
+
+
+def test_unit__add_period_if_missing():
+  sentence_wo_period = 'fubar'
+  sentence_w_period = 'fubar.'
+
+  assert sentence_w_period == add_period_if_missing(sentence_wo_period)
+  assert sentence_w_period == add_period_if_missing(sentence_w_period)
 
 
 def test_brainstorm__freeze_thaw_ablate_interview(rs):
