@@ -225,6 +225,14 @@ def copyanything(src, dst):
     else: raise
 
 
+def add_period_if_missing(sentence):
+  # Limitations: this is a dumb function. It will also add a period to a
+  # sentence ending in some other valid punctuation.
+  if not sentence.endswith('.'):
+    sentence = f'{sentence}.'
+  return sentence
+
+
 if __name__ == '__main__':
   pass
 
