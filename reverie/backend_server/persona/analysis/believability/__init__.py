@@ -9,6 +9,7 @@ from ..ablate import (
 )
 from .believability_questions import get_believability_question_variables
 from ..interview import interview_persona
+from ...prompt_template.run_gpt_prompt import *
 
 import jsonpickle
 
