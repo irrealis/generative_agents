@@ -293,20 +293,7 @@ def get_llm_parameters():
 
 
 def get_evaluations_dict(rs, interviews):
-  # We will request $n$ evaluations; for now $n = 5$.
-  num_choices = 5
-  # Configure the LLM.
-  llm_parameters = dict(
-    engine = 'gpt-3.5-turbo-16k',
-    max_tokens = 2000,
-    temperature = 1,
-    top_p = 1,
-    stream = False,
-    frequency_penalty = 0,
-    presence_penalty = 0,
-    stop = None,
-    n = num_choices,
-  )
+  llm_parameters = get_llm_parameters()
   llm = LangChainModel(ChatOpenAI(
     model_name=llm_parameters["engine"],
     temperature=llm_parameters["temperature"],
