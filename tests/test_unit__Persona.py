@@ -32,3 +32,14 @@ def test_unit__Persona__format_bootstrap_or_reflection_thought__bootstrap(rs, co
   formatted_thought = persona.format_bootstrap_or_reflection_thought(concept_nodes['bootstrap_thought'])
   expected_formatted_thought = "- At 00:00:20: Isabella Rodriguez reflects that Isabella Rodriguez is excited to be planning a Valentine's Day party at Hobbs Cafe on February 14th from 5pm and is eager to invite everyone to attend the party."
   assert formatted_thought == expected_formatted_thought
+
+
+def test_unit__Persona__format_chat_event(rs, concept_nodes):
+  persona = rs.personas['Isabella Rodriguez']
+  formatted_thought = persona.format_chat_event(concept_nodes['chat_event'])
+  expected_formatted_thought = '''
+- At 11:22:40: Isabella Rodriguez is conversing about a conversation about Isabella inviting Klaus to her Valentine's Day party at Hobbs Cafe on February 14th, 2023 from 5pm to 7pm. Here is the dialog history:
+  - Isabella Rodriguez: Hi Klaus! How are you enjoying your meal? I wanted to let you know that I'm planning a Valentine's Day party at Hobbs Cafe on February 14th, 2023 from 5pm to 7pm. I would love for you to join us!
+  - Klaus Mueller: Oh, hi Isabella! I'm doing well, thank you. The meal is delicious as always. A Valentine's Day party sounds fun. I'd love to join! Thank you for inviting me.
+  '''.strip()
+  assert formatted_thought == expected_formatted_thought
