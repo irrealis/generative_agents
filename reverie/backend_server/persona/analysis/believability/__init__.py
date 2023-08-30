@@ -73,6 +73,7 @@ Today is {date_str}. Using the above memories, please roleplay how {persona_name
       no_reflection_no_planning = self.interview__no_reflection_no_planning,
       no_reflection = self.interview__no_reflection,
       full_architecture = self.interview__full_architecture,
+      roleplay = self.interview__roleplay,
     )
     return condition_methods_dict
 
