@@ -107,7 +107,7 @@ def interviews():
 random.seed(0)
 
 
-def test_brainstorm__believability_rankings(rs, interviews):
+def test_integration__believability_rankings(rs, interviews):
   # Write evaluations to YAML file.
   evaluations_dict = get_evaluations_dict(rs, interviews)
   believability_evaluations_path = f'{project_dir}/tests/believability_evaluations.yaml'
