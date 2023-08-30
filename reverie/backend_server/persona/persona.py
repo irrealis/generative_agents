@@ -8,11 +8,19 @@ Note (May 1, 2023) -- this is effectively GenerativeAgent class. Persona was
 the term we used internally back in 2022, taking from our Social Simulacra 
 paper.
 """
-import math
-import sys
-import datetime
-import random
-sys.path.append('../')
+import logging
+log = logging.getLogger(__name__)
+log.setLevel(logging.DEBUG)
+
+from dotenv import find_dotenv, load_dotenv
+env_path = find_dotenv()
+load_dotenv(env_path)
+
+import os, sys
+project_dir = os.path.dirname(os.path.abspath(env_path))
+sys.path.insert(0, os.path.abspath(f"{project_dir}/reverie/backend_server"))
+
+import pprint
 
 from global_methods import *
 
@@ -233,7 +241,7 @@ class Persona:
 
   def open_convo_session(self, convo_mode): 
     open_convo_session(self, convo_mode)
-    
+
 
 
 
