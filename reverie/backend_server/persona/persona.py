@@ -251,6 +251,19 @@ class Persona:
     description = f'- {node.created.strftime("At %H:%M:%S")}: {self.name} reflects that {node.description}'
     return add_period_if_missing(description)
 
+  def format_chat_event(self, node):
+    lines = []
+    line = f'- {node.created.strftime("At %H:%M:%S")}: {node.description}'
+    line = add_period_if_missing(line)
+    line = f'{line} Here is the dialog history:'
+    lines.append(line)
+    for chat_node_id in node.filling:
+      chat_node = self.a_mem.id_to_node[chat_node_id]
+      for (speaker, dialog) in chat_node.filling:
+        lines.append(f'  - {speaker}: {dialog}')
+    description = '\n'.join(lines)
+    return description
+
 
 
 
