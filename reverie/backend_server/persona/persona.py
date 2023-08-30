@@ -243,6 +243,10 @@ class Persona:
     open_convo_session(self, convo_mode)
 
 
+  def format_plan_thought(self, node):
+    description = f'- {node.created.strftime("At %H:%M:%S")}: {self.name} is thinking about what to do. {node.description}'
+    return add_period_if_missing(description)
+
 
 
 
