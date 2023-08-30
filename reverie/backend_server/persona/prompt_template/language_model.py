@@ -11,7 +11,9 @@ log.setLevel(logging.DEBUG)
 
 
 class LanguageModel:
-  def generate(str):
+  def generate_low(self, prompt, *l, **d):
+    raise NotImplementedError
+  def generate(self, prompt, *l, **d):
     raise NotImplementedError
 
 
@@ -63,13 +65,11 @@ try:
     def __init__(self, model, exception_handler = None):
       self.model = model
       self.exception_handler = exception_handler
-    def generate(self, prompt, **kw):
+    def generate_low(self, prompt, **kw):
       if isinstance(self.model, langchain.chat_models.base.BaseChatModel):
         try:
-          output = self.model(
-            [
-              langchain.schema.HumanMessage(content=prompt, additional_kwargs=kw),
-            ],
+          output = self.model.generate(
+            [[langchain.schema.HumanMessage(content=prompt, additional_kwargs=kw)]]
           )
         except Exception as e:
           if self.exception_handler:
@@ -78,7 +78,7 @@ try:
             raise e
       elif isinstance(self.model, langchain.llms.base.BaseLLM):
         try:
-          output = self.model(prompt, **kw)
+          output = self.model.generate([prompt], **kw)
         except Exception as e:
           if self.exception_handler:
             self.exception_handler(e)
@@ -86,6 +86,13 @@ try:
             raise e
       else:
         raise Exception('model is neither chat nor llm')
-      return output.content
+      return output
+
+    def generate(self, prompt, **kw):
+      output = self.generate_low(prompt, **kw)
+      if isinstance(self.model, langchain.chat_models.base.BaseChatModel):
+        return output.generations[0][0].message.content
+      elif isinstance(self.model, langchain.llms.base.BaseLLM):
+        return output.generations[0][0].text
 except:
   pass
