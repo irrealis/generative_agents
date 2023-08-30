@@ -48,6 +48,8 @@ from global_methods import add_period_if_missing
 
 import openai.error
 
+from langchain.chat_models import ChatOpenAI
+
 import pytest
 
 import jsonpickle
