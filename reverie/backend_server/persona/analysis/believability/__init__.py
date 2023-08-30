@@ -49,6 +49,24 @@ class Conditions(object):
   def interview__full_architecture(self, question, **kw):
     return interview_persona(self.full_architecture, question, **kw)
 
+  def interview__roleplay(self, question, **kw):
+    memory_stream_text = self.full_architecture.format_memory_stream()
+    persona_name = self.full_architecture.name
+    date_str = self.full_architecture.scratch.get_str_curr_date_str()
+    prompt = f'''Below are {persona_name}'s recent memories.
+
+{memory_stream_text}
+
+Today is {date_str}. Using the above memories, please roleplay how {persona_name} would respond if asked "{question}"
+
+--- Roleplay:
+{persona_name}: '''
+    gpt_param = {"engine": "gpt-3.5-turbo-16k", "max_tokens": 500,
+                 "temperature": 1, "top_p": 1, "stream": False,
+                 "frequency_penalty": 0, "presence_penalty": 0, "stop": None}
+    output = GPT_request(prompt=prompt, gpt_parameter=gpt_param)
+    return None, prompt, output, []
+
   def get_condition_methods_dict(self):
     condition_methods_dict = dict(
       no_observation_no_reflection_no_planning = self.interview__no_observation_no_reflection_no_planning,
