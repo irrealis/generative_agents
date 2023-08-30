@@ -247,6 +247,10 @@ class Persona:
     description = f'- {node.created.strftime("At %H:%M:%S")}: {self.name} is thinking about what to do. {node.description}'
     return add_period_if_missing(description)
 
+  def format_bootstrap_or_reflection_thought(self, node):
+    description = f'- {node.created.strftime("At %H:%M:%S")}: {self.name} reflects that {node.description}'
+    return add_period_if_missing(description)
+
 
 
 
