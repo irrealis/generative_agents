@@ -264,6 +264,12 @@ class Persona:
     description = '\n'.join(lines)
     return description
 
+  def format_object_observation_event(self, node):
+    match = node.is_object_observation_event()
+    world,sector,arena,game_object = match.groups()
+    description = f'- {node.created.strftime("At %H:%M:%S")}: In the {arena} of {sector}, {self.name} is aware that the {node.description}'
+    return add_period_if_missing(description)
+
 
 
 
