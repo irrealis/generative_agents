@@ -59,3 +59,21 @@ def test_unit__Persona__format_activity_event(rs, concept_nodes):
   expected_formatted_thought = '- At 00:00:10: Isabella Rodriguez is sleeping.'
   assert formatted_thought == expected_formatted_thought
   log.debug(f'{formatted_thought=}')
+
+
+def test_unit__Persona__format_memory_stream(rs, concept_nodes):
+  persona = rs.personas['Isabella Rodriguez']
+  id_to_node = {n.node_id:n for n in concept_nodes.values()}
+  formatted_memory_stream = persona.format_memory_stream(id_to_node)
+  expected_formatted_memory_stream = '''
+Memories from February 13, 2023:
+- At 00:00:00: Isabella Rodriguez is thinking about what to do. This is Isabella Rodriguez's plan for Monday February 13: wake up and complete the morning routine at 6:00 am, travel to Hobbs Cafe at 7:00 am, open up shop at 8:00 am, greet customers and work at the counter until 8 pm, buy party materials for the Valentine's Day party at the cafe from 9:00 am to 10:00 am, have lunch at 12:00 pm, take a short nap from 2 to 4 pm, plan the Valentine's Day Party in the afternoon.
+- At 00:00:10: Isabella Rodriguez is sleeping.
+- At 00:00:10: In the main room of Isabella Rodriguez's apartment, Isabella Rodriguez is aware that the bed is being used.
+- At 00:00:20: Isabella Rodriguez reflects that Isabella Rodriguez is excited to be planning a Valentine's Day party at Hobbs Cafe on February 14th from 5pm and is eager to invite everyone to attend the party.
+- At 07:50:10: Isabella Rodriguez reflects that Isabella Rodriguez is very invested in the Valentine's Day party at Hobbs Cafe.
+- At 11:22:40: Isabella Rodriguez is conversing about a conversation about Isabella inviting Klaus to her Valentine's Day party at Hobbs Cafe on February 14th, 2023 from 5pm to 7pm. Here is the dialog history:
+  - Isabella Rodriguez: Hi Klaus! How are you enjoying your meal? I wanted to let you know that I'm planning a Valentine's Day party at Hobbs Cafe on February 14th, 2023 from 5pm to 7pm. I would love for you to join us!
+  - Klaus Mueller: Oh, hi Isabella! I'm doing well, thank you. The meal is delicious as always. A Valentine's Day party sounds fun. I'd love to join! Thank you for inviting me.
+'''.strip()
+  assert formatted_memory_stream == expected_formatted_memory_stream
