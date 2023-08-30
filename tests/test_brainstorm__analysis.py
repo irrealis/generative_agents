@@ -92,6 +92,14 @@ def interviewer(rs, questions):
   return interviewer
 
 
+@pytest.fixture
+def interviews():
+  believability_interviews_path = f'{project_dir}/tests/believability_interviews.yaml'
+  with open(believability_interviews_path, 'r') as f:
+    believability_interviews_dict = yaml.load(f)
+  return believability_interviews_dict
+
+
 ### Tests
 
 # Try to make system more deterministic.
