@@ -43,3 +43,11 @@ def test_unit__Persona__format_chat_event(rs, concept_nodes):
   - Klaus Mueller: Oh, hi Isabella! I'm doing well, thank you. The meal is delicious as always. A Valentine's Day party sounds fun. I'd love to join! Thank you for inviting me.
   '''.strip()
   assert formatted_thought == expected_formatted_thought
+
+
+def test_unit__Persona__format_object_observation_event(rs, concept_nodes):
+  persona = rs.personas['Isabella Rodriguez']
+  formatted_thought = persona.format_object_observation_event(concept_nodes['object_observation_event'])
+  expected_formatted_thought = "- At 00:00:10: In the main room of Isabella Rodriguez's apartment, Isabella Rodriguez is aware that the bed is being used."
+  assert formatted_thought == expected_formatted_thought
+  log.debug(f'{formatted_thought=}')
