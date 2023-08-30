@@ -105,6 +105,40 @@ def interviews():
 # Try to make system more deterministic.
 random.seed(0)
 
+believability_ranking_prompt_template = '''{persona_name} is a generative agent, that is, an entity whose behaviors are driven by a large language model such as GPT-3.5, and who lives in a simulated world and interacts with other similar entities in that world. Below are {persona_name}'s recent memories.
+
+--- Memory stream
+{memory_stream}
+---
+
+In an experiment to evaluate believability of generative-agent behavior, {persona_name} was asked a question under five different conditions. Here is the question that was asked:
+
+--- Question
+"{question}"
+---
+
+Here are {persona_name}'s answers:
+
+--- Answers
+{answers}
+---
+
+Your task is to evaluate the believability of {persona_name}'s answers given the above memory stream. Please rank the answers by believability by listing the answer IDs from most to least believable. For example, "A,B,C,D,E" would indicate that "A" is most believable, and "E" is least believable. Please give your reasoning as well.
+
+Here is the desired format:
+
+---
+Ranking: A,B,C,D,E
+
+- Answer A is most believable because...
+- Answer B is second most believable because...
+- Answer C is third most believable because...
+- Answer D is fourth most believable because...
+- Answer E is least believable because...
+---
+
+Ranking: '''
+
 
 def test_integration__believability_interviews(rs, questions):
   environment_loc = f"{project_dir}/environment"
