@@ -127,7 +127,7 @@ def test_integration__believability_interviews(rs, questions):
   assert 'question' in first_question_dict
   assert 'conditions' in first_question_dict
   assert isinstance(first_question_dict['conditions'], list)
-  assert len(first_question_dict['conditions']) == 4
+  assert len(first_question_dict['conditions']) == 5
   first_condition_dict = first_question_dict['conditions'][0]
   assert 'condition' in first_condition_dict
   assert 'response' in first_condition_dict
@@ -159,7 +159,7 @@ def test_integration__BelievabilityInterviewer__generate_interviews_dict(rs, int
   assert 'question' in first_question_dict
   assert 'conditions' in first_question_dict
   assert isinstance(first_question_dict['conditions'], list)
-  assert len(first_question_dict['conditions']) == 4
+  assert len(first_question_dict['conditions']) == 5
   first_condition_dict = first_question_dict['conditions'][0]
   assert 'condition' in first_condition_dict
   assert 'response' in first_condition_dict
