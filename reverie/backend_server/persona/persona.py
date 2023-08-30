@@ -270,6 +270,10 @@ class Persona:
     description = f'- {node.created.strftime("At %H:%M:%S")}: In the {arena} of {sector}, {self.name} is aware that the {node.description}'
     return add_period_if_missing(description)
 
+  def format_activity_event(self, node):
+    description = f'- {node.created.strftime("At %H:%M:%S")}: {node.description}'
+    return add_period_if_missing(description)
+
 
 
 
