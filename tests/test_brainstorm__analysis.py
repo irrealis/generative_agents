@@ -12,6 +12,7 @@ import sys
 project_dir = os.path.dirname(os.path.abspath(env_path))
 sys.path.insert(0, os.path.abspath(f"{project_dir}/reverie/backend_server"))
 
+from concept_nodes_setup import concept_nodes
 from langchain_setup import *
 from reverie_setup import ReverieTestServer, rs
 
