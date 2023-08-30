@@ -40,6 +40,7 @@ from persona.cognitive_modules.converse import generate_summarize_ideas, generat
 from persona.cognitive_modules.perceive import generate_poig_score
 from persona.cognitive_modules.retrieve import new_retrieve
 from persona.memory_structures.associative_memory import ConceptNode
+from persona.persona import Persona
 from persona.prompt_template.gpt_structure import get_embedding
 
 from global_methods import add_period_if_missing
