@@ -275,6 +275,52 @@ class Persona:
     return add_period_if_missing(description)
 
 
+  def format_memory_stream(self, id_to_node = None):
+    if id_to_node is None:
+      id_to_node = self.a_mem.id_to_node
+
+    node_descriptions = []
+    date = None
+    for node_id, node in id_to_node.items():
+      matches = node.classify()
+      if len(matches) != 1:
+        log.warning(
+          f'''
+  Memory should have one category, but doesn't.
+  Categories: {matches}
+  Memory:
+  {pprint.pformat(node.__dict__)}
+  '''
+        )
+      if not node.is_idle():
+        descriptions = []
+        if node.created.date() != date:
+          date = node.created.date()
+          descriptions.append(f'Memories from {node.created.strftime("%B %d, %Y")}:')
+        if 'plan_thought' in matches:
+          descriptions.append(self.format_plan_thought(node))
+        if 'reflection_thought' in matches:
+          descriptions.append(self.format_bootstrap_or_reflection_thought(node))
+        if 'reflection_error_thought' in matches:
+          pass
+        if 'bootstrap_thought' in matches:
+          descriptions.append(self.format_bootstrap_or_reflection_thought(node))
+        if 'chat_event' in matches:
+          descriptions.append(self.format_chat_event(node))
+        if 'object_observation_event' in matches:
+          descriptions.append(self.format_object_observation_event(node))
+        if 'activity_event' in matches:
+          descriptions.append(self.format_activity_event(node))
+        if 'chat' in matches:
+          pass
+
+        if descriptions:
+          node_description = '\n'.join(descriptions)
+          node_descriptions.append(node_description)
+
+    memory_stream_text = '\n'.join(node_descriptions)
+
+    return memory_stream_text
 
 
 
