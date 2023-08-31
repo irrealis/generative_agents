@@ -411,38 +411,38 @@ def get_ranking_dict(i, g, ranking_keys_to_condition_keys):
 
 def get_evaluator_dict(
   evaluator_id,
+  interview_question_dict,
   persona_name,
   memory_stream,
-  question_dict,
 ):
   # Request LLM completion
   # For debugging, we want to record metadata containing the prompt,
   # LLM parameters, and the raw LLM completion.
   (
     llm_output,
-    e_evaluator_metadata_dict,
-    e_shuffled_conditions_list,
+    evaluator_metadata_dict,
+    shuffled_conditions,
     ranking_keys_to_condition_keys,
   ) = generate_evaluation(
     persona_name,
     memory_stream,
-    question_dict,
+    interview_question_dict,
   )
 
   # Parse the rankings.
-  e_rankings_list = list()
+  ranking_dicts = list()
   for i, g in enumerate(llm_output.generations[0]):
-    e_ranking_dict = get_ranking_dict(i, g, ranking_keys_to_condition_keys)
-    e_rankings_list.append(e_ranking_dict)
+    ranking_dict = get_ranking_dict(i, g, ranking_keys_to_condition_keys)
+    ranking_dicts.append(ranking_dict)
 
   # Save the list of rankinigs.
-  e_evaluator_dict = dict(
+  evaluator_dict = dict(
     evaluator_id = evaluator_id,
-    shuffled_conditions = e_shuffled_conditions_list,
-    rankings = e_rankings_list,
-    evaluator_metadata = e_evaluator_metadata_dict,
+    shuffled_conditions = shuffled_conditions,
+    rankings = ranking_dicts,
+    evaluator_metadata = evaluator_metadata_dict,
   )
-  return e_evaluator_dict
+  return evaluator_dict
 
 
 def get_question_dict(interview_question_dict, persona_name, memory_stream):
@@ -452,9 +452,9 @@ def get_question_dict(interview_question_dict, persona_name, memory_stream):
   for evaluator_id in ['1. gpt-3.5-turbo-16k']:
     evaluator_dict = get_evaluator_dict(
       evaluator_id,
+      interview_question_dict,
       persona_name,
       memory_stream,
-      interview_question_dict,
     )
     evaluator_dicts.append(evaluator_dict)
         # Save the question and rankings.
