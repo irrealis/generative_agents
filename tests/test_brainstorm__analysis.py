@@ -109,12 +109,13 @@ random.seed(0)
 
 def test_integration__believability_rankings(rs, interviews):
   # Write evaluations to YAML file.
-  evaluations_dict = get_evaluations_dict(rs, interviews)
+  personas = rs.personas
+  evaluations_dict = get_evaluations_dict(personas, interviews)
   believability_evaluations_path = f'{project_dir}/tests/believability_evaluations.yaml'
   with open(believability_evaluations_path, 'w') as f:
     yaml.dump(evaluations_dict, f)
 
-  persona = rs.personas['Isabella Rodriguez']
+  persona = personas['Isabella Rodriguez']
   assert 'evaluations' in evaluations_dict
   assert 'personas' in evaluations_dict['evaluations']
   assert isinstance(evaluations_dict['evaluations']['personas'], list)

@@ -502,12 +502,12 @@ def get_persona_dict(persona_dict, personas):
   return e_persona_dict
 
 
-def get_evaluations_dict(rs, interviews):
+def get_evaluations_dict(personas, interviews):
   interviews_dict = interviews['interviews']
   interview_persona_dicts = interviews_dict['personas']
   evaluation_persona_dicts = list()
   for interview_persona_dict in interview_persona_dicts:
-    evaluation_persona_dict = get_persona_dict(interview_persona_dict, rs.personas)
+    evaluation_persona_dict = get_persona_dict(interview_persona_dict, personas)
     evaluation_persona_dicts.append(evaluation_persona_dict)
   # Save the evaluations organized by persona.
   evaluations_dict = dict(
