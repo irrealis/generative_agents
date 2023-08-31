@@ -118,6 +118,7 @@ def test_integration__believability_rankings(rs, interviews):
     personas,
     interviews,
     believability_evaluations_path,
+    random_number_generator=random.Random(0),
   )
 
   persona = personas['Isabella Rodriguez']
@@ -180,7 +181,7 @@ def test_integration__BelievabilityEvaluator__llm_attributes(rs, interviews):
     interviews,
     personas,
     llm_parameters=get_llm_parameters(num_choices = 1),
-    random_number_generator=random.Random(0)
+    random_number_generator=random.Random(0),
   )
   evaluations_dict = evaluator.generate_evaluations_dict()
   believability_evaluations_path = f'{project_dir}/tests/believability_evaluations.yaml'
