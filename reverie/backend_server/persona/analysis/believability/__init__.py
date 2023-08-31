@@ -445,25 +445,25 @@ def get_evaluator_dict(
   return e_evaluator_dict
 
 
-def get_question_dict(persona_name, memory_stream, question_dict):
-  question_id = question_dict['question_id']
-  question = question_dict['question']
-  e_evaluators_list = list()
+def get_question_dict(interview_question_dict, persona_name, memory_stream):
+  question_id = interview_question_dict['question_id']
+  question = interview_question_dict['question']
+  evaluator_dicts = list()
   for evaluator_id in ['1. gpt-3.5-turbo-16k']:
-    e_evaluator_dict = get_evaluator_dict(
+    evaluator_dict = get_evaluator_dict(
       evaluator_id,
       persona_name,
       memory_stream,
-      question_dict,
+      interview_question_dict,
     )
-    e_evaluators_list.append(e_evaluator_dict)
+    evaluator_dicts.append(evaluator_dict)
         # Save the question and rankings.
-  e_question_dict = dict(
+  evaluation_question_dict = dict(
     question_id = question_id,
     question = question,
-    evaluators = e_evaluators_list,
+    evaluators = evaluator_dicts,
   )
-  return e_question_dict
+  return evaluation_question_dict
 
 
 def get_category_dict(interview_category_dict, persona_name, memory_stream):
@@ -471,7 +471,7 @@ def get_category_dict(interview_category_dict, persona_name, memory_stream):
   interview_question_dicts = interview_category_dict['questions']
   evaluation_question_dicts = list()
   for interview_question_dict in interview_question_dicts:
-    evaluation_question_dict = get_question_dict(persona_name, memory_stream, interview_question_dict)
+    evaluation_question_dict = get_question_dict(interview_question_dict, persona_name, memory_stream)
     evaluation_question_dicts.append(evaluation_question_dict)
   # Save the category and list of questions with rankings.
   e_category_dict = dict(
