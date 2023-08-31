@@ -531,6 +531,7 @@ class BelievabilityEvaluator:
     # better thought out.
     llm_parameters = None,
     llm = None,
+    ranking_prompt_template = None,
   ):
     self.interviews = interviews
     self.personas = personas
@@ -541,12 +542,20 @@ class BelievabilityEvaluator:
 
     self.llm = llm
 
-  def get_believability_ranking_prompt(
+    if ranking_prompt_template is None:
+      ranking_prompt_template = believability_ranking_prompt_template
+    self.ranking_prompt_template = ranking_prompt_template
+
+  def get_ranking_prompt(
     self,
     interview_question_dict,
     persona_name,
     memory_stream,
+    ranking_prompt_template = None,
   ):
+    if ranking_prompt_template is None:
+      ranking_prompt_template = self.ranking_prompt_template
+
     # Record the shuffled mapping.
     (
       shuffled_conditions_list,
@@ -560,14 +569,14 @@ class BelievabilityEvaluator:
     ]
     answers = '\n'.join(answer_list)
     question = interview_question_dict['question']
-    believability_ranking_prompt = believability_ranking_prompt_template.format(
+    ranking_prompt = ranking_prompt_template.format(
       question = question,
       answers = answers,
       persona_name = persona_name,
       memory_stream = memory_stream,
     )
     return (
-      believability_ranking_prompt,
+      ranking_prompt,
       shuffled_conditions_list,
       ranking_keys_to_condition_keys,
     )
@@ -599,7 +608,7 @@ class BelievabilityEvaluator:
       believability_ranking_prompt,
       shuffled_conditions_list,
       ranking_keys_to_condition_keys,
-    ) = self.get_believability_ranking_prompt(
+    ) = self.get_ranking_prompt(
       interview_question_dict,
       persona_name,
       memory_stream,
