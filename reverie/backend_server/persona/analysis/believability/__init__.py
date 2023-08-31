@@ -459,25 +459,7 @@ def get_evaluations_dict(rs, interviews):
           # Now parse the rankings.
           e_rankings_list = list()
           for i, g in enumerate(llm_output.generations[0]):
-            # The first line contains the ranking string.
-            lines = g.message.content.splitlines()
-            ranking_str = lines[0]
-
-            # Parse ranking string. The LLM will return the ranking keys
-            # separated by commas. Sometimes it includes spaces, which the re
-            # below takes into account.
-            ranked_keys = re.split(r'\W+', ranking_str)
-            # Convert from ranking IDs to condition IDs.
-            ranked_condition_keys = [
-              ranking_keys_to_condition_keys[rid] for rid in ranked_keys
-            ]
-
-            # Save ranking info.
-            e_ranking_dict = dict(
-              evaluation_number = i,
-              ranking = ranking_str,
-              ranked_conditions = ranked_condition_keys,
-            )
+            e_ranking_dict = get_ranking_dict(i, g, ranking_keys_to_condition_keys)
             e_rankings_list.append(e_ranking_dict)
 
           # Save the list of rankinigs.
