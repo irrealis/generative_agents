@@ -531,6 +531,26 @@ class BelievabilityEvaluator:
     self.interviews = interviews
     self.personas = personas
 
+  def generate_ranking_dict(self, i, g, ranking_keys_to_condition_keys):
+    # The first line contains the ranking string.
+    lines = g.message.content.splitlines()
+    ranking_str = lines[0]
+    # Parse ranking string. The LLM will return the ranking keys
+    # separated by commas. Sometimes it includes spaces, which the re
+    # below takes into account.
+    ranked_keys = re.split(r'\W+', ranking_str)
+    # Convert from ranking IDs to condition IDs.
+    ranked_condition_keys = [
+      ranking_keys_to_condition_keys[rid] for rid in ranked_keys
+    ]
+    # Save ranking info.
+    ranking_dict = dict(
+      evaluation_number = i,
+      ranking = ranking_str,
+      ranked_conditions = ranked_condition_keys,
+    )
+    return ranking_dict
+
   def generate_evaluator_dict(
     self,
     evaluator_id,
@@ -554,7 +574,7 @@ class BelievabilityEvaluator:
     # Parse the rankings.
     ranking_dicts = list()
     for i, g in enumerate(llm_output.generations[0]):
-      ranking_dict = get_ranking_dict(i, g, ranking_keys_to_condition_keys)
+      ranking_dict = self.generate_ranking_dict(i, g, ranking_keys_to_condition_keys)
       ranking_dicts.append(ranking_dict)
     # Save the list of rankinigs.
     evaluator_dict = dict(
