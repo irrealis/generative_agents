@@ -532,7 +532,18 @@ class BelievabilityEvaluator:
     self.personas = personas
 
   def generate_evaluations_dict(self):
-    return get_evaluations_dict(self.personas, self.interviews)
+    interviews_dict = self.interviews['interviews']
+    interview_persona_dicts = interviews_dict['personas']
+    evaluation_persona_dicts = list()
+    for interview_persona_dict in interview_persona_dicts:
+      evaluation_persona_dict = get_persona_dict(interview_persona_dict, self.personas)
+      evaluation_persona_dicts.append(evaluation_persona_dict)
+    # Save the evaluations organized by persona.
+    evaluations_dict = dict(
+      evaluations = dict(personas = evaluation_persona_dicts),
+    )
+
+    return evaluations_dict
 
 
 
