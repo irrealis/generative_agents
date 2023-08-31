@@ -323,9 +323,10 @@ def get_believability_ranking_prompt(interview_question_dict, persona_name, memo
   )
 
 
-def get_llm_parameters():
-  # We will request $n$ evaluations; for now $n = 5$.
-  num_choices = 5
+def get_llm_parameters(num_choices = None):
+  if num_choices is None:
+    # We will request n evaluations; for now n defaults to 5.
+    num_choices = 5
   # Configure the LLM.
   llm_parameters = dict(
     engine = 'gpt-3.5-turbo-16k',
