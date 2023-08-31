@@ -531,12 +531,32 @@ class BelievabilityEvaluator:
     self.interviews = interviews
     self.personas = personas
 
+  def generate_question_dict(self, interview_question_dict, persona_name, memory_stream):
+    question_id = interview_question_dict['question_id']
+    question = interview_question_dict['question']
+    evaluator_dicts = list()
+    for evaluator_id in ['1. gpt-3.5-turbo-16k']:
+      evaluator_dict = get_evaluator_dict(
+        evaluator_id,
+        interview_question_dict,
+        persona_name,
+        memory_stream,
+      )
+      evaluator_dicts.append(evaluator_dict)
+          # Save the question and rankings.
+    evaluation_question_dict = dict(
+      question_id = question_id,
+      question = question,
+      evaluators = evaluator_dicts,
+    )
+    return evaluation_question_dict
+
   def generate_category_dict(self, interview_category_dict, persona_name, memory_stream):
     category = interview_category_dict['category']
     interview_question_dicts = interview_category_dict['questions']
     evaluation_question_dicts = list()
     for interview_question_dict in interview_question_dicts:
-      evaluation_question_dict = get_question_dict(interview_question_dict, persona_name, memory_stream)
+      evaluation_question_dict = self.generate_question_dict(interview_question_dict, persona_name, memory_stream)
       evaluation_question_dicts.append(evaluation_question_dict)
     # Save the category and list of questions with rankings.
     evaluation_category_dict = dict(
