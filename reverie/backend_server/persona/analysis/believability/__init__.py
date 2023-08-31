@@ -418,8 +418,6 @@ def get_evaluator_dict(
   persona_name,
   memory_stream,
   question_dict,
-  llm_parameters,
-  llm,
 ):
   # Request LLM completion
   # For debugging, we want to record metadata containing the prompt,
@@ -499,8 +497,6 @@ def get_evaluations_dict(rs, interviews):
             persona_name,
             memory_stream,
             question_dict,
-            llm_parameters,
-            llm,
           )
           e_evaluators_list.append(e_evaluator_dict)
         # Save the question and rankings.
