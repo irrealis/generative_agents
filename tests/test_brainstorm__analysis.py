@@ -120,9 +120,8 @@ def test_integration__believability_rankings(rs, interviews):
   assert 'personas' in evaluations_dict['evaluations']
   assert isinstance(evaluations_dict['evaluations']['personas'], list)
   first_persona_dict = evaluations_dict['evaluations']['personas'][0]
-  # FIXME@kaben: switch to 'persona'.
-  assert 'persona_name' in first_persona_dict
-  assert persona.name == first_persona_dict['persona_name']
+  assert 'persona' in first_persona_dict
+  assert persona.name == first_persona_dict['persona']
   assert 'categories' in first_persona_dict
   assert isinstance(first_persona_dict['categories'], list)
   first_category_dict = first_persona_dict['categories'][0]
