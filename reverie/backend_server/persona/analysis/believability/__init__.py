@@ -479,11 +479,11 @@ def get_category_dict(interview_category_dict, persona_name, memory_stream):
     evaluation_question_dict = get_question_dict(interview_question_dict, persona_name, memory_stream)
     evaluation_question_dicts.append(evaluation_question_dict)
   # Save the category and list of questions with rankings.
-  e_category_dict = dict(
+  evaluation_category_dict = dict(
     category = category,
     questions = evaluation_question_dicts,
   )
-  return e_category_dict
+  return evaluation_category_dict
 
 
 def get_persona_dict(interview_persona_dict, personas):
