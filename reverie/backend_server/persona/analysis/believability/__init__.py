@@ -531,6 +531,49 @@ class BelievabilityEvaluator:
     self.interviews = interviews
     self.personas = personas
 
+  def generate_evaluation(self, interview_question_dict, persona_name, memory_stream):
+    llm_parameters = get_llm_parameters()
+    llm = LangChainModel(ChatOpenAI(
+      model_name=llm_parameters["engine"],
+      temperature=llm_parameters["temperature"],
+      max_tokens=llm_parameters["max_tokens"],
+      streaming=llm_parameters["stream"],
+      n=llm_parameters.get("n", 1),
+      model_kwargs=dict(
+        top_p=llm_parameters["top_p"],
+        frequency_penalty=llm_parameters["frequency_penalty"],
+        presence_penalty=llm_parameters["presence_penalty"],
+        stop=llm_parameters["stop"],
+      ),
+    ))
+    (
+      believability_ranking_prompt,
+      shuffled_conditions_list,
+      ranking_keys_to_condition_keys,
+    ) = get_believability_ranking_prompt(interview_question_dict, persona_name, memory_stream)
+    # Request LLM completion
+    llm_output = llm.generate_low(believability_ranking_prompt)
+    # For debugging, we want to record metadata containing the prompt,
+    # LLM parameters, and the raw LLM completion.
+    llm_completion_json = llm_output.json()
+    llm_completion = json.loads(llm_completion_json)
+    # Reformat the text in the completions for easier reading in the YAML file.
+    for i, generations in enumerate(llm_completion['generations']):
+      for j, generation in enumerate(generations):
+        text = generation['text']
+        llm_completion['generations'][i][j]['text'] = LiteralScalarString(text)
+    evaluator_metadata_dict = dict(
+      believability_ranking_prompt = LiteralScalarString(believability_ranking_prompt),
+      llm_parameters = llm_parameters,
+      llm_completion = llm_completion,
+    )
+    return (
+      llm_output,
+      evaluator_metadata_dict,
+      shuffled_conditions_list,
+      ranking_keys_to_condition_keys,
+    )
+
   def generate_ranking_dict(self, i, g, ranking_keys_to_condition_keys):
     # The first line contains the ranking string.
     lines = g.message.content.splitlines()
@@ -566,7 +609,7 @@ class BelievabilityEvaluator:
       evaluator_metadata_dict,
       shuffled_conditions,
       ranking_keys_to_condition_keys,
-    ) = generate_evaluation(
+    ) = self.generate_evaluation(
       interview_question_dict,
       persona_name,
       memory_stream,
