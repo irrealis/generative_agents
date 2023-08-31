@@ -481,11 +481,11 @@ def get_category_dict(category_dict, persona_name, memory_stream):
   return e_category_dict
 
 
-def get_persona_dict(persona_dict, personas):
-  persona_name = persona_dict['persona']
+def get_persona_dict(interview_persona_dict, personas):
+  persona_name = interview_persona_dict['persona']
   persona = personas[persona_name]
   memory_stream = persona.format_memory_stream()
-  interview_category_dicts = persona_dict['categories']
+  interview_category_dicts = interview_persona_dict['categories']
   evaluation_category_dicts = list()
   for interview_category_dict in interview_category_dicts:
     evaluation_category_dict = get_category_dict(
