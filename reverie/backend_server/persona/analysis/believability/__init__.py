@@ -387,11 +387,11 @@ def get_evaluations_dict(rs, interviews):
           ) = get_believability_ranking_prompt(persona_name, memory_stream, question_dict)
 
           # Request LLM completion
-          output = llm.generate_low(believability_ranking_prompt)
+          llm_output = llm.generate_low(believability_ranking_prompt)
 
           # For debugging, we want to record metadata containing the prompt,
           # LLM parameters, and the raw LLM completion.
-          llm_completion_json = output.json()
+          llm_completion_json = llm_output.json()
           llm_completion = json.loads(llm_completion_json)
           # Reformat the text in the completions for easier reading in the YAML file.
           for i, generations in enumerate(llm_completion['generations']):
@@ -407,7 +407,7 @@ def get_evaluations_dict(rs, interviews):
 
           # Now parse the rankings.
           e_rankings_list = list()
-          for i, g in enumerate(output.generations[0]):
+          for i, g in enumerate(llm_output.generations[0]):
             # The first line contains the ranking string.
             lines = g.message.content.splitlines()
             ranking_str = lines[0]
