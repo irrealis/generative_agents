@@ -533,3 +533,15 @@ class BelievabilityEvaluator:
 
   def generate_evaluations_dict(self):
     return get_evaluations_dict(self.personas, self.interviews)
+
+
+
+def believability_evaluations(personas, interviews, believability_evaluations_path):
+  evaluator = BelievabilityEvaluator(
+    interviews,
+    personas,
+  )
+  evaluations_dict = evaluator.generate_evaluations_dict()
+  with open(believability_evaluations_path, 'w') as f:
+    yaml.dump(evaluations_dict, f)
+  return evaluations_dict
