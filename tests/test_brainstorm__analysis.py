@@ -169,6 +169,10 @@ def test_integration__believability_rankings(rs, interviews):
   assert isinstance(evaluator_metadata_dict['llm_completion'], dict)
 
 
+# TODO@kaben: test `ranking_prompt_template` param to
+# `BelievabilityEvaluator.get_ranking_prompt(...)`.
+
+
 def test_integration__BelievabilityEvaluator__llm_attributes(rs, interviews):
   # TODO@kaben: verify number of rankings is 1.
   personas = rs.personas
