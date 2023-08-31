@@ -296,6 +296,29 @@ def get_shuffled_conditions_list(question_dict):
   return e_shuffled_conditions_list, ranking_keys_to_condition_keys, condition_map
 
 
+def get_believability_ranking_prompt(persona_name, memory_stream, question_dict):
+  # Record the shuffled mapping.
+  e_shuffled_conditions_list, ranking_keys_to_condition_keys, condition_map = get_shuffled_conditions_list(question_dict)
+  # Build prompt for requesting ranking evaluation.
+  answer_list = [
+    f'''- {ranking_key}: {condition_map[condition_key]['response']}'''
+    for (ranking_key, condition_key) in ranking_keys_to_condition_keys.items()
+  ]
+  answers = '\n'.join(answer_list)
+  question = question_dict['question']
+  believability_ranking_prompt = believability_ranking_prompt_template.format(
+    persona_name = persona_name,
+    memory_stream = memory_stream,
+    question = question,
+    answers = answers,
+  )
+  return (
+    believability_ranking_prompt,
+    e_shuffled_conditions_list,
+    ranking_keys_to_condition_keys,
+  )
+
+
 def get_llm_parameters():
   # We will request $n$ evaluations; for now $n = 5$.
   num_choices = 5
