@@ -520,3 +520,16 @@ def get_evaluations_dict(personas, interviews):
   )
 
   return evaluations_dict
+
+
+class BelievabilityEvaluator:
+  def __init__(
+    self,
+    interviews,
+    personas,
+  ):
+    self.interviews = interviews
+    self.personas = personas
+
+  def generate_evaluations_dict(self):
+    return get_evaluations_dict(self.personas, self.interviews)
