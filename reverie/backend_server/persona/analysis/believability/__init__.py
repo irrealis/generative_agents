@@ -289,11 +289,11 @@ def get_shuffled_conditions_list(question_dict):
   ranking_keys = [chr(i + ord('A')) for i in range(len(condition_keys))]
   ranking_keys_to_condition_keys = dict(zip(ranking_keys, condition_keys))
 
-  e_shuffled_conditions_list = [
+  shuffled_conditions_list = [
     dict(ranking_key=ranking_key, condition_key=condition_key)
     for (ranking_key, condition_key) in ranking_keys_to_condition_keys.items()
   ]
-  return e_shuffled_conditions_list, ranking_keys_to_condition_keys, condition_map
+  return shuffled_conditions_list, ranking_keys_to_condition_keys, condition_map
 
 
 def get_believability_ranking_prompt(interview_question_dict, persona_name, memory_stream):
