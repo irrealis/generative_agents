@@ -341,8 +341,6 @@ def generate_evaluation(
   persona_name,
   memory_stream,
   question_dict,
-  llm_parameters,
-  llm,
 ):
   llm_parameters = get_llm_parameters()
   llm = LangChainModel(ChatOpenAI(
@@ -435,8 +433,6 @@ def get_evaluator_dict(
     persona_name,
     memory_stream,
     question_dict,
-    llm_parameters,
-    llm,
   )
 
   # Parse the rankings.
