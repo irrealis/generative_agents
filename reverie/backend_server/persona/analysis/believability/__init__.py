@@ -421,28 +421,16 @@ def get_evaluations_dict(rs, interviews):
 
         for evaluator_id in ['1. gpt-3.5-turbo-16k']:
           (
-            believability_ranking_prompt,
+            llm_output,
+            e_evaluator_metadata_dict,
             e_shuffled_conditions_list,
             ranking_keys_to_condition_keys,
-          ) = get_believability_ranking_prompt(persona_name, memory_stream, question_dict)
-
-          # Request LLM completion
-          llm_output = llm.generate_low(believability_ranking_prompt)
-
-          # For debugging, we want to record metadata containing the prompt,
-          # LLM parameters, and the raw LLM completion.
-          llm_completion_json = llm_output.json()
-          llm_completion = json.loads(llm_completion_json)
-          # Reformat the text in the completions for easier reading in the YAML file.
-          for i, generations in enumerate(llm_completion['generations']):
-            for j, generation in enumerate(generations):
-              text = generation['text']
-              llm_completion['generations'][i][j]['text'] = LiteralScalarString(text)
-
-          e_evaluator_metadata_dict = dict(
-            believability_ranking_prompt = LiteralScalarString(believability_ranking_prompt),
-            llm_parameters = llm_parameters,
-            llm_completion = llm_completion,
+          ) = generate_evaluation(
+            persona_name,
+            memory_stream,
+            question_dict,
+            llm_parameters,
+            llm,
           )
 
           # Now parse the rankings.
