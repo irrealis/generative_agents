@@ -337,7 +337,7 @@ def get_llm_parameters():
   return llm_parameters
 
 
-def generate_evaluation(persona_name, memory_stream, question_dict):
+def generate_evaluation(interview_question_dict, persona_name, memory_stream):
   llm_parameters = get_llm_parameters()
   llm = LangChainModel(ChatOpenAI(
     model_name=llm_parameters["engine"],
@@ -355,9 +355,9 @@ def generate_evaluation(persona_name, memory_stream, question_dict):
 
   (
     believability_ranking_prompt,
-    e_shuffled_conditions_list,
+    shuffled_conditions_list,
     ranking_keys_to_condition_keys,
-  ) = get_believability_ranking_prompt(persona_name, memory_stream, question_dict)
+  ) = get_believability_ranking_prompt(persona_name, memory_stream, interview_question_dict)
 
   # Request LLM completion
   llm_output = llm.generate_low(believability_ranking_prompt)
@@ -372,7 +372,7 @@ def generate_evaluation(persona_name, memory_stream, question_dict):
       text = generation['text']
       llm_completion['generations'][i][j]['text'] = LiteralScalarString(text)
 
-  e_evaluator_metadata_dict = dict(
+  evaluator_metadata_dict = dict(
     believability_ranking_prompt = LiteralScalarString(believability_ranking_prompt),
     llm_parameters = llm_parameters,
     llm_completion = llm_completion,
@@ -380,8 +380,8 @@ def generate_evaluation(persona_name, memory_stream, question_dict):
 
   return (
     llm_output,
-    e_evaluator_metadata_dict,
-    e_shuffled_conditions_list,
+    evaluator_metadata_dict,
+    shuffled_conditions_list,
     ranking_keys_to_condition_keys,
   )
 
@@ -424,9 +424,9 @@ def get_evaluator_dict(
     shuffled_conditions,
     ranking_keys_to_condition_keys,
   ) = generate_evaluation(
+    interview_question_dict,
     persona_name,
     memory_stream,
-    interview_question_dict,
   )
 
   # Parse the rankings.
