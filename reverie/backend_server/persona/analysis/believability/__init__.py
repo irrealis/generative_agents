@@ -377,6 +377,29 @@ def generate_evaluation(
   )
 
 
+def get_ranking_dict(i, g, ranking_keys_to_condition_keys):
+  # The first line contains the ranking string.
+  lines = g.message.content.splitlines()
+  ranking_str = lines[0]
+
+  # Parse ranking string. The LLM will return the ranking keys
+  # separated by commas. Sometimes it includes spaces, which the re
+  # below takes into account.
+  ranked_keys = re.split(r'\W+', ranking_str)
+  # Convert from ranking IDs to condition IDs.
+  ranked_condition_keys = [
+    ranking_keys_to_condition_keys[rid] for rid in ranked_keys
+  ]
+
+  # Save ranking info.
+  e_ranking_dict = dict(
+    evaluation_number = i,
+    ranking = ranking_str,
+    ranked_conditions = ranked_condition_keys,
+  )
+  return e_ranking_dict
+
+
 def get_evaluations_dict(rs, interviews):
   llm_parameters = get_llm_parameters()
   llm = LangChainModel(ChatOpenAI(
