@@ -32,7 +32,6 @@ from persona.analysis.believability import (
   believability_evaluations,
   believability_interviews,
   BelievabilityInterviewer,
-  get_evaluations_dict,
   get_llm_parameters,
 )
 from persona.analysis.believability.believability_questions import (

@@ -541,6 +541,38 @@ class BelievabilityEvaluator:
 
     self.llm = llm
 
+  def get_believability_ranking_prompt(
+    self,
+    interview_question_dict,
+    persona_name,
+    memory_stream,
+  ):
+    # Record the shuffled mapping.
+    (
+      shuffled_conditions_list,
+      ranking_keys_to_condition_keys,
+      condition_map,
+    ) = get_shuffled_conditions_list(interview_question_dict)
+    # Build prompt for requesting ranking evaluation.
+    answer_list = [
+      f'''- {ranking_key}: {condition_map[condition_key]['response']}'''
+      for (ranking_key, condition_key) in ranking_keys_to_condition_keys.items()
+    ]
+    answers = '\n'.join(answer_list)
+    question = interview_question_dict['question']
+    believability_ranking_prompt = believability_ranking_prompt_template.format(
+      question = question,
+      answers = answers,
+      persona_name = persona_name,
+      memory_stream = memory_stream,
+    )
+    return (
+      believability_ranking_prompt,
+      shuffled_conditions_list,
+      ranking_keys_to_condition_keys,
+    )
+
+
   def get_default_llm(self, llm_parameters = None):
     if llm_parameters is None:
       llm_parameters = self.llm_parameters
@@ -567,7 +599,11 @@ class BelievabilityEvaluator:
       believability_ranking_prompt,
       shuffled_conditions_list,
       ranking_keys_to_condition_keys,
-    ) = get_believability_ranking_prompt(interview_question_dict, persona_name, memory_stream)
+    ) = self.get_believability_ranking_prompt(
+      interview_question_dict,
+      persona_name,
+      memory_stream,
+    )
     # Request LLM completion
     if llm is None:
       llm = self.get_default_llm()
