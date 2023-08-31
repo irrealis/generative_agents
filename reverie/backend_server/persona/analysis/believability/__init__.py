@@ -450,21 +450,6 @@ def get_evaluator_dict(
 
 
 def get_evaluations_dict(rs, interviews):
-  llm_parameters = get_llm_parameters()
-  llm = LangChainModel(ChatOpenAI(
-    model_name=llm_parameters["engine"],
-    temperature=llm_parameters["temperature"],
-    max_tokens=llm_parameters["max_tokens"],
-    streaming=llm_parameters["stream"],
-    n=llm_parameters.get("n", 1),
-    model_kwargs=dict(
-      top_p=llm_parameters["top_p"],
-      frequency_penalty=llm_parameters["frequency_penalty"],
-      presence_penalty=llm_parameters["presence_penalty"],
-      stop=llm_parameters["stop"],
-    ),
-  ))
-
   e_personas_list = list()
 
   interviews_dict = interviews['interviews']
