@@ -337,11 +337,7 @@ def get_llm_parameters():
   return llm_parameters
 
 
-def generate_evaluation(
-  persona_name,
-  memory_stream,
-  question_dict,
-):
+def generate_evaluation(persona_name, memory_stream, question_dict):
   llm_parameters = get_llm_parameters()
   llm = LangChainModel(ChatOpenAI(
     model_name=llm_parameters["engine"],
