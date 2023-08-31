@@ -531,12 +531,46 @@ class BelievabilityEvaluator:
     self.interviews = interviews
     self.personas = personas
 
+  def generate_evaluator_dict(
+    self,
+    evaluator_id,
+    interview_question_dict,
+    persona_name,
+    memory_stream,
+  ):
+    # Request LLM completion
+    # For debugging, we want to record metadata containing the prompt,
+    # LLM parameters, and the raw LLM completion.
+    (
+      llm_output,
+      evaluator_metadata_dict,
+      shuffled_conditions,
+      ranking_keys_to_condition_keys,
+    ) = generate_evaluation(
+      interview_question_dict,
+      persona_name,
+      memory_stream,
+    )
+    # Parse the rankings.
+    ranking_dicts = list()
+    for i, g in enumerate(llm_output.generations[0]):
+      ranking_dict = get_ranking_dict(i, g, ranking_keys_to_condition_keys)
+      ranking_dicts.append(ranking_dict)
+    # Save the list of rankinigs.
+    evaluator_dict = dict(
+      evaluator = evaluator_id,
+      shuffled_conditions = shuffled_conditions,
+      rankings = ranking_dicts,
+      evaluator_metadata = evaluator_metadata_dict,
+    )
+    return evaluator_dict
+
   def generate_question_dict(self, interview_question_dict, persona_name, memory_stream):
     question_id = interview_question_dict['question_id']
     question = interview_question_dict['question']
     evaluator_dicts = list()
     for evaluator_id in ['1. gpt-3.5-turbo-16k']:
-      evaluator_dict = get_evaluator_dict(
+      evaluator_dict = self.generate_evaluator_dict(
         evaluator_id,
         interview_question_dict,
         persona_name,
