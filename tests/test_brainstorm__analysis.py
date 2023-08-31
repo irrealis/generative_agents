@@ -137,8 +137,7 @@ def test_integration__believability_rankings(rs, interviews):
   assert isinstance(first_question_dict['evaluators'], list)
   assert len(first_question_dict['evaluators']) == 1
   first_evaluator_dict = first_question_dict['evaluators'][0]
-  # FIXME@kaben: switch to 'evaluator'.
-  assert 'evaluator_id' in first_evaluator_dict
+  assert 'evaluator' in first_evaluator_dict
   assert 'shuffled_conditions' in first_evaluator_dict
   assert 'rankings' in first_evaluator_dict
   assert 'evaluator_metadata' in first_evaluator_dict

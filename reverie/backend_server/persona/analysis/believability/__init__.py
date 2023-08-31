@@ -441,7 +441,7 @@ def get_evaluator_dict(
 
   # Save the list of rankinigs.
   evaluator_dict = dict(
-    evaluator_id = evaluator_id,
+    evaluator = evaluator_id,
     shuffled_conditions = shuffled_conditions,
     rankings = ranking_dicts,
     evaluator_metadata = evaluator_metadata_dict,
