@@ -29,6 +29,7 @@ from persona.analysis.ablate import (
 )
 from persona.analysis.believability import (
   BelievabilityEvaluator,
+  believability_evaluations,
   believability_interviews,
   BelievabilityInterviewer,
   get_evaluations_dict,
@@ -111,10 +112,12 @@ random.seed(0)
 def test_integration__believability_rankings(rs, interviews):
   # Write evaluations to YAML file.
   personas = rs.personas
-  evaluations_dict = get_evaluations_dict(personas, interviews)
   believability_evaluations_path = f'{project_dir}/tests/believability_evaluations.yaml'
-  with open(believability_evaluations_path, 'w') as f:
-    yaml.dump(evaluations_dict, f)
+  evaluations_dict = believability_evaluations(
+    personas,
+    interviews,
+    believability_evaluations_path,
+  )
 
   persona = personas['Isabella Rodriguez']
   assert 'evaluations' in evaluations_dict
