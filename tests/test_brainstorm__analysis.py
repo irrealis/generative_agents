@@ -174,6 +174,9 @@ def test_integration__BelievabilityEvaluator__generate_evaluations_dict(rs, inte
   personas = rs.personas
   evaluator = BelievabilityEvaluator(interviews, personas)
   evaluations_dict = evaluator.generate_evaluations_dict()
+  believability_evaluations_path = f'{project_dir}/tests/believability_evaluations.yaml'
+  with open(believability_evaluations_path, 'w') as f:
+    yaml.dump(evaluations_dict, f)
 
   persona = personas['Isabella Rodriguez']
   assert 'evaluations' in evaluations_dict
