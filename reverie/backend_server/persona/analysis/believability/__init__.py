@@ -539,30 +539,39 @@ class BelievabilityEvaluator:
       llm_parameters = get_llm_parameters()
     self.llm_parameters = llm_parameters
 
-    if llm is None:
-      llm = LangChainModel(ChatOpenAI(
-        model_name=self.llm_parameters["engine"],
-        temperature=self.llm_parameters["temperature"],
-        max_tokens=self.llm_parameters["max_tokens"],
-        streaming=self.llm_parameters["stream"],
-        n=self.llm_parameters.get("n", 1),
-        model_kwargs=dict(
-          top_p=self.llm_parameters["top_p"],
-          frequency_penalty=self.llm_parameters["frequency_penalty"],
-          presence_penalty=self.llm_parameters["presence_penalty"],
-          stop=self.llm_parameters["stop"],
-        ),
-      ))
     self.llm = llm
 
-  def generate_evaluation(self, interview_question_dict, persona_name, memory_stream):
+  def get_default_llm(self, llm_parameters = None):
+    if llm_parameters is None:
+      llm_parameters = self.llm_parameters
+    if self.llm is not None:
+      return self.llm
+    else:
+      llm = LangChainModel(ChatOpenAI(
+        model_name=llm_parameters["engine"],
+        temperature=llm_parameters["temperature"],
+        max_tokens=llm_parameters["max_tokens"],
+        streaming=llm_parameters["stream"],
+        n=llm_parameters.get("n", 1),
+        model_kwargs=dict(
+          top_p=llm_parameters["top_p"],
+          frequency_penalty=llm_parameters["frequency_penalty"],
+          presence_penalty=llm_parameters["presence_penalty"],
+          stop=llm_parameters["stop"],
+        ),
+      ))
+      return llm
+
+  def generate_evaluation(self, interview_question_dict, persona_name, memory_stream, llm = None):
     (
       believability_ranking_prompt,
       shuffled_conditions_list,
       ranking_keys_to_condition_keys,
     ) = get_believability_ranking_prompt(interview_question_dict, persona_name, memory_stream)
     # Request LLM completion
-    llm_output = self.llm.generate_low(believability_ranking_prompt)
+    if llm is None:
+      llm = self.get_default_llm()
+    llm_output = llm.generate_low(believability_ranking_prompt)
     # For debugging, we want to record metadata containing the prompt,
     # LLM parameters, and the raw LLM completion.
     llm_completion_json = llm_output.json()
