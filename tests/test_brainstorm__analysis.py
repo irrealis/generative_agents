@@ -110,6 +110,7 @@ random.seed(0)
 
 
 def test_integration__believability_rankings(rs, interviews):
+  # TODO@kaben: verify number of rankings defaults to 5.
   # Write evaluations to YAML file.
   personas = rs.personas
   believability_evaluations_path = f'{project_dir}/tests/believability_evaluations.yaml'
@@ -169,6 +170,7 @@ def test_integration__believability_rankings(rs, interviews):
 
 
 def test_integration__BelievabilityEvaluator__generate_evaluations_dict(rs, interviews):
+  # TODO@kaben: verify number of rankings defaults to 5.
   personas = rs.personas
   evaluator = BelievabilityEvaluator(interviews, personas)
   evaluations_dict = evaluator.generate_evaluations_dict()
