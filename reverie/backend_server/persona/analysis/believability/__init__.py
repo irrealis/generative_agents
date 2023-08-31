@@ -561,10 +561,16 @@ class BelievabilityEvaluator:
 
 
 
-def believability_evaluations(personas, interviews, believability_evaluations_path):
+def believability_evaluations(
+  personas,
+  interviews,
+  believability_evaluations_path,
+  random_number_generator = None,
+):
   evaluator = BelievabilityEvaluator(
     interviews,
     personas,
+    random_number_generator=random_number_generator,
   )
   evaluations_dict = evaluator.generate_evaluations_dict()
   with open(believability_evaluations_path, 'w') as f:
