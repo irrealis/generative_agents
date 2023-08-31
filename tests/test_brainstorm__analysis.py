@@ -239,7 +239,11 @@ def test_integration__BelievabilityEvaluator__llm_attributes(rs, interviews):
 def test_integration__BelievabilityEvaluator__generate_evaluations_dict(rs, interviews):
   # TODO@kaben: verify number of rankings defaults to 5.
   personas = rs.personas
-  evaluator = BelievabilityEvaluator(interviews, personas)
+  evaluator = BelievabilityEvaluator(
+    interviews,
+    personas,
+    random_number_generator=random.Random(0),
+  )
   evaluations_dict = evaluator.generate_evaluations_dict()
   believability_evaluations_path = f'{project_dir}/tests/believability_evaluations.yaml'
   with open(believability_evaluations_path, 'w') as f:
