@@ -531,12 +531,32 @@ class BelievabilityEvaluator:
     self.interviews = interviews
     self.personas = personas
 
+  def generate_persona_dict(self, interview_persona_dict):
+    persona_name = interview_persona_dict['persona']
+    persona = self.personas[persona_name]
+    memory_stream = persona.format_memory_stream()
+    interview_category_dicts = interview_persona_dict['categories']
+    evaluation_category_dicts = list()
+    for interview_category_dict in interview_category_dicts:
+      evaluation_category_dict = get_category_dict(
+        interview_category_dict,
+        persona_name,
+        memory_stream,
+      )
+      evaluation_category_dicts.append(evaluation_category_dict)
+    # Save the persona name and questions organized by categories.
+    evaluation_persona_dict = dict(
+      persona = persona_name,
+      categories = evaluation_category_dicts,
+    )
+    return evaluation_persona_dict
+
   def generate_evaluations_dict(self):
     interviews_dict = self.interviews['interviews']
     interview_persona_dicts = interviews_dict['personas']
     evaluation_persona_dicts = list()
     for interview_persona_dict in interview_persona_dicts:
-      evaluation_persona_dict = get_persona_dict(interview_persona_dict, self.personas)
+      evaluation_persona_dict = self.generate_persona_dict(interview_persona_dict)
       evaluation_persona_dicts.append(evaluation_persona_dict)
     # Save the evaluations organized by persona.
     evaluations_dict = dict(
