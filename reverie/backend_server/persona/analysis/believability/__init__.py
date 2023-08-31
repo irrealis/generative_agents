@@ -380,20 +380,11 @@ def get_evaluations_dict(rs, interviews):
         question = question_dict['question']
 
         for evaluator_id in ['1. gpt-3.5-turbo-16k']:
-          e_shuffled_conditions_list, ranking_keys_to_condition_keys, condition_map = get_shuffled_conditions_list(question_dict)
-
-          # Build prompt for requesting ranking evaluation.
-          answer_list = [
-            f'''- {ranking_key}: {condition_map[condition_key]['response']}'''
-            for (ranking_key, condition_key) in ranking_keys_to_condition_keys.items()
-          ]
-          answers = '\n'.join(answer_list)
-          believability_ranking_prompt = believability_ranking_prompt_template.format(
-            persona_name = persona_name,
-            memory_stream = memory_stream,
-            question = question,
-            answers = answers,
-          )
+          (
+            believability_ranking_prompt,
+            e_shuffled_conditions_list,
+            ranking_keys_to_condition_keys,
+          ) = get_believability_ranking_prompt(persona_name, memory_stream, question_dict)
 
           # Request LLM completion
           output = llm.generate_low(believability_ranking_prompt)
