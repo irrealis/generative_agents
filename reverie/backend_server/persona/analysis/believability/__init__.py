@@ -274,55 +274,6 @@ Ranking: A,B,C,D,E
 Ranking: '''
 
 
-def get_shuffled_conditions_list(question_dict):
-  # Build a map from condition_id to condition.
-  conditions_list = question_dict['conditions']
-  condition_map = {c['condition']:c for c in conditions_list}
-  condition_keys = list(condition_map.keys())
-
-  # Shuffle the condition keys. I'm doing this to try to mitigate
-  # situation where the order of the IDs influences the ranking
-  # produced by the LLM.
-  random.shuffle(condition_keys)
-
-  # Make a shuffled mapping from ranking ID (A,B,C,...) to condition ID.
-  ranking_keys = [chr(i + ord('A')) for i in range(len(condition_keys))]
-  ranking_keys_to_condition_keys = dict(zip(ranking_keys, condition_keys))
-
-  shuffled_conditions_list = [
-    dict(ranking_key=ranking_key, condition_key=condition_key)
-    for (ranking_key, condition_key) in ranking_keys_to_condition_keys.items()
-  ]
-  return shuffled_conditions_list, ranking_keys_to_condition_keys, condition_map
-
-
-def get_believability_ranking_prompt(interview_question_dict, persona_name, memory_stream):
-  # Record the shuffled mapping.
-  (
-    shuffled_conditions_list,
-    ranking_keys_to_condition_keys,
-    condition_map,
-  ) = get_shuffled_conditions_list(interview_question_dict)
-  # Build prompt for requesting ranking evaluation.
-  answer_list = [
-    f'''- {ranking_key}: {condition_map[condition_key]['response']}'''
-    for (ranking_key, condition_key) in ranking_keys_to_condition_keys.items()
-  ]
-  answers = '\n'.join(answer_list)
-  question = interview_question_dict['question']
-  believability_ranking_prompt = believability_ranking_prompt_template.format(
-    question = question,
-    answers = answers,
-    persona_name = persona_name,
-    memory_stream = memory_stream,
-  )
-  return (
-    believability_ranking_prompt,
-    shuffled_conditions_list,
-    ranking_keys_to_condition_keys,
-  )
-
-
 def get_llm_parameters(num_choices = None):
   if num_choices is None:
     # We will request n evaluations; for now n defaults to 5.
