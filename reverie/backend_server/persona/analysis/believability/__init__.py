@@ -356,7 +356,7 @@ def get_evaluations_dict(rs, interviews):
           ]
           e_shuffled_conditions_list = [
             dict(ranking_key=ranking_key, condition_key=condition_key)
-            for (ranking_key, condition_key) in key_pairs
+            for (ranking_key, condition_key) in ranking_keys_to_condition_keys.items()
           ]
 
           # Build prompt for requesting ranking evaluation.
