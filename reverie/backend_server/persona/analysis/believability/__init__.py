@@ -496,19 +496,7 @@ def get_evaluations_dict(rs, interviews):
 
     categories_list = persona_dict['categories']
     for category_dict in categories_list:
-
-      e_questions_list = list()
-
-      category = category_dict['category']
-      questions_list = category_dict['questions']
-      for question_dict in questions_list:
-        e_question_dict = get_question_dict(persona_name, memory_stream, question_dict)
-        e_questions_list.append(e_question_dict)
-      # Save the category and list of questions with rankings.
-      e_category_dict = dict(
-        category = category,
-        questions = e_questions_list,
-      )
+      e_category_dict = get_category_dict(category_dict, persona_name, memory_stream)
       e_categories_list.append(e_category_dict)
     # Save the persona name and questions organized by categories.
     e_persona_dict = dict(
