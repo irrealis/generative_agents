@@ -33,6 +33,7 @@ from persona.analysis.believability import (
   believability_interviews,
   BelievabilityInterviewer,
   get_evaluations_dict,
+  get_llm_parameters,
 )
 from persona.analysis.believability.believability_questions import (
   get_chat_interaction_counts,
@@ -119,6 +120,68 @@ def test_integration__believability_rankings(rs, interviews):
     interviews,
     believability_evaluations_path,
   )
+
+  persona = personas['Isabella Rodriguez']
+  assert 'evaluations' in evaluations_dict
+  assert 'personas' in evaluations_dict['evaluations']
+  assert isinstance(evaluations_dict['evaluations']['personas'], list)
+  first_persona_dict = evaluations_dict['evaluations']['personas'][0]
+  assert 'persona' in first_persona_dict
+  assert persona.name == first_persona_dict['persona']
+  assert 'categories' in first_persona_dict
+  assert isinstance(first_persona_dict['categories'], list)
+  first_category_dict = first_persona_dict['categories'][0]
+  assert 'category' in first_category_dict
+  assert 'plans' == first_category_dict['category']
+  assert 'questions' in first_category_dict
+  assert isinstance(first_category_dict['questions'], list)
+  first_question_dict = first_category_dict['questions'][0]
+  assert 'question_id' in first_question_dict
+  assert first_question_dict['question_id'] == 'just_finished_at_1pm'
+  assert 'question' in first_question_dict
+  assert 'evaluators' in first_question_dict
+  assert isinstance(first_question_dict['evaluators'], list)
+  assert len(first_question_dict['evaluators']) == 1
+  first_evaluator_dict = first_question_dict['evaluators'][0]
+  assert 'evaluator' in first_evaluator_dict
+  assert 'shuffled_conditions' in first_evaluator_dict
+  assert 'rankings' in first_evaluator_dict
+  assert 'evaluator_metadata' in first_evaluator_dict
+  assert isinstance(first_evaluator_dict['shuffled_conditions'], list)
+  first_shuffled_condition_dict = first_evaluator_dict['shuffled_conditions'][0]
+  assert 'ranking_key' in first_shuffled_condition_dict
+  assert 'condition_key' in first_shuffled_condition_dict
+  assert first_shuffled_condition_dict['ranking_key'] == 'A'
+  assert first_shuffled_condition_dict['condition_key'] in ('no_observation_no_reflection_no_planning', 'no_reflection_no_planning', 'no_reflection', 'full_architecture', 'roleplay')
+  assert isinstance(first_evaluator_dict['rankings'], list)
+  first_rankings_dict = first_evaluator_dict['rankings'][0]
+  assert 'evaluation_number' in first_rankings_dict
+  assert first_rankings_dict['evaluation_number'] == 0
+  assert 'ranking' in first_rankings_dict
+  assert 'ranked_conditions' in first_rankings_dict
+  assert isinstance(first_rankings_dict['ranked_conditions'], list)
+  assert first_rankings_dict['ranked_conditions'][0] in ('no_observation_no_reflection_no_planning', 'no_reflection_no_planning', 'no_reflection', 'full_architecture', 'roleplay')
+  evaluator_metadata_dict = first_evaluator_dict['evaluator_metadata']
+  assert 'believability_ranking_prompt' in evaluator_metadata_dict
+  assert 'llm_parameters' in evaluator_metadata_dict
+  assert 'llm_completion' in evaluator_metadata_dict
+  assert isinstance(evaluator_metadata_dict['believability_ranking_prompt'], str)
+  assert isinstance(evaluator_metadata_dict['llm_parameters'], dict)
+  assert isinstance(evaluator_metadata_dict['llm_completion'], dict)
+
+
+def test_integration__BelievabilityEvaluator__llm_attributes(rs, interviews):
+  # TODO@kaben: verify number of rankings is 1.
+  personas = rs.personas
+  evaluator = BelievabilityEvaluator(
+    interviews,
+    personas,
+    llm_parameters=get_llm_parameters(num_choices = 1),
+  )
+  evaluations_dict = evaluator.generate_evaluations_dict()
+  believability_evaluations_path = f'{project_dir}/tests/believability_evaluations.yaml'
+  with open(believability_evaluations_path, 'w') as f:
+    yaml.dump(evaluations_dict, f)
 
   persona = personas['Isabella Rodriguez']
   assert 'evaluations' in evaluations_dict
