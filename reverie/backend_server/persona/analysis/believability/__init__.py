@@ -500,11 +500,11 @@ def get_persona_dict(interview_persona_dict, personas):
     )
     evaluation_category_dicts.append(evaluation_category_dict)
   # Save the persona name and questions organized by categories.
-  e_persona_dict = dict(
+  evaluation_persona_dict = dict(
     persona = persona_name,
     categories = evaluation_category_dicts,
   )
-  return e_persona_dict
+  return evaluation_persona_dict
 
 
 def get_evaluations_dict(personas, interviews):
