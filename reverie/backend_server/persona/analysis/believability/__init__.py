@@ -445,6 +445,27 @@ def get_evaluator_dict(
   return e_evaluator_dict
 
 
+def get_question_dict(persona_name, memory_stream, question_dict):
+  question_id = question_dict['question_id']
+  question = question_dict['question']
+  e_evaluators_list = list()
+  for evaluator_id in ['1. gpt-3.5-turbo-16k']:
+    e_evaluator_dict = get_evaluator_dict(
+      evaluator_id,
+      persona_name,
+      memory_stream,
+      question_dict,
+    )
+    e_evaluators_list.append(e_evaluator_dict)
+        # Save the question and rankings.
+  e_question_dict = dict(
+    question_id = question_id,
+    question = question,
+    evaluators = e_evaluators_list,
+  )
+  return e_question_dict
+
+
 def get_evaluations_dict(rs, interviews):
   e_personas_list = list()
 
