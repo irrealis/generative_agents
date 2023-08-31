@@ -400,6 +400,46 @@ def get_ranking_dict(i, g, ranking_keys_to_condition_keys):
   return e_ranking_dict
 
 
+def get_evaluator_dict(
+  evaluator_id,
+  persona_name,
+  memory_stream,
+  question_dict,
+  llm_parameters,
+  llm,
+):
+  # Request LLM completion
+  # For debugging, we want to record metadata containing the prompt,
+  # LLM parameters, and the raw LLM completion.
+  (
+    llm_output,
+    e_evaluator_metadata_dict,
+    e_shuffled_conditions_list,
+    ranking_keys_to_condition_keys,
+  ) = generate_evaluation(
+    persona_name,
+    memory_stream,
+    question_dict,
+    llm_parameters,
+    llm,
+  )
+
+  # Parse the rankings.
+  e_rankings_list = list()
+  for i, g in enumerate(llm_output.generations[0]):
+    e_ranking_dict = get_ranking_dict(i, g, ranking_keys_to_condition_keys)
+    e_rankings_list.append(e_ranking_dict)
+
+  # Save the list of rankinigs.
+  e_evaluator_dict = dict(
+    evaluator_id = evaluator_id,
+    shuffled_conditions = e_shuffled_conditions_list,
+    rankings = e_rankings_list,
+    evaluator_metadata = e_evaluator_metadata_dict,
+  )
+  return e_evaluator_dict
+
+
 def get_evaluations_dict(rs, interviews):
   llm_parameters = get_llm_parameters()
   llm = LangChainModel(ChatOpenAI(
