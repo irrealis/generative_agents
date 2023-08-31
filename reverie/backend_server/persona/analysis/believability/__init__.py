@@ -499,16 +499,15 @@ def get_persona_dict(persona_dict, rs):
 
 
 def get_evaluations_dict(rs, interviews):
-  e_personas_list = list()
-
   interviews_dict = interviews['interviews']
-  personas_list = interviews_dict['personas']
-  for persona_dict in personas_list:
-    e_persona_dict = get_persona_dict(persona_dict, rs)
-    e_personas_list.append(e_persona_dict)
+  interview_persona_dicts = interviews_dict['personas']
+  evaluation_persona_dicts = list()
+  for interview_persona_dict in interview_persona_dicts:
+    evaluation_persona_dict = get_persona_dict(interview_persona_dict, rs)
+    evaluation_persona_dicts.append(evaluation_persona_dict)
   # Save the evaluations organized by persona.
   evaluations_dict = dict(
-    evaluations = dict(personas = e_personas_list),
+    evaluations = dict(personas = evaluation_persona_dicts),
   )
 
   return evaluations_dict
