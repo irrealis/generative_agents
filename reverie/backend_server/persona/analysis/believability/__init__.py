@@ -401,12 +401,12 @@ def get_ranking_dict(i, g, ranking_keys_to_condition_keys):
   ]
 
   # Save ranking info.
-  e_ranking_dict = dict(
+  ranking_dict = dict(
     evaluation_number = i,
     ranking = ranking_str,
     ranked_conditions = ranked_condition_keys,
   )
-  return e_ranking_dict
+  return ranking_dict
 
 
 def get_evaluator_dict(
