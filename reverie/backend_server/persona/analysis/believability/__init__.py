@@ -466,17 +466,17 @@ def get_question_dict(persona_name, memory_stream, question_dict):
   return e_question_dict
 
 
-def get_category_dict(category_dict, persona_name, memory_stream):
-  category = category_dict['category']
-  questions_list = category_dict['questions']
-  e_questions_list = list()
-  for question_dict in questions_list:
-    e_question_dict = get_question_dict(persona_name, memory_stream ,question_dict)
-    e_questions_list.append(e_question_dict)
+def get_category_dict(interview_category_dict, persona_name, memory_stream):
+  category = interview_category_dict['category']
+  interview_question_dicts = interview_category_dict['questions']
+  evaluation_question_dicts = list()
+  for interview_question_dict in interview_question_dicts:
+    evaluation_question_dict = get_question_dict(persona_name, memory_stream, interview_question_dict)
+    evaluation_question_dicts.append(evaluation_question_dict)
   # Save the category and list of questions with rankings.
   e_category_dict = dict(
     category = category,
-    questions = e_questions_list,
+    questions = evaluation_question_dicts,
   )
   return e_category_dict
 
