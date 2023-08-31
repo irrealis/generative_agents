@@ -17,7 +17,7 @@ import ruamel
 from ruamel.yaml import YAML
 from ruamel.yaml.scalarstring import LiteralScalarString
 
-import json, os
+import json, os, random
 
 
 yaml = YAML()
@@ -303,6 +303,7 @@ class BelievabilityEvaluator:
     llm_parameters = None,
     llm = None,
     ranking_prompt_template = None,
+    random_number_generator = None,
   ):
     self.interviews = interviews
     self.personas = personas
@@ -317,6 +318,10 @@ class BelievabilityEvaluator:
       ranking_prompt_template = believability_ranking_prompt_template
     self.ranking_prompt_template = ranking_prompt_template
 
+    if random_number_generator is None:
+      random_number_generator = random.Random()
+    self.random_number_generator = random_number_generator
+
 
   def get_shuffled_conditions(self, question_dict):
     # Build a map from condition_id to condition.
@@ -327,7 +332,7 @@ class BelievabilityEvaluator:
     # Shuffle the condition keys. I'm doing this to try to mitigate
     # situation where the order of the IDs influences the ranking
     # produced by the LLM.
-    random.shuffle(condition_keys)
+    self.random_number_generator.shuffle(condition_keys)
 
     # Make a shuffled mapping from ranking ID (A,B,C,...) to condition ID.
     ranking_keys = [chr(i + ord('A')) for i in range(len(condition_keys))]
