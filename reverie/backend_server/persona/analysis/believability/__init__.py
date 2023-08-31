@@ -334,12 +334,12 @@ def get_evaluations_dict(rs, interviews):
         question_id = question_dict['question_id']
         question = question_dict['question']
 
-        # Build a map from condition_id to condition.
-        conditions_list = question_dict['conditions']
-        condition_map = {c['condition']:c for c in conditions_list}
-        condition_keys = list(condition_map.keys())
-
         for evaluator_id in ['1. gpt-3.5-turbo-16k']:
+          # Build a map from condition_id to condition.
+          conditions_list = question_dict['conditions']
+          condition_map = {c['condition']:c for c in conditions_list}
+          condition_keys = list(condition_map.keys())
+
           # Shuffle the condition keys. I'm doing this to try to mitigate
           # situation where the order of the IDs influences the ranking
           # produced by the LLM.
