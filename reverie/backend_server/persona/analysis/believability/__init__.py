@@ -350,10 +350,6 @@ def get_evaluations_dict(rs, interviews):
           ranking_keys_to_condition_keys = dict(zip(ranking_keys, condition_keys))
 
           # Record the shuffled mapping.
-          key_pairs = [
-            (ranking_key, ranking_keys_to_condition_keys[ranking_key])
-            for ranking_key in ranking_keys
-          ]
           e_shuffled_conditions_list = [
             dict(ranking_key=ranking_key, condition_key=condition_key)
             for (ranking_key, condition_key) in ranking_keys_to_condition_keys.items()
