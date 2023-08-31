@@ -78,7 +78,7 @@ Today is {date_str}. Using the above memories, please roleplay how {persona_name
     return condition_methods_dict
 
 
-class BelievabilityInterviewer(object):
+class BelievabilityInterviewer:
   # Layout of the interviews dict:
   #
   # interviews = {
