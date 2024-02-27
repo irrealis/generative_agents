@@ -153,6 +153,7 @@ def perceive(persona, maze):
       # of the persona here. 
       chat_node_ids = []
       if p_event[0] == f"{persona.name}" and p_event[1] == "chat with": 
+        breakpoint()
         curr_event = persona.scratch.act_event
         if persona.scratch.act_description in persona.a_mem.embeddings: 
           chat_embedding = persona.a_mem.embeddings[

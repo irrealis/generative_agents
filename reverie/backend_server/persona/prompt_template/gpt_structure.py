@@ -11,7 +11,6 @@ log.setLevel(logging.DEBUG)
 import json
 import random
 import openai
-import openai.error
 import time 
 
 from utils import *
@@ -190,8 +189,8 @@ def ChatGPT_safe_generate_response(prompt,
         print (curr_gpt_response)
         print ("~~~~")
 
-    except openai.error.InvalidRequestError as e:
-      log.error(f'OpenAI InvalidRequestError; exception: {e}')
+    except openai.BadRequestError as e:
+      log.error(f'OpenAI BadRequestError; exception: {e}')
       raise e
     except Exception as e: 
       pass

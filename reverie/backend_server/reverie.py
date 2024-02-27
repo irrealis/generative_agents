@@ -31,19 +31,17 @@ import os
 project_dir = os.path.dirname(os.path.abspath(env_path))
 
 import json
-import numpy
+#import numpy
 import datetime
-import pickle
+#import pickle
 import time
 import math
 import os
 import shutil
 import traceback
 
-from selenium import webdriver
+#from selenium import webdriver
 
-import langchain
-from langchain.cache import SQLiteCache, RETURN_VAL_TYPE
 
 from global_methods import *
 from utils import *
@@ -58,7 +56,11 @@ from persona.persona import *
 # Try to import LangChain. If this works, setup cache for LLM calls.
 try:
   import langchain
-  from langchain.cache import SQLiteCache, RETURN_VAL_TYPE
+  from langchain.cache import SQLiteCache
+  #from langchain_core.caches import (
+  #  SQLiteCache,
+  #  #RETURN_VAL_TYPE,
+  #)
   log.debug('Successfully imported LangChain.')
 
   if not os.environ.get('LANGCHAIN_PROJECT'):
